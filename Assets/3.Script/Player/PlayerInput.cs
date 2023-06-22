@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    public string moveAxisName = "Vertical";
-    public string rotateAxisName = "Horizontal";
+    //input 키 입력 string 값
+    private string moveAxisName = "Vertical";
+    private string rotateAxisName = "Horizontal";
 
     public float move { get; private set; }
     public float rotate { get; private set; }

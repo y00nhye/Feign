@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 8178291120101077006}
   m_Layer: 5
   m_Name: Role
-  m_TagString: Untagged
+  m_TagString: Role
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -177,6 +177,7 @@ MonoBehaviour:
   roleBackground: {fileID: 3007342360753233214}
   roleImg: {fileID: 3007342362332542078}
   roleName: {fileID: 3007342360746157839}
+  roleNum: {fileID: 3291440863279294214}
 --- !u!1 &3007342361491004139
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,7 +342,7 @@ GameObject:
   - component: {fileID: 3007342362568336570}
   - component: {fileID: 3007342362568336571}
   m_Layer: 5
-  m_Name: PlusBtn
+  m_Name: MinusBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -448,7 +449,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3007342362568336570}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8178291120101077006}
+        m_TargetAssemblyTypeName: RoleInfo, Assembly-CSharp
+        m_MethodName: Minus
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3007342362577361127
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +549,7 @@ GameObject:
   - component: {fileID: 2539254382091323602}
   - component: {fileID: 3291440863279294214}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Num
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -602,4 +615,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: x2
+  m_Text: 

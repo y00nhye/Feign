@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    //플레이어 스크립트 가져오기
     private PlayerInput playerInput;
     private Animator playerAni;
     private Rigidbody playerRigid;
 
+    //이동 및 회전 속도 수치값 변수
     private float moveSpeed = 3f;
     private float rotateSpeed = 120f;
 
