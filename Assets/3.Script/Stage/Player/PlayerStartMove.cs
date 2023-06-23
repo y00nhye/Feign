@@ -5,8 +5,7 @@ using UnityEngine;
 public class PlayerStartMove : MonoBehaviour
 {
     //플레이어 순서에 맞는 지연시간 정하기
-    //private float waitTime = 7 + GameManager.instance.myOrder;
-    private float waitTime = 7;
+    private float waitTime = 7 + GameManager.instance.myOrder;
 
     //이동 및 회전 속도
     private float rotateSpeed = 5f;
@@ -36,8 +35,9 @@ public class PlayerStartMove : MonoBehaviour
 
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotateSpeed);
 
-        }
+            yield return null;
 
+        }
 
         while (Vector3.Distance(transform.position, votePos[GameManager.instance.myOrder].position) > 0.1f)
         {
