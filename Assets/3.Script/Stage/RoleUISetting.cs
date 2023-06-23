@@ -17,7 +17,7 @@ public class RoleUISetting : MonoBehaviour
     {
         int j = 0;
 
-        for (int i = 0; i < GameManager.instance.totalRoleNum; i++)
+        for (int i = 0; i < GameManager.instance.roles.Count; i++)
         {
             for (int k = 0; k < GameManager.instance.roles[i].roleCnt; k++)
             {
