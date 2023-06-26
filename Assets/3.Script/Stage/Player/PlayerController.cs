@@ -21,18 +21,29 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Image myColor;
     [SerializeField] Text myNickname;
     [SerializeField] SkinnedMeshRenderer slimeColor;
+    [SerializeField] Image myRoleColor;
+    [SerializeField] Image myRoleImg;
+    [SerializeField] Text myRoleTxt;
+
+    [Header("[Player Role (set)]")]
+    public Role myRole;
 
     private void Awake()
     {
         TryGetComponent(out playerInput);
         TryGetComponent(out playerAni);
         TryGetComponent(out playerRigid);
+
+        myRole = GameManager.instance.shuffleRoles[GameManager.instance.myOrder];
     }
     private void Start()
     {
         myColor.color = GameManager.instance.myColor;
         myNickname.text = GameManager.instance.myName;
         slimeColor.material = materials[GameManager.instance.myColorNum];
+        myRoleColor.color = myRole.roleColor;
+        myRoleImg.sprite = myRole.roleData.roleImg;
+        myRoleTxt.text = myRole.roleData.roleName;
     }
     private void Update()
     {

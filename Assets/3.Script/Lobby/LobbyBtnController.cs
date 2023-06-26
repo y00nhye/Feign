@@ -88,10 +88,10 @@ public class LobbyBtnController : MonoBehaviour
         GameManager.instance.voteTime = FindObjectOfType<TimeBtnController>().voteTimeCurrent;
         GameManager.instance.rolePlayTime = FindObjectOfType<TimeBtnController>().rolePlayTimeCurrent;
 
-        SceneManager.LoadScene(1);
-
         GameManager.instance.myColor = playerColor.color;
         GameManager.instance.myName = playerName.text;
+
+        SceneManager.LoadScene(1);
     }
     public void RoomCreateExit()
     {

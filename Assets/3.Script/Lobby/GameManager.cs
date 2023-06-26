@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     public void RoleShuffle()
     {
         for(int i = 0; i < roles.Count; i++)
-        {
+        {   
             shuffleRoles.Add(roles[i]);
         }
 

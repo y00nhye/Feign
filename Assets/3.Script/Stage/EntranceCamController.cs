@@ -11,6 +11,12 @@ public class EntranceCamController : MonoBehaviour
     [Header("[Vote Cam]")]
     [SerializeField] CinemachineVirtualCamera voteCam;
 
+    private TimeManager timeManager;
+
+    private void Awake()
+    {
+        timeManager = FindObjectOfType<TimeManager>();
+    }
     private void Start()
     {
         transform.position = new Vector3(45, 44, player.position.z);
@@ -23,5 +29,8 @@ public class EntranceCamController : MonoBehaviour
         GetComponent<CinemachineVirtualCamera>().enabled = false;
 
         voteCam.enabled = true;
+
+        timeManager.isTimeChange = true;
+        timeManager.isVote = true;
     }
 }
