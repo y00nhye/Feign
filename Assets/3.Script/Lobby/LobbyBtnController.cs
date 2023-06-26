@@ -10,19 +10,36 @@ public class LobbyBtnController : MonoBehaviour
     [SerializeField] GameObject lobbyMenuUI;
     [SerializeField] GameObject roomCreateUI;
     [SerializeField] GameObject roomEnterUI;
+    [SerializeField] GameObject nicknameSettingUI;
+    [SerializeField] GameObject RoomNameUI;
 
-    [Header("[Player Info]")]
-    [SerializeField] Image playerColor;
-    [SerializeField] Text playerName;
+    [Header("[Player Name]")]
+    [SerializeField] Text playerNameInput;
+    public string playerName { get; private set; }
 
-    public void RoomCreate()
+    [Header("[Player Color (set)]")]
+    public Image playerColor;
+
+    public void NicknameSet()
     {
+        playerName = playerNameInput.text;
+
+        nicknameSettingUI.SetActive(false);
+        lobbyMenuUI.SetActive(true);
+    }
+    public void RoomNameCreate()
+    {
+        RoomNameUI.SetActive(true);
+    }
+    public void RoomCreateOrEnter()
+    {
+        RoomNameUI.SetActive(false);
         lobbyMenuUI.SetActive(false);
         roomCreateUI.SetActive(true);
     }
     public void RoomEnter()
     {
-
+        RoomNameUI.SetActive(true);
     }
     public void GameExit()
     {
@@ -89,15 +106,15 @@ public class LobbyBtnController : MonoBehaviour
         GameManager.instance.rolePlayTime = FindObjectOfType<TimeBtnController>().rolePlayTimeCurrent;
 
         GameManager.instance.myColor = playerColor.color;
-        GameManager.instance.myName = playerName.text;
+        GameManager.instance.myName = playerName;
 
         SceneManager.LoadScene(1);
     }
     public void RoomCreateExit()
     {
-        //방 세팅 리셋 만들기
-        
         lobbyMenuUI.SetActive(true);
         roomCreateUI.SetActive(false);
+
+        FindObjectOfType<PunManager>().Disconnect();
     }
 }

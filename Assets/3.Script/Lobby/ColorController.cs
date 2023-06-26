@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class ColorController : MonoBehaviour
 {
-    [Header("[Player Color]")]
-    [SerializeField] Image playerColor;
+    [Header("[Player Color (set)]")]
+    public Image playerColor;
 
     [Header("[0Mint 1Blue 2Purple 3Yellow 4Gray 5Pink 6Orange 7Green]")]
     [SerializeField] Color[] colors;
@@ -17,7 +17,7 @@ public class ColorController : MonoBehaviour
     //사용한 컬러 담는 변수
     private List<int> useColor = new List<int>();
 
-    private void Start()
+    public void DefaultColor()
     {
         playerColor.color = colors[0];
         GameManager.instance.myColorNum = 0;
@@ -25,7 +25,6 @@ public class ColorController : MonoBehaviour
         useColor.Add(0);
         useSprite[0].SetActive(true);
     }
-
     public void ColorSet(int colorNum)
     {
         for (int i = 0; i < useColor.Count; i++)
