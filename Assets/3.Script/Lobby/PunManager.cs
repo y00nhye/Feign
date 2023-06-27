@@ -104,7 +104,7 @@ public class PunManager : MonoBehaviourPunCallbacks
         lobbyBtnController.RoomCreateOrEnter();
         GameObject name = PhotonNetwork.Instantiate(playerNameUIPrebs.name, Vector3.zero, Quaternion.identity);
         name.transform.SetParent(GameObject.Find("Sort").transform);
-        name.transform.position = defaultPos;
+        name.transform.position = defaultPos - movePos * PhotonNetwork.CurrentRoom.PlayerCount;
 
         name.GetComponentInChildren<Text>().text = PhotonNetwork.LocalPlayer.NickName;
         lobbyBtnController.playerColor = name.GetComponent<Image>();
