@@ -14,9 +14,9 @@ public class PunManager : MonoBehaviourPunCallbacks
     public ServerSettings setting = null;
 
     [Header("ETC UI")]
-    public InputField roomName; //커스텀 프로퍼티
-    public Text UserCountText; //User count
-    public Button OKBtn;
+    public InputField createRoomName;
+    public InputField enterRoomName;
+    public Text UserCountText;
 
     [Header("Player Prefabs")]
     public GameObject playerNamePrebs;
@@ -43,56 +43,37 @@ public class PunManager : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectToMaster(setting.AppSettings.Server, setting.AppSettings.Port, "");
 
         Debug.Log("Connect to Master Server...");
-
-        OKBtn.onClick.AddListener(JoinRandomRoomOrCreateRoom);
     }
-    
 
     public void Disconnect()
     {
         PhotonNetwork.Disconnect(); //포톤 서버와 연결 끊기
     }
 
+    //콜백함수
     public void CreateRoom()
     {
-        OKBtn.onClick.RemoveAllListeners();
-        OKBtn.onClick.AddListener(JoinRandomRoomOrCreateRoom);
-    }
-    public void EnterRoom()
-    {
-        OKBtn.onClick.RemoveAllListeners();
-    }
-
-    //콜백함수
-    public void JoinRandomRoomOrCreateRoom()
-    {
-        if (roomName.Equals(string.Empty))
+        if (createRoomName.Equals(string.Empty))
         {
             Debug.Log("입력해 주십시오.");
             return;
         }
 
-        string nickname = FindObjectOfType<LobbyBtnController>().playerName;
-
         Debug.Log($"{FindObjectOfType<LobbyBtnController>().playerName} 랜덤 매칭 시작");
 
-        PhotonNetwork.LocalPlayer.NickName = nickname;
-
-        string roomname = roomName.text;
-
-        RoomOptions option = new RoomOptions();
-
-        int i_maxplayer = 10;
-
-        option.MaxPlayers = i_maxplayer;
+        PhotonNetwork.LocalPlayer.NickName = FindObjectOfType<LobbyBtnController>().playerName;
 
         //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
-        PhotonNetwork.CreateRoom(roomname, option);
+        PhotonNetwork.CreateRoom(createRoomName.text, new RoomOptions { MaxPlayers = 10 }, null);
+    }
+    public void EnterRoom()
+    {
+        PhotonNetwork.JoinRoom(enterRoomName.text);
     }
     public void cancelMatching()
     {
         Debug.Log("방 나감");
-        
+
         PhotonNetwork.LeaveRoom();
     }
     public override void OnConnectedToMaster()

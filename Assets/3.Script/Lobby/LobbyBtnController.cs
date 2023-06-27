@@ -11,7 +11,8 @@ public class LobbyBtnController : MonoBehaviour
     [SerializeField] GameObject roomCreateUI;
     [SerializeField] GameObject roomEnterUI;
     [SerializeField] GameObject nicknameSettingUI;
-    [SerializeField] GameObject RoomNameUI;
+    [SerializeField] GameObject createRoomNameUI;
+    [SerializeField] GameObject enterRoomNameUI;
 
     [Header("[Player Name]")]
     [SerializeField] Text playerNameInput;
@@ -29,17 +30,18 @@ public class LobbyBtnController : MonoBehaviour
     }
     public void RoomNameCreate()
     {
-        RoomNameUI.SetActive(true);
+        createRoomNameUI.SetActive(true);
     }
     public void RoomCreateOrEnter()
     {
-        RoomNameUI.SetActive(false);
+        createRoomNameUI.SetActive(false);
+        enterRoomNameUI.SetActive(false);
         lobbyMenuUI.SetActive(false);
         roomCreateUI.SetActive(true);
     }
     public void RoomEnter()
     {
-        RoomNameUI.SetActive(true);
+        enterRoomNameUI.SetActive(true);
     }
     public void GameExit()
     {
