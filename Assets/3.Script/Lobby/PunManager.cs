@@ -130,7 +130,7 @@ public class PunManager : MonoBehaviourPunCallbacks
                 playerNameUIs[i].SetActive(true);
                 playerNameUIs[i].GetComponentInChildren<Text>().text = PhotonNetwork.PlayerList[i].NickName;
 
-                if(PhotonNetwork.PlayerList[i].NickName == lobbyBtnController.playerName)
+                if(PhotonNetwork.PlayerList[i] == PhotonNetwork.LocalPlayer)
                 {
                     GameManager.instance.myOrder = i;
 
