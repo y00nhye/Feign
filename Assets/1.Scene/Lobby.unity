@@ -2582,6 +2582,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 831631379}
+        m_TargetAssemblyTypeName: PunManager, Assembly-CSharp
+        m_MethodName: EnterRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &272685005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3684,6 +3696,18 @@ MonoBehaviour:
       - m_Target: {fileID: 773053379}
         m_TargetAssemblyTypeName: LobbyBtnController, Assembly-CSharp
         m_MethodName: RoomNameCreate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 831631379}
+        m_TargetAssemblyTypeName: PunManager, Assembly-CSharp
+        m_MethodName: CreateRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7668,11 +7692,8 @@ MonoBehaviour:
   setting: {fileID: 11400000, guid: 72ba9ba594e78af4c91db6c3c0307a46, type: 2}
   roomName: {fileID: 1561929988}
   UserCountText: {fileID: 2072045994}
-  roomCreateBtn: {fileID: 1028849944}
-  roomExitBtn: {fileID: 330661187}
+  OKBtn: {fileID: 1028849944}
   playerNamePrebs: {fileID: 7717959673417133462, guid: 96025df43fdfbea40a534fc588e5bdfb, type: 3}
-  PlayerPrebs:
-  - {fileID: 3953146126802785487, guid: 18d7be6bf78fbd6478e04b461630b2c0, type: 3}
 --- !u!4 &831631380
 Transform:
   m_ObjectHideFlags: 0

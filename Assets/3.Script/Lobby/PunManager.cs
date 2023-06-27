@@ -16,8 +16,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     [Header("ETC UI")]
     public InputField roomName; //커스텀 프로퍼티
     public Text UserCountText; //User count
-    public Button roomCreateBtn;
-    public Button roomExitBtn;
+    public Button OKBtn;
 
     [Header("Player Prefabs")]
     public GameObject playerNamePrebs;
@@ -45,12 +44,23 @@ public class PunManager : MonoBehaviourPunCallbacks
 
         Debug.Log("Connect to Master Server...");
 
-        roomCreateBtn.onClick.AddListener(JoinRandomRoomOrCreateRoom);
+        OKBtn.onClick.AddListener(JoinRandomRoomOrCreateRoom);
     }
+    
 
     public void Disconnect()
     {
         PhotonNetwork.Disconnect(); //포톤 서버와 연결 끊기
+    }
+
+    public void CreateRoom()
+    {
+        OKBtn.onClick.RemoveAllListeners();
+        OKBtn.onClick.AddListener(JoinRandomRoomOrCreateRoom);
+    }
+    public void EnterRoom()
+    {
+        OKBtn.onClick.RemoveAllListeners();
     }
 
     //콜백함수
@@ -63,54 +73,38 @@ public class PunManager : MonoBehaviourPunCallbacks
         }
 
         string nickname = FindObjectOfType<LobbyBtnController>().playerName;
+
         Debug.Log($"{FindObjectOfType<LobbyBtnController>().playerName} 랜덤 매칭 시작");
+
         PhotonNetwork.LocalPlayer.NickName = nickname;
 
         string roomname = roomName.text;
 
         RoomOptions option = new RoomOptions();
 
-        int i_maxplayer = 8;
+        int i_maxplayer = 10;
 
         option.MaxPlayers = i_maxplayer;
 
-        //실질적으로 사용할 커스텀 프로퍼티 객체 생성
-        option.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable()
-        {
-            {"RoomName", roomname }
-        };
-        //CustomRoomPropertiesForLobby : 로비에서 커스텀 프로퍼티 등록, 게임에서 필터링이 가능함.
-        option.CustomRoomPropertiesForLobby = new string[] { "RoomName" };
-
         //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
-        PhotonNetwork.JoinRandomOrCreateRoom(expectedCustomRoomProperties: new ExitGames.Client.Photon.Hashtable() { { "RoomName", option.CustomRoomProperties["RoomName"] } }, expectedMaxPlayers: (byte)option.MaxPlayers, roomOptions: option);
+        PhotonNetwork.CreateRoom(roomname, option);
     }
     public void cancelMatching()
     {
-        Debug.Log("매칭 취소");
-        Debug.Log("방을 떠남");
+        Debug.Log("방 나감");
+        
         PhotonNetwork.LeaveRoom();
-        roomExitBtn.onClick.RemoveAllListeners();
-        roomExitBtn.onClick.AddListener(JoinRandomRoomOrCreateRoom);
     }
     public override void OnConnectedToMaster()
     {
         base.OnConnectedToMaster();
 
         Debug.Log("Connect Complete!");
-
-        //PhotonNetwork.JoinRandomRoom();
     }
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
         Debug.Log("Connect to Room..");
-
-        FindObjectOfType<LobbyBtnController>().RoomCreateOrEnter();
-        GameObject name = Instantiate(playerNamePrebs);
-
-        name.transform.SetParent(GameObject.Find("PlayerListBackground").transform);
-        name.transform.localPosition = defaultPos - movePos * PhotonNetwork.CurrentRoom.PlayerCount;
 
         Update_Player();
     }
@@ -119,6 +113,7 @@ public class PunManager : MonoBehaviourPunCallbacks
         //어떤 newPlayer 가 들어왔을 때 콜백되는 콜백함수
         base.OnPlayerEnteredRoom(newPlayer);
         Debug.Log($"{newPlayer.NickName} enter room..");
+
         Update_Player();
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -130,6 +125,12 @@ public class PunManager : MonoBehaviourPunCallbacks
     }
     public void Update_Player()
     {
+        FindObjectOfType<LobbyBtnController>().RoomCreateOrEnter();
+        GameObject name = Instantiate(playerNamePrebs);
+
+        name.transform.SetParent(GameObject.Find("PlayerListBackground").transform);
+        name.transform.localPosition = defaultPos - movePos * PhotonNetwork.CurrentRoom.PlayerCount;
+
         UserCountText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount}";
     }
 
