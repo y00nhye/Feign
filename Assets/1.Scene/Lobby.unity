@@ -2661,7 +2661,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1200462179}
-  - {fileID: 1882477925}
   m_Father: {fileID: 1389941926}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3773,7 +3772,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1782378512}
-  - {fileID: 1162175556}
   m_Father: {fileID: 1389941926}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4739,41 +4737,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 447977184}
   m_CullTransparentMesh: 1
---- !u!1 &449406384
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 449406385}
-  m_Layer: 5
-  m_Name: RoomEnter
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &449406385
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 449406384}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 829723766}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &459445910
 GameObject:
   m_ObjectHideFlags: 0
@@ -7640,7 +7603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyMenuUI: {fileID: 1389941925}
   roomCreateUI: {fileID: 1146776661}
-  roomEnterUI: {fileID: 449406384}
+  roomEnterUI: {fileID: 0}
   nicknameSettingUI: {fileID: 179844843}
   createRoomNameUI: {fileID: 1162175555}
   enterRoomNameUI: {fileID: 1882477924}
@@ -8044,9 +8007,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 179844844}
+  - {fileID: 1162175556}
+  - {fileID: 1882477925}
   - {fileID: 1389941926}
   - {fileID: 1146776662}
-  - {fileID: 449406385}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8103,8 +8067,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   setting: {fileID: 11400000, guid: 72ba9ba594e78af4c91db6c3c0307a46, type: 2}
-  createRoomName: {fileID: 0}
-  enterRoomName: {fileID: 0}
+  createRoomName: {fileID: 38285991}
+  enterRoomName: {fileID: 1914415175}
   UserCountText: {fileID: 2072045994}
   playerNamePrebs: {fileID: 7717959673417133462, guid: 96025df43fdfbea40a534fc588e5bdfb, type: 3}
 --- !u!4 &831631380
@@ -11273,7 +11237,7 @@ RectTransform:
   - {fileID: 183091846}
   - {fileID: 53322180}
   m_Father: {fileID: 829723766}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -11328,7 +11292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1162175556}
   m_Layer: 5
-  m_Name: RoomName
+  m_Name: CreateRoomName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11347,12 +11311,12 @@ RectTransform:
   m_Children:
   - {fileID: 38285990}
   - {fileID: 1562829784}
-  m_Father: {fileID: 391041344}
+  m_Father: {fileID: 829723766}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 85}
+  m_AnchoredPosition: {x: -730, y: -165}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1185330735
@@ -13581,7 +13545,7 @@ RectTransform:
   - {fileID: 272685003}
   - {fileID: 492319257}
   m_Father: {fileID: 829723766}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -18468,7 +18432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1882477925}
   m_Layer: 5
-  m_Name: RoomName
+  m_Name: EnterRoomName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18487,12 +18451,12 @@ RectTransform:
   m_Children:
   - {fileID: 1914415174}
   - {fileID: 411733338}
-  m_Father: {fileID: 272685003}
-  m_RootOrder: 1
+  m_Father: {fileID: 829723766}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 185}
+  m_AnchoredPosition: {x: -730, y: -165}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1885211482

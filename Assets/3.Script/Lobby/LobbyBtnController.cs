@@ -30,6 +30,7 @@ public class LobbyBtnController : MonoBehaviour
     }
     public void RoomNameCreate()
     {
+        lobbyMenuUI.SetActive(false);
         createRoomNameUI.SetActive(true);
     }
     public void RoomCreateOrEnter()
@@ -41,6 +42,7 @@ public class LobbyBtnController : MonoBehaviour
     }
     public void RoomEnter()
     {
+        lobbyMenuUI.SetActive(false);
         enterRoomNameUI.SetActive(true);
     }
     public void GameExit()
