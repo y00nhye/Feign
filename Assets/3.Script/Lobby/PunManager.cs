@@ -80,7 +80,7 @@ public class PunManager : MonoBehaviourPunCallbacks
             {"RoomName", roomname }
         };
         //CustomRoomPropertiesForLobby : 로비에서 커스텀 프로퍼티 등록, 게임에서 필터링이 가능함.
-        option.CustomRoomPropertiesForLobby = new string[] { "MaxTime" };
+        option.CustomRoomPropertiesForLobby = new string[] { "RoomName" };
 
         //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
         PhotonNetwork.JoinRandomOrCreateRoom(expectedCustomRoomProperties: new ExitGames.Client.Photon.Hashtable() { { "RoomName", option.CustomRoomProperties["RoomName"] } }, expectedMaxPlayers: (byte)option.MaxPlayers, roomOptions: option);
