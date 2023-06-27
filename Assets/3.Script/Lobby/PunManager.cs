@@ -21,7 +21,6 @@ public class PunManager : MonoBehaviourPunCallbacks
 
     [Header("Player Prefabs")]
     public GameObject playerNamePrebs;
-    public GameObject[] PlayerPrebs;
 
     //플레이어 이름 default 값
     private Vector3 defaultPos = new Vector3(0, 500, 0);
@@ -140,11 +139,6 @@ public class PunManager : MonoBehaviourPunCallbacks
     public void Update_Player()
     {
         UserCountText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount}";
-    }
-    public void InstantiatePlayer()
-    {
-        int num = Random.Range(0, PlayerPrebs.Length);   
-        PhotonNetwork.Instantiate(PlayerPrebs[num].name, Vector3.zero, Quaternion.identity);
     }
 
     #endregion

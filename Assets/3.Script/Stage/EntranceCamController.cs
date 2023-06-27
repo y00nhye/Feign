@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using Photon.Pun;
 
-public class EntranceCamController : MonoBehaviour
+public class EntranceCamController : MonoBehaviourPun
 {
-    [Header("[My Player transform]")]
-    [SerializeField] Transform player;
+    [Header("[My Player transform (set)]")]
+    public Transform player;
 
     [Header("[Vote Cam]")]
     [SerializeField] CinemachineVirtualCamera voteCam;
@@ -17,13 +18,14 @@ public class EntranceCamController : MonoBehaviour
     {
         timeManager = FindObjectOfType<TimeManager>();
     }
-    private void Start()
+    
+    public void FollowPlayer()
     {
         transform.position = new Vector3(45, 44, player.position.z);
 
         Invoke("MovetoVoteCam", 9);
     }
-    
+
     private void MovetoVoteCam()
     {
         GetComponent<CinemachineVirtualCamera>().enabled = false;

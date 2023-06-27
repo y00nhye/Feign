@@ -19,6 +19,11 @@ public class PlayerStartMove : MonoBehaviour
     private void Awake()
     {
         TryGetComponent(out playerAni);
+
+        for(int i = 0; i < votePos.Length; i++)
+        {
+            votePos[i] = GameObject.Find("VotePos").GetComponentsInChildren<Transform>()[i + 1];
+        }
     }
     private void Start()
     {
