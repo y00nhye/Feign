@@ -128,19 +128,15 @@ public class PunManager : MonoBehaviourPunCallbacks
             if (i < PhotonNetwork.CurrentRoom.PlayerCount)
             {
                 playerNameUIs[i].SetActive(true);
+                playerNameUIs[i].GetComponentInChildren<Text>().text = PhotonNetwork.PlayerList[i].NickName;
 
-                for(int j = 0; j < PhotonNetwork.PlayerList.Length; j++)
+                if(PhotonNetwork.PlayerList[i].NickName == lobbyBtnController.playerName)
                 {
-                    if(PhotonNetwork.PlayerList[j].NickName == lobbyBtnController.playerName)
-                    {
-                        GameManager.instance.myOrder = i;
+                    GameManager.instance.myOrder = i;
 
-                        playerNameUIs[i].GetComponentInChildren<Text>().text = lobbyBtnController.playerName;
-
-                        lobbyBtnController.playerColor = playerNameUIs[i].GetComponent<Image>();
-                        FindObjectOfType<ColorController>().playerColor = playerNameUIs[i].GetComponent<Image>();
-                        FindObjectOfType<ColorController>().DefaultColor();
-                    }
+                    lobbyBtnController.playerColor = playerNameUIs[i].GetComponent<Image>();
+                    FindObjectOfType<ColorController>().playerColor = playerNameUIs[i].GetComponent<Image>();
+                    FindObjectOfType<ColorController>().DefaultColor();
                 }
             }
             else
