@@ -18,8 +18,8 @@ public class PunManager : MonoBehaviourPunCallbacks
     public InputField enterRoomName;
     public Text UserCountText;
 
-    [Header("Player Prefabs")]
-    public GameObject playerNamePrebs;
+    [Header("[Player Name UI Array]")]
+    [SerializeField] GameObject[] playerNameUIs;
 
     //플레이어 이름 default 값
     private Vector3 defaultPos = new Vector3(0, 500, 0);
@@ -87,6 +87,8 @@ public class PunManager : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
         Debug.Log("Connect to Room..");
 
+        FindObjectOfType<LobbyBtnController>().RoomCreateOrEnter();
+
         Update_Player();
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -102,17 +104,39 @@ public class PunManager : MonoBehaviourPunCallbacks
         //어떤 otherPlayer 가 방에서 나갔을 때 콜백되는 콜백함수
         base.OnPlayerLeftRoom(otherPlayer);
         Debug.Log($"{otherPlayer.NickName} leave room..");
+
         Update_Player();
     }
     public void Update_Player()
     {
-        FindObjectOfType<LobbyBtnController>().RoomCreateOrEnter();
-        GameObject name = Instantiate(playerNamePrebs);
-
-        name.transform.SetParent(GameObject.Find("PlayerListBackground").transform);
-        name.transform.localPosition = defaultPos - movePos * PhotonNetwork.CurrentRoom.PlayerCount;
-
         UserCountText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount}";
+
+        for (int i = 0; i < playerNameUIs.Length; i++)
+        {
+            if (i < PhotonNetwork.CurrentRoom.PlayerCount)
+            {
+                playerNameUIs[i].SetActive(true);
+
+                for(int j = 0; j < PhotonNetwork.PlayerList.Length; j++)
+                {
+                    if(PhotonNetwork.PlayerList[j] == PhotonNetwork.PlayerList[i])
+                    {
+                        GameManager.instance.myOrder = i;
+
+                        playerNameUIs[i].GetComponentInChildren<Text>().text = PhotonNetwork.PlayerList[i].NickName;
+
+                        FindObjectOfType<LobbyBtnController>().playerColor = playerNameUIs[i].GetComponent<Image>();
+                        FindObjectOfType<ColorController>().playerColor = playerNameUIs[i].GetComponent<Image>();
+                        FindObjectOfType<ColorController>().DefaultColor();
+                    }
+                }
+            }
+            else
+            {
+                playerNameUIs[i].SetActive(false);
+            }
+        }
+
     }
 
     #endregion
