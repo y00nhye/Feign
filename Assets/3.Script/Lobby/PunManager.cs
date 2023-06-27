@@ -59,8 +59,6 @@ public class PunManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        Debug.Log($"{FindObjectOfType<LobbyBtnController>().playerName} 랜덤 매칭 시작");
-
         PhotonNetwork.LocalPlayer.NickName = FindObjectOfType<LobbyBtnController>().playerName;
 
         //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
@@ -68,6 +66,14 @@ public class PunManager : MonoBehaviourPunCallbacks
     }
     public void EnterRoom()
     {
+        if (enterRoomName.Equals(string.Empty))
+        {
+            Debug.Log("입력해 주십시오.");
+            return;
+        }
+
+        PhotonNetwork.LocalPlayer.NickName = FindObjectOfType<LobbyBtnController>().playerName;
+
         PhotonNetwork.JoinRoom(enterRoomName.text);
     }
     public void cancelMatching()
@@ -119,7 +125,7 @@ public class PunManager : MonoBehaviourPunCallbacks
 
                 for(int j = 0; j < PhotonNetwork.PlayerList.Length; j++)
                 {
-                    if(PhotonNetwork.PlayerList[j] == PhotonNetwork.PlayerList[i])
+                    if(PhotonNetwork.PlayerList[j] == PhotonNetwork.LocalPlayer)
                     {
                         GameManager.instance.myOrder = i;
 
