@@ -99,15 +99,7 @@ public class PunManager : MonoBehaviourPunCallbacks
 
         Debug.Log("Connect Complete!");
 
-        PhotonNetwork.JoinLobby(); //대기실 입장
-    }
-    public override void OnJoinedLobby()
-    {
-        base.OnJoinedLobby();
-
-        Debug.Log("Connect to Lobby..");
-
-        PhotonNetwork.JoinRandomRoom(); //방 입장
+        //PhotonNetwork.JoinRandomRoom();
     }
     public override void OnJoinedRoom()
     {
@@ -118,7 +110,7 @@ public class PunManager : MonoBehaviourPunCallbacks
         GameObject name = Instantiate(playerNamePrebs);
 
         name.transform.SetParent(GameObject.Find("PlayerListBackground").transform);
-        name.transform.localPosition = defaultPos - movePos;
+        name.transform.localPosition = defaultPos - movePos * PhotonNetwork.CurrentRoom.PlayerCount;
 
         Update_Player();
     }
