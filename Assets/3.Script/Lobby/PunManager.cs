@@ -21,10 +21,16 @@ public class PunManager : MonoBehaviourPunCallbacks
     [Header("[Player Name UI Array]")]
     [SerializeField] GameObject[] playerNameUIs;
 
+    private LobbyBtnController lobbyBtnController;
+
     //플레이어 이름 default 값
     private Vector3 defaultPos = new Vector3(0, 500, 0);
     private Vector3 movePos = new Vector3(0, 100, 0);
 
+    private void Awake()
+    {
+        lobbyBtnController = FindObjectOfType<LobbyBtnController>();
+    }
     private void Start()
     {
         Connect();
@@ -59,7 +65,7 @@ public class PunManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        PhotonNetwork.LocalPlayer.NickName = FindObjectOfType<LobbyBtnController>().playerName;
+        PhotonNetwork.LocalPlayer.NickName = lobbyBtnController.playerName;
 
         //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
         PhotonNetwork.CreateRoom(createRoomName.text, new RoomOptions { MaxPlayers = 10 }, null);
@@ -72,7 +78,7 @@ public class PunManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        PhotonNetwork.LocalPlayer.NickName = FindObjectOfType<LobbyBtnController>().playerName;
+        PhotonNetwork.LocalPlayer.NickName = lobbyBtnController.playerName;
 
         PhotonNetwork.JoinRoom(enterRoomName.text);
     }
@@ -93,7 +99,7 @@ public class PunManager : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
         Debug.Log("Connect to Room..");
 
-        FindObjectOfType<LobbyBtnController>().RoomCreateOrEnter();
+        lobbyBtnController.RoomCreateOrEnter();
 
         Update_Player();
     }
@@ -125,13 +131,13 @@ public class PunManager : MonoBehaviourPunCallbacks
 
                 for(int j = 0; j < PhotonNetwork.PlayerList.Length; j++)
                 {
-                    if(PhotonNetwork.PlayerList[j] == PhotonNetwork.LocalPlayer)
+                    if(PhotonNetwork.PlayerList[j].NickName == lobbyBtnController.playerName)
                     {
                         GameManager.instance.myOrder = i;
 
-                        playerNameUIs[i].GetComponentInChildren<Text>().text = PhotonNetwork.PlayerList[i].NickName;
+                        playerNameUIs[i].GetComponentInChildren<Text>().text = lobbyBtnController.playerName;
 
-                        FindObjectOfType<LobbyBtnController>().playerColor = playerNameUIs[i].GetComponent<Image>();
+                        lobbyBtnController.playerColor = playerNameUIs[i].GetComponent<Image>();
                         FindObjectOfType<ColorController>().playerColor = playerNameUIs[i].GetComponent<Image>();
                         FindObjectOfType<ColorController>().DefaultColor();
                     }
