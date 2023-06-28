@@ -34,5 +34,6 @@ public class PlayerNameUI : MonoBehaviourPunCallbacks
     {
         myNickName.text = PhotonNetwork.LocalPlayer.NickName;
         pos.SetParent(GameObject.Find("Sort").transform);
+        FindObjectOfType<ColorController>().DefaultColor();
     }
 }

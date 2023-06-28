@@ -110,7 +110,7 @@ public class PunManager : MonoBehaviourPunCallbacks
         //    PhotonNetwork.PlayerList[i].SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "num", i } });
         //}
 
-        FindObjectOfType<ColorController>().DefaultColor();
+        //FindObjectOfType<ColorController>().DefaultColor();
 
         Update_Player();
     }
