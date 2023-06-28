@@ -3474,7 +3474,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: CPoliceOfficerPlus
+        m_MethodName: CPoliceOfficerPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4640,7 +4640,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: NRandomPlus
+        m_MethodName: NRandomPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6257,7 +6257,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: IPoliceOfficerPlus
+        m_MethodName: IPoliceOfficerPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7613,6 +7613,7 @@ GameObject:
   - component: {fileID: 773053380}
   - component: {fileID: 773053379}
   - component: {fileID: 773053383}
+  - component: {fileID: 773053384}
   m_Layer: 0
   m_Name: LobbyManager
   m_TagString: Untagged
@@ -7686,6 +7687,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1a44f86fe4f14664eb13d3678989261c, type: 2}
   - {fileID: 11400000, guid: 6b7832d70c8ec8f4a902c656efdf15b7, type: 2}
   - {fileID: 11400000, guid: 8b9c4fa7a33baea4da3e43be22dbed82, type: 2}
+  PV: {fileID: 773053384}
 --- !u!4 &773053382
 Transform:
   m_ObjectHideFlags: 0
@@ -7731,6 +7733,28 @@ MonoBehaviour:
   - {fileID: 1637801849}
   - {fileID: 1552047273}
   - {fileID: 1234908994}
+--- !u!114 &773053384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773053378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!64 &799384134
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8132,7 +8156,7 @@ MonoBehaviour:
   createRoomName: {fileID: 38285991}
   enterRoomName: {fileID: 1914415175}
   UserCountText: {fileID: 2072045994}
-  playerNameUIPrebs: {fileID: 0}
+  playerNameUIPreb: {fileID: 3904129407032344886, guid: ccb1a5a92fdf8404bb6a6557056d1a29, type: 3}
 --- !u!4 &831631380
 Transform:
   m_ObjectHideFlags: 0
@@ -9263,7 +9287,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: ThiefPlus
+        m_MethodName: ThiefPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9801,7 +9825,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: CAgentPlus
+        m_MethodName: CAgentPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12253,7 +12277,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: CRandomPlus
+        m_MethodName: CRandomPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12943,7 +12967,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: DoctorPlus
+        m_MethodName: DoctorPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14366,7 +14390,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: PsychopathPlus
+        m_MethodName: PsychopathPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14725,7 +14749,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: IRandomPlus
+        m_MethodName: IRandomPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15320,7 +15344,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: SerialKillerPlus
+        m_MethodName: SerialKillerPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -19414,7 +19438,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: PainterPlus
+        m_MethodName: PainterPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -19622,7 +19646,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: CleanerPlus
+        m_MethodName: CleanerPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20387,7 +20411,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773053381}
         m_TargetAssemblyTypeName: RoleController, Assembly-CSharp
-        m_MethodName: IAgentPlus
+        m_MethodName: IAgentPlus_pv
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

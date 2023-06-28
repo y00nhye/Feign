@@ -18,20 +18,24 @@ public class PunManager : MonoBehaviourPunCallbacks
     public InputField enterRoomName;
     public Text UserCountText;
 
-    [Header("[Player Name UI Array]")]
-    [SerializeField] GameObject playerNameUIPrebs;
+    //[Header("[Player Name UI Array]")]
+    //[SerializeField] Image[] playerNameUIPrebs;
+    //[SerializeField] Text[] playerNameTxtPrebs;
+
+    [Header("[Player Name UI]")]
+    [SerializeField] GameObject playerNameUIPreb;
 
     private LobbyBtnController lobbyBtnController;
+    private ColorController colorController;
 
     //플레이어 이름 default 값
-    private Vector3 defaultPos = new Vector3(0, 500, 0);
-    private Vector3 movePos = new Vector3(0, 100, 0);
-
-    private PhotonView PV;
+    //private Vector3 defaultPos = new Vector3(0, 500, 0);
+    //private Vector3 movePos = new Vector3(0, 100, 0);
 
     private void Awake()
     {
         lobbyBtnController = FindObjectOfType<LobbyBtnController>();
+        colorController = FindObjectOfType<ColorController>();
     }
     private void Start()
     {
@@ -103,14 +107,7 @@ public class PunManager : MonoBehaviourPunCallbacks
 
         lobbyBtnController.RoomCreateOrEnter();
 
-        PhotonNetwork.Instantiate(playerNameUIPrebs.name, Vector3.zero, Quaternion.identity);
-
-        //for(int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-        //{
-        //    PhotonNetwork.PlayerList[i].SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "num", i } });
-        //}
-
-        //FindObjectOfType<ColorController>().DefaultColor();
+        PhotonNetwork.Instantiate(playerNameUIPreb.name, Vector3.zero, Quaternion.identity);
 
         Update_Player();
     }
@@ -133,6 +130,26 @@ public class PunManager : MonoBehaviourPunCallbacks
     public void Update_Player()
     {
         UserCountText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount}";
+
+        //for (int i = 0; i < playerNameUIPrebs.Length; i++)
+        //{
+        //    if (PhotonNetwork.CurrentRoom.PlayerCount > i)
+        //    {
+        //        playerNameUIPrebs[i].gameObject.SetActive(true);
+        //        playerNameTxtPrebs[i].text = PhotonNetwork.PlayerList[i].NickName;
+        //
+        //        if (i == PhotonNetwork.LocalPlayer.ActorNumber)
+        //        {
+        //            lobbyBtnController.playerColor = playerNameUIPrebs[i];
+        //            colorController.playerColor = playerNameUIPrebs[i];
+        //            colorController.DefaultColor();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        playerNameUIPrebs[i].gameObject.SetActive(false);
+        //    }
+        //}
     }
 
     #endregion

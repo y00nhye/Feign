@@ -106,15 +106,15 @@ GameObject:
   - component: {fileID: 3904129407032344885}
   - component: {fileID: 3904129407032344883}
   - component: {fileID: 3904129407032344884}
-  - component: {fileID: 3904129407032344889}
-  - component: {fileID: -4541909736214299040}
+  - component: {fileID: -6809928193899106907}
+  - component: {fileID: -5474952611387533688}
   m_Layer: 5
   m_Name: PlayerNameUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3904129407032344885
 RectTransform:
   m_ObjectHideFlags: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3904129407032344889
+--- !u!114 &-6809928193899106907
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -195,7 +195,7 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-4541909736214299040
+--- !u!114 &-5474952611387533688
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -207,3 +207,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d29b81258141ce4aa898b2a9c218154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PV: {fileID: -6809928193899106907}

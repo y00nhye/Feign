@@ -7,33 +7,34 @@ using UnityEngine.UI;
 
 public class PlayerNameUI : MonoBehaviourPunCallbacks
 {
-    private PhotonView PV;
-    private RectTransform pos;
+    [Header("[PhotonView]")]
+    public PhotonView PV;
 
-    private Text myNickName;
+    private LobbyBtnController lobbyBtnController;
+    private ColorController colorController;
 
     private void Awake()
     {
-        TryGetComponent(out PV);
-        TryGetComponent(out pos);
-
-        myNickName = GetComponentInChildren<Text>();
+        lobbyBtnController = FindObjectOfType<LobbyBtnController>();
+        colorController = FindObjectOfType<ColorController>();
     }
     private void Start()
     {
-        FindObjectOfType<LobbyBtnController>().playerColor = GetComponent<Image>();
-        FindObjectOfType<ColorController>().playerColor = GetComponent<Image>();
-
         if (PV.IsMine)
         {
             PV.RPC("Set", RpcTarget.AllBuffered);
         }
     }
+
     [PunRPC]
     void Set()
     {
-        myNickName.text = PhotonNetwork.LocalPlayer.NickName;
-        pos.SetParent(GameObject.Find("Sort").transform);
-        FindObjectOfType<ColorController>().DefaultColor();
+        transform.SetParent(GameObject.Find("Sort").transform);
+        GetComponentInChildren<Text>().text = PV.Controller.NickName;
+
+        lobbyBtnController.playerColor = GetComponent<Image>();
+        colorController.playerColor = GetComponent<Image>();
+
+        colorController.DefaultColor();
     }
 }

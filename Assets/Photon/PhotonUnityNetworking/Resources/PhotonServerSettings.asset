@@ -39,6 +39,22 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - Pos
+  - Set
+  - DoctorPlus
+  - CAgentPlus
+  - CleanerPlus
+  - CPoliceOfficerPlus
+  - CRandomPlus
+  - IAgentPlus
+  - IPoliceOfficerPlus
+  - IRandomPlus
+  - NRandomPlus
+  - PainterPlus
+  - PsychopathPlus
+  - SerialKillerPlus
+  - ThiefPlus
+  - Minus
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

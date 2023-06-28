@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class RoleController : MonoBehaviour
+public class RoleController : MonoBehaviourPunCallbacks
 {
     [Header("[RoleList UI]")]
     [SerializeField] GameObject citizenUI;
@@ -48,6 +49,9 @@ public class RoleController : MonoBehaviour
 
     private Vector3 PlusUIPos = new Vector3(0, 120, 0); //변경 UI 위치값, 생성 UI 위치는 localPosition 으로 받기
 
+    [Header("[Photon View]")]
+    [SerializeField] PhotonView PV;
+
     private void Start()
     {
         doctorNum = 0;
@@ -80,8 +84,6 @@ public class RoleController : MonoBehaviour
         imposterUI.transform.position -= PlusUIPos;
         neutralUI.transform.position -= PlusUIPos;
 
-        //!!!중첩 관리하기 구현!!!
-
         GameObject role = Instantiate(roleListPrebs);
         role.transform.SetParent(GameObject.Find("Citizen").transform);
 
@@ -96,8 +98,6 @@ public class RoleController : MonoBehaviour
     {
         neutralUI.transform.position -= PlusUIPos;
 
-        //!!!중첩 관리하기 구현!!!
-
         GameObject role = Instantiate(roleListPrebs);
         role.transform.SetParent(GameObject.Find("Imposter").transform);
 
@@ -111,8 +111,6 @@ public class RoleController : MonoBehaviour
     }
     private GameObject NeutralRoleSet() //중립 세팅
     {
-        //!!!중첩 관리하기 구현!!!
-
         GameObject role = Instantiate(roleListPrebs);
         role.transform.SetParent(GameObject.Find("Neutral").transform);
 
@@ -125,8 +123,62 @@ public class RoleController : MonoBehaviour
         return role;
     }
 
+    public void DoctorPlus_pv()
+    {
+        PV.RPC("DoctorPlus", RpcTarget.AllBuffered);
+    }
+    public void PsychopathPlus_pv()
+    {
+        PV.RPC("PsychopathPlus", RpcTarget.AllBuffered);
+    }
+    public void CleanerPlus_pv()
+    {
+        PV.RPC("CleanerPlus", RpcTarget.AllBuffered);
+    }
+    public void PainterPlus_pv()
+    {
+        PV.RPC("PainterPlus", RpcTarget.AllBuffered);
+    }
+    public void CPoliceOfficerPlus_pv()
+    {
+        PV.RPC("CPoliceOfficerPlus", RpcTarget.AllBuffered);
+    }
+    public void IPoliceOfficerPlus_pv()
+    {
+        PV.RPC("IPoliceOfficerPlus", RpcTarget.AllBuffered);
+    }
+    public void CAgentPlus_pv()
+    {
+        PV.RPC("CAgentPlus", RpcTarget.AllBuffered);
+    }
+    public void IAgentPlus_pv()
+    {
+        PV.RPC("IAgentPlus", RpcTarget.AllBuffered);
+    }
+    public void SerialKillerPlus_pv()
+    {
+        PV.RPC("SerialKillerPlus", RpcTarget.AllBuffered);
+    }
+    public void ThiefPlus_pv()
+    {
+        PV.RPC("ThiefPlus", RpcTarget.AllBuffered);
+    }
+    public void CRandomPlus_pv()
+    {
+        PV.RPC("CRandomPlus", RpcTarget.AllBuffered);
+    }
+    public void IRandomPlus_pv()
+    {
+        PV.RPC("IRandomPlus", RpcTarget.AllBuffered);
+    }
+    public void NRandomPlus_pv()
+    {
+        PV.RPC("NRandomPlus", RpcTarget.AllBuffered);
+    }
+
     //역할 추가 버튼 이벤트 13개
-    public void DoctorPlus()
+    [PunRPC]
+    private void DoctorPlus()
     {
         doctorNum++;
         citizenNum++;
@@ -138,7 +190,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void PsychopathPlus()
+    [PunRPC]
+    private void PsychopathPlus()
     {
         psychopathNum++;
         citizenNum++;
@@ -150,7 +203,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void CleanerPlus()
+    [PunRPC]
+    private void CleanerPlus()
     {
         cleanerNum++;
         imposterNum++;
@@ -162,7 +216,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void PainterPlus()
+    [PunRPC]
+    private void PainterPlus()
     {
         painterNum++;
         imposterNum++;
@@ -174,7 +229,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void CPoliceOfficerPlus()
+    [PunRPC]
+    private void CPoliceOfficerPlus()
     {
         cPoliceOfficerNum++;
         citizenNum++;
@@ -186,7 +242,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void IPoliceOfficerPlus()
+    [PunRPC]
+    private void IPoliceOfficerPlus()
     {
         iPoliceOfficerNum++;
         imposterNum++;
@@ -198,7 +255,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void CAgentPlus()
+    [PunRPC]
+    private void CAgentPlus()
     {
         cAgentNum++;
         citizenNum++;
@@ -210,7 +268,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void IAgentPlus()
+    [PunRPC]
+    private void IAgentPlus()
     {
         iAgentNum++;
         imposterNum++;
@@ -222,7 +281,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void SerialKillerPlus()
+    [PunRPC]
+    private void SerialKillerPlus()
     {
         serialKillerNum++;
         neutralNum++;
@@ -234,7 +294,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void ThiefPlus()
+    [PunRPC]
+    private void ThiefPlus()
     {
         thiefNum++;
         neutralNum++;
@@ -246,7 +307,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void CRandomPlus()
+    [PunRPC]
+    private void CRandomPlus()
     {
         cRandomNum++;
         citizenNum++;
@@ -258,7 +320,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void IRandomPlus()
+    [PunRPC]
+    private void IRandomPlus()
     {
         iRandomNum++;
         imposterNum++;
@@ -270,7 +333,8 @@ public class RoleController : MonoBehaviour
             roleInfo.SetInfo();
         }
     }
-    public void NRandomPlus()
+    [PunRPC]
+    private void NRandomPlus()
     {
         nRandomNum++;
         neutralNum++;
