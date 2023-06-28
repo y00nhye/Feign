@@ -102,15 +102,15 @@ public class PunManager : MonoBehaviourPunCallbacks
         Debug.Log("Connect to Room..");
 
         lobbyBtnController.RoomCreateOrEnter();
+
         GameObject name = PhotonNetwork.Instantiate(playerNameUIPrebs.name, Vector3.zero, Quaternion.identity);
-        name.transform.SetParent(GameObject.Find("Sort").transform);
-        name.transform.position = defaultPos - movePos * PhotonNetwork.CurrentRoom.PlayerCount;
 
-        name.GetComponentInChildren<Text>().text = PhotonNetwork.LocalPlayer.NickName;
-        lobbyBtnController.playerColor = name.GetComponent<Image>();
-        FindObjectOfType<ColorController>().playerColor = name.GetComponent<Image>();
-
-        PV = name.GetComponent<PhotonView>();
+        //name.GetComponentInChildren<Text>().text = PhotonNetwork.LocalPlayer.NickName;
+        //lobbyBtnController.playerColor = name.GetComponent<Image>();
+        //FindObjectOfType<ColorController>().playerColor = name.GetComponent<Image>();
+        //FindObjectOfType<ColorController>().DefaultColor();
+        //
+        //PV = name.GetComponent<PhotonView>();
 
         Update_Player();
     }
@@ -133,11 +133,6 @@ public class PunManager : MonoBehaviourPunCallbacks
     public void Update_Player()
     {
         UserCountText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount}";
-
-        if (PV.IsMine)
-        {
-            FindObjectOfType<ColorController>().DefaultColor();
-        }
     }
 
     #endregion
