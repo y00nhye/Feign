@@ -105,10 +105,10 @@ public class PunManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.Instantiate(playerNameUIPrebs.name, Vector3.zero, Quaternion.identity);
 
-        for(int i = 0; i < 10; i++)
-        {
-            PhotonNetwork.PlayerList[i].SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "num", i } });
-        }
+        //for(int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        //{
+        //    PhotonNetwork.PlayerList[i].SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "num", i } });
+        //}
 
         FindObjectOfType<ColorController>().DefaultColor();
 
