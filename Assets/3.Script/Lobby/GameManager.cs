@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     //플레이어 정보 담는 변수, 플레이어 생성 되면 제작
     public Color myColor;
-    public int myColorNum;
+    public int[] myColorNum;
     public string myName;
     public int myOrder = 0;
 
@@ -61,6 +61,11 @@ public class GameManager : MonoBehaviour
     public int neutralNum;
 
     public int totalRoleNum;
+
+    private void Start()
+    {
+        myColorNum = new int[8];
+    }
 
     public void RoleShuffle()
     {

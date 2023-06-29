@@ -45,6 +45,13 @@ public class LobbyBtnController : MonoBehaviour
         lobbyMenuUI.SetActive(false);
         enterRoomNameUI.SetActive(true);
     }
+    public void Back()
+    {
+        createRoomNameUI.SetActive(false);
+        enterRoomNameUI.SetActive(false);
+        lobbyMenuUI.SetActive(true);
+
+    }
     public void GameExit()
     {
         Application.Quit();
@@ -119,6 +126,6 @@ public class LobbyBtnController : MonoBehaviour
         lobbyMenuUI.SetActive(true);
         roomCreateUI.SetActive(false);
 
-        FindObjectOfType<PunManager>().Disconnect();
+        FindObjectOfType<PunManager>().LeaveRoom();
     }
 }

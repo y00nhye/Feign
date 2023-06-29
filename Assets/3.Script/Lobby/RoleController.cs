@@ -50,7 +50,7 @@ public class RoleController : MonoBehaviourPunCallbacks
     private Vector3 PlusUIPos = new Vector3(0, 120, 0); //변경 UI 위치값, 생성 UI 위치는 localPosition 으로 받기
 
     [Header("[Photon View]")]
-    [SerializeField] PhotonView PV;
+    public PhotonView PV;
 
     private void Start()
     {
@@ -347,37 +347,38 @@ public class RoleController : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
     //역할 삭제, 프리팹에서 삭제
-    public void RoleMinus(RoleInfo role)
+    public void RoleMinus(bool isim, bool isne, string name)
     {
         int re = 0; //정렬을 위한 변수, re 번째 인덱스부터 자리 세팅
 
-        if (role.roleColor == citizenUI.GetComponent<Image>().color) //시민 역할 삭제
+        if (!isim && !isne) //시민 역할 삭제
         {
             citizenNum--;
             int currentNum; //현재 역할의 수 체크
 
-            if(role.roleData.roleName == "의사")
+            if(name == "의사")
             {
                 doctorNum--;
                 currentNum = doctorNum;
             }
-            else if (role.roleData.roleName == "정신병자")
+            else if (name == "정신병자")
             {
                 psychopathNum--;
                 currentNum = psychopathNum;
             }
-            else if (role.roleData.roleName == "경찰")
+            else if (name == "경찰")
             {
                 cPoliceOfficerNum--;
                 currentNum = cPoliceOfficerNum;
             }
-            else if (role.roleData.roleName == "조사관")
+            else if (name == "조사관")
             {
                 cAgentNum--;
                 currentNum = cAgentNum;
             }
-            else if (role.roleData.roleName == "무작위")
+            else if (name == "무작위")
             {
                 cRandomNum--;
                 currentNum = cRandomNum;
@@ -392,7 +393,7 @@ public class RoleController : MonoBehaviourPunCallbacks
             {
                 for (int i = 0; i < citizen.Count; i++)
                 {
-                    if (citizen[i] == role.gameObject)
+                    if (citizen[i].GetComponent<RoleInfo>().roleData.roleName == name)
                     {
                         Destroy(citizen[i]);
                         citizen.RemoveAt(i);
@@ -415,32 +416,32 @@ public class RoleController : MonoBehaviourPunCallbacks
                 }
             }
         }
-        else if (role.roleColor == imposterUI.GetComponent<Image>().color) //임포스터 역할 삭제
+        else if (isim) //임포스터 역할 삭제
         {
             imposterNum--;
             int currentNum; //현재 역할의 수 체크
 
-            if (role.roleData.roleName == "청소부")
+            if (name == "청소부")
             {
                 cleanerNum--;
                 currentNum = cleanerNum;
             }
-            else if (role.roleData.roleName == "페인터")
+            else if (name == "페인터")
             {
                 painterNum--;
                 currentNum = painterNum;
             }
-            else if (role.roleData.roleName == "경찰")
+            else if (name == "경찰")
             {
                 iPoliceOfficerNum--;
                 currentNum = iPoliceOfficerNum;
             }
-            else if (role.roleData.roleName == "조사관")
+            else if (name == "조사관")
             {
                 iAgentNum--;
                 currentNum = iAgentNum;
             }
-            else if (role.roleData.roleName == "무작위")
+            else if (name == "무작위")
             {
                 iRandomNum--;
                 currentNum = iRandomNum;
@@ -455,7 +456,7 @@ public class RoleController : MonoBehaviourPunCallbacks
             {
                 for (int i = 0; i < imposter.Count; i++)
                 {
-                    if (imposter[i] == role.gameObject)
+                    if (imposter[i].GetComponent<RoleInfo>().roleData.roleName == name)
                     {
                         Destroy(imposter[i]);
                         imposter.RemoveAt(i);
@@ -477,22 +478,22 @@ public class RoleController : MonoBehaviourPunCallbacks
                 }
             }
         }
-        else if (role.roleColor == neutralUI.GetComponent<Image>().color) //중립 역할 삭제
+        else if (isne) //중립 역할 삭제
         {
             neutralNum--;
             int currentNum; //현재 역할의 수 체크
 
-            if (role.roleData.roleName == "연쇄 살인마")
+            if (name == "연쇄 살인마")
             {
                 serialKillerNum--;
                 currentNum = serialKillerNum;
             }
-            else if (role.roleData.roleName == "도둑")
+            else if (name == "도둑")
             {
                 thiefNum--;
                 currentNum = thiefNum;
             }
-            else if (role.roleData.roleName == "무작위")
+            else if (name == "무작위")
             {
                 nRandomNum--;
                 currentNum = nRandomNum;
@@ -507,7 +508,7 @@ public class RoleController : MonoBehaviourPunCallbacks
             {
                 for (int i = 0; i < neutral.Count; i++)
                 {
-                    if (neutral[i] == role.gameObject)
+                    if (neutral[i].GetComponent<RoleInfo>().roleData.roleName == name)
                     {
                         Destroy(neutral[i]);
                         neutral.RemoveAt(i);

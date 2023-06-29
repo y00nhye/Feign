@@ -91,7 +91,6 @@ GameObject:
   - component: {fileID: 3007342360753233213}
   - component: {fileID: 3007342360753233214}
   - component: {fileID: 8178291120101077006}
-  - component: {fileID: 1145194551093558509}
   m_Layer: 5
   m_Name: Role
   m_TagString: Role
@@ -181,29 +180,6 @@ MonoBehaviour:
   num: 0
   isImposter: 0
   isNeutral: 0
-  PV: {fileID: 0}
---- !u!114 &1145194551093558509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3007342360753233200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!1 &3007342361491004139
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,7 +605,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 82038de3c245668448be06fad5561486, type: 3}
     m_FontSize: 20
     m_FontStyle: 1
     m_BestFit: 0

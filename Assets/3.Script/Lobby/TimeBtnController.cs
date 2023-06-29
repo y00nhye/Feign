@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class TimeBtnController : MonoBehaviour
 {
@@ -21,12 +22,35 @@ public class TimeBtnController : MonoBehaviour
     private int voteTimeValue = 60;
     private int rolePlayTimeValue = 10;
 
+    private PhotonView PV;
+
+    private void Awake()
+    {
+        PV = GameObject.Find("LobbyManager").GetPhotonView();
+    }
     private void Start()
     {
         voteTimeCurrent = voteTimeDefault;
         rolePlayTimeCurrent = rolePlayTimeDefault;
     }
-    public void VoteTimeUp()
+    public void VoteTimeUp_pv()
+    {
+        PV.RPC("VoteTimeUp", RpcTarget.AllBuffered);
+    }
+    public void VoteTimeDown_pv()
+    {
+        PV.RPC("VoteTimeDown", RpcTarget.AllBuffered);
+    }
+    public void RolePlayTimeUp_pv()
+    {
+        PV.RPC("RolePlayTimeUp", RpcTarget.AllBuffered);
+    }
+    public void RolePlayTimeDown_pv()
+    {
+        PV.RPC("RolePlayTimeDown", RpcTarget.AllBuffered);
+    }
+    [PunRPC]
+    private void VoteTimeUp()
     {
         voteTimeCurrent += voteTimeValue;
 
@@ -37,7 +61,8 @@ public class TimeBtnController : MonoBehaviour
 
         voteTimeTxt.text = "" + voteTimeCurrent;
     }
-    public void VoteTimeDown()
+    [PunRPC]
+    private void VoteTimeDown()
     {
         voteTimeCurrent -= voteTimeValue;
 
@@ -48,7 +73,8 @@ public class TimeBtnController : MonoBehaviour
 
         voteTimeTxt.text = "" + voteTimeCurrent;
     }
-    public void RolePlayTimeUp()
+    [PunRPC]
+    private void RolePlayTimeUp()
     {
         rolePlayTimeCurrent += rolePlayTimeValue;
 
@@ -59,7 +85,8 @@ public class TimeBtnController : MonoBehaviour
 
         rolePlayTimeTxt.text = "" + rolePlayTimeCurrent;
     }
-    public void RolePlayTimeDown()
+    [PunRPC]
+    private void RolePlayTimeDown()
     {
         rolePlayTimeCurrent -= rolePlayTimeValue;
 

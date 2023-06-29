@@ -16,21 +16,14 @@ public class PunManager : MonoBehaviourPunCallbacks
     [Header("ETC UI")]
     public InputField createRoomName;
     public InputField enterRoomName;
+    public Text RoomName;
     public Text UserCountText;
-
-    //[Header("[Player Name UI Array]")]
-    //[SerializeField] Image[] playerNameUIPrebs;
-    //[SerializeField] Text[] playerNameTxtPrebs;
 
     [Header("[Player Name UI]")]
     [SerializeField] GameObject playerNameUIPreb;
 
     private LobbyBtnController lobbyBtnController;
     private ColorController colorController;
-
-    //플레이어 이름 default 값
-    //private Vector3 defaultPos = new Vector3(0, 500, 0);
-    //private Vector3 movePos = new Vector3(0, 100, 0);
 
     private void Awake()
     {
@@ -62,6 +55,11 @@ public class PunManager : MonoBehaviourPunCallbacks
         PhotonNetwork.Disconnect(); //포톤 서버와 연결 끊기
     }
 
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
     //콜백함수
     public void CreateRoom()
     {
@@ -72,9 +70,10 @@ public class PunManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.LocalPlayer.NickName = lobbyBtnController.playerName;
+        RoomName.text = createRoomName.text;
 
         //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
-        PhotonNetwork.CreateRoom(createRoomName.text, new RoomOptions { MaxPlayers = 10 }, null);
+        PhotonNetwork.CreateRoom(createRoomName.text, new RoomOptions { MaxPlayers = 8 }, null);
     }
     public void EnterRoom()
     {
@@ -85,6 +84,7 @@ public class PunManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.LocalPlayer.NickName = lobbyBtnController.playerName;
+        RoomName.text = enterRoomName.text;
 
         PhotonNetwork.JoinRoom(enterRoomName.text);
     }
@@ -130,26 +130,6 @@ public class PunManager : MonoBehaviourPunCallbacks
     public void Update_Player()
     {
         UserCountText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount}";
-
-        //for (int i = 0; i < playerNameUIPrebs.Length; i++)
-        //{
-        //    if (PhotonNetwork.CurrentRoom.PlayerCount > i)
-        //    {
-        //        playerNameUIPrebs[i].gameObject.SetActive(true);
-        //        playerNameTxtPrebs[i].text = PhotonNetwork.PlayerList[i].NickName;
-        //
-        //        if (i == PhotonNetwork.LocalPlayer.ActorNumber)
-        //        {
-        //            lobbyBtnController.playerColor = playerNameUIPrebs[i];
-        //            colorController.playerColor = playerNameUIPrebs[i];
-        //            colorController.DefaultColor();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        playerNameUIPrebs[i].gameObject.SetActive(false);
-        //    }
-        //}
     }
 
     #endregion

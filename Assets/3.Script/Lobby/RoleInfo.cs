@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class RoleInfo : MonoBehaviour
 {
@@ -20,9 +21,12 @@ public class RoleInfo : MonoBehaviour
     public bool isImposter = false;
     public bool isNeutral = false;
 
+    private PhotonView PV;
+
     private void Awake()
     {
         roleController = FindObjectOfType<RoleController>();
+        PV = GameObject.Find("LobbyManager").GetPhotonView();
     }
     private void Update()
     {
@@ -101,8 +105,8 @@ public class RoleInfo : MonoBehaviour
         roleImg.sprite = roleData.roleImg;
         roleName.text = roleData.roleName; 
     }
-    public void Minus()
+    public void Minus_pv()
     {
-        roleController.RoleMinus(GetComponent<RoleInfo>());
+        PV.RPC("RoleMinus", RpcTarget.AllBuffered, isImposter, isNeutral, roleData.roleName);
     }
 }

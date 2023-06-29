@@ -13,10 +13,15 @@ public class PlayerNameUI : MonoBehaviourPunCallbacks
     private LobbyBtnController lobbyBtnController;
     private ColorController colorController;
 
+    public int viewID;
+
     private void Awake()
     {
         lobbyBtnController = FindObjectOfType<LobbyBtnController>();
         colorController = FindObjectOfType<ColorController>();
+
+        viewID = ((PV.ViewID - 1) / 1000) - 1;
+
     }
     private void Start()
     {
@@ -33,8 +38,8 @@ public class PlayerNameUI : MonoBehaviourPunCallbacks
         GetComponentInChildren<Text>().text = PV.Controller.NickName;
 
         lobbyBtnController.playerColor = GetComponent<Image>();
-        colorController.playerColor = GetComponent<Image>();
+        colorController.playerColor[((PV.ViewID - 1) / 1000) - 1] = GetComponent<Image>();
 
-        colorController.DefaultColor();
+        colorController.DefaultColor_pv(((PV.ViewID - 1) / 1000) - 1);
     }
 }

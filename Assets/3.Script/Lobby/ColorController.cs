@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class ColorController : MonoBehaviour
 {
     [Header("[Player Color (set)]")]
-    public Image playerColor;
+    public Image[] playerColor;
 
     [Header("[0Mint 1Blue 2Purple 3Yellow 4Gray 5Pink 6Orange 7Green]")]
     [SerializeField] Color[] colors;
@@ -15,34 +16,78 @@ public class ColorController : MonoBehaviour
     [SerializeField] GameObject[] useSprite;
 
     //사용한 컬러 담는 변수
-    private List<int> useColor = new List<int>();
+    public List<int> useColor = new List<int>();
 
-    public void DefaultColor()
+    private PhotonView PV;
+
+    private void Awake()
     {
-        playerColor.color = colors[0];
-        GameManager.instance.myColorNum = 0;
-
-        useColor.Add(0);
-        useSprite[0].SetActive(true);
+        PV = GameObject.Find("LobbyManager").GetPhotonView();
     }
-    public void ColorSet(int colorNum)
+    private void Start()
     {
-        for (int i = 0; i < useColor.Count; i++)
+        playerColor = new Image[8];
+    }
+
+    public void DefaultColor_pv(int playerNum)
+    {
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
-            if (useColor[i] != colorNum)
+            if (playerColor[i] != null && playerColor[i].gameObject.GetComponent<PhotonView>().IsMine)
             {
-                useSprite[GameManager.instance.myColorNum].SetActive(false);
-                useColor.Remove(GameManager.instance.myColorNum);
-                
-                playerColor.color = colors[colorNum];
+                PV.RPC("DefaultColor", RpcTarget.AllBuffered, playerNum);
+            }
+        }
+    }
 
-                GameManager.instance.myColorNum = colorNum;
+    [PunRPC]
+    private void DefaultColor(int playerNum)
+    {
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            if (!useSprite[i].activeSelf)
+            {
+                playerColor[playerNum].color = colors[i];
+                GameManager.instance.myColorNum[playerNum] = i;
 
-                useColor.Add(colorNum);
-                useSprite[colorNum].SetActive(true);
+                useColor.Add(i);
+                useSprite[i].SetActive(true);
 
                 break;
             }
         }
+    }
+
+    public void ColorSet_pv(int colorNum)
+    {
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            if (playerColor[i].gameObject.GetComponent<PhotonView>().IsMine)
+            {
+                PV.RPC("ColorSet", RpcTarget.AllBuffered, colorNum, i);
+            }
+        }
+    }
+
+    [PunRPC]
+    private void ColorSet(int colorNum, int playerNum)
+    {
+        for (int i = 0; i < useColor.Count; i++)
+        {
+            if (useColor[i] == colorNum)
+            {
+                return;
+            }
+        }
+
+        useSprite[GameManager.instance.myColorNum[playerNum]].SetActive(false);
+        useColor.Remove(GameManager.instance.myColorNum[playerNum]);
+
+        playerColor[playerNum].color = colors[colorNum];
+
+        GameManager.instance.myColorNum[playerNum] = colorNum;
+
+        useColor.Add(colorNum);
+        useSprite[colorNum].SetActive(true);
     }
 }
