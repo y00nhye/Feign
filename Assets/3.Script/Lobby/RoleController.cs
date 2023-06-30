@@ -32,7 +32,7 @@ public class RoleController : MonoBehaviourPunCallbacks
     private int citizenNum = 0;
     private int imposterNum = 0;
     private int neutralNum = 0;
-    private int totalNum = 0;
+    public int totalNum = 0;
     public int doctorNum { get; private set; }
     public int psychopathNum { get; private set; }
     public int cleanerNum { get; private set; }

@@ -8,6 +8,7 @@ public class ColorController : MonoBehaviour
 {
     [Header("[Player Color (set)]")]
     public Image[] playerColor;
+    public Image defaultColor;
 
     [Header("[0Mint 1Blue 2Purple 3Yellow 4Gray 5Pink 6Orange 7Green]")]
     [SerializeField] Color[] colors;
@@ -16,7 +17,7 @@ public class ColorController : MonoBehaviour
     [SerializeField] GameObject[] useSprite;
 
     //사용한 컬러 담는 변수
-    public List<int> useColor = new List<int>();
+    private List<int> useColor = new List<int>();
 
     private PhotonView PV;
 
@@ -29,19 +30,7 @@ public class ColorController : MonoBehaviour
         playerColor = new Image[8];
     }
 
-    public void DefaultColor_pv(int playerNum)
-    {
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-        {
-            if (playerColor[i] != null && playerColor[i].gameObject.GetComponent<PhotonView>().IsMine)
-            {
-                PV.RPC("DefaultColor", RpcTarget.AllBuffered, playerNum);
-            }
-        }
-    }
-
-    [PunRPC]
-    private void DefaultColor(int playerNum)
+    public void DefaultColor(int playerNum)
     {
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
@@ -69,6 +58,17 @@ public class ColorController : MonoBehaviour
         }
     }
 
+    public void ColorRemove_pv()
+    {
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            if (playerColor[i].gameObject.GetComponent<PhotonView>().IsMine)
+            {
+                PV.RPC("ColorRemove", RpcTarget.AllBuffered, i);
+            }
+        }
+    }
+
     [PunRPC]
     private void ColorSet(int colorNum, int playerNum)
     {
@@ -89,5 +89,12 @@ public class ColorController : MonoBehaviour
 
         useColor.Add(colorNum);
         useSprite[colorNum].SetActive(true);
+    }
+
+    [PunRPC]
+    private void ColorRemove(int playerNum)
+    {
+        useSprite[GameManager.instance.myColorNum[playerNum]].SetActive(false);
+        useColor.Remove(GameManager.instance.myColorNum[playerNum]);
     }
 }

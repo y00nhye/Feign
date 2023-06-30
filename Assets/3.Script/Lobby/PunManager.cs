@@ -57,6 +57,8 @@ public class PunManager : MonoBehaviourPunCallbacks
 
     public void LeaveRoom()
     {
+        colorController.ColorRemove_pv();
+        
         PhotonNetwork.LeaveRoom();
     }
 
@@ -86,13 +88,12 @@ public class PunManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.NickName = lobbyBtnController.playerName;
         RoomName.text = enterRoomName.text;
 
-        PhotonNetwork.JoinRoom(enterRoomName.text);
-    }
-    public void cancelMatching()
-    {
-        Debug.Log("¹æ ³ª°¨");
+        if (!PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            lobbyBtnController.NotMasterSet();
+        }
 
-        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.JoinRoom(enterRoomName.text);
     }
     public override void OnConnectedToMaster()
     {

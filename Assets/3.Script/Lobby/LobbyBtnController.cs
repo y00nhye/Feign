@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 public class LobbyBtnController : MonoBehaviour
 {
@@ -13,17 +14,31 @@ public class LobbyBtnController : MonoBehaviour
     [SerializeField] GameObject nicknameSettingUI;
     [SerializeField] GameObject createRoomNameUI;
     [SerializeField] GameObject enterRoomNameUI;
+    [SerializeField] GameObject errorPopup;
+    [SerializeField] Button startBtn;
 
     [Header("[Player Name]")]
     [SerializeField] Text playerNameInput;
     public string playerName { get; private set; }
 
     [Header("[Player Color (set)]")]
-    public Image playerColor;
+    public Image[] playerColor;
+
+    private PhotonView PV;
+
+    private void Awake()
+    {
+        PV = GameObject.Find("LobbyManager").GetPhotonView();
+    }
+    private void Start()
+    {
+        playerColor = new Image[8];
+    }
 
     public void NicknameSet()
     {
         playerName = playerNameInput.text;
+        GameManager.instance.myName = playerName;
 
         nicknameSettingUI.SetActive(false);
         lobbyMenuUI.SetActive(true);
@@ -57,7 +72,33 @@ public class LobbyBtnController : MonoBehaviour
         Application.Quit();
     }
 
-    public void GameStart()
+    public void NotMasterSet()
+    {
+        startBtn.interactable = false;
+    }
+
+    public void GameStart_pv()
+    {
+        if(PhotonNetwork.CurrentRoom.PlayerCount != FindObjectOfType<RoleController>().totalNum || FindObjectOfType<RoleController>().totalNum <= 0)
+        {
+            StartCoroutine(Error_co());
+            return;
+        }
+          
+        PV.RPC("GameStart", RpcTarget.AllBuffered);
+    }
+
+    IEnumerator Error_co()
+    {
+        errorPopup.SetActive(true);
+
+        yield return new WaitForSeconds(3f);
+
+        errorPopup.SetActive(false);
+    }
+
+    [PunRPC]
+    private void GameStart()
     {
         int citizenCnt = 0;
         int imposterCnt = 0;
@@ -116,8 +157,10 @@ public class LobbyBtnController : MonoBehaviour
         GameManager.instance.voteTime = FindObjectOfType<TimeBtnController>().voteTimeCurrent;
         GameManager.instance.rolePlayTime = FindObjectOfType<TimeBtnController>().rolePlayTimeCurrent;
 
-        GameManager.instance.myColor = playerColor.color;
-        GameManager.instance.myName = playerName;
+        for(int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            GameManager.instance.myColor[i] = playerColor[i].color;
+        }
 
         SceneManager.LoadScene(1);
     }

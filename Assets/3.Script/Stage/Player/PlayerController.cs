@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Start()
     {
-        myColor.color = GameManager.instance.myColor;
+        //myColor.color = GameManager.instance.myColor;
         myNickname.text = GameManager.instance.myName;
         //slimeColor.material = materials[GameManager.instance.myColorNum]; 고쳐주세용
         myRoleColor.color = myRole.roleColor;

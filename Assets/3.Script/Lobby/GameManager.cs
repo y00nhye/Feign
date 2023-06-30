@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     public int rolePlayTime;
 
     //플레이어 정보 담는 변수, 플레이어 생성 되면 제작
-    public Color myColor;
+    public Color[] myColor;
     public int[] myColorNum;
     public string myName;
     public int myOrder = 0;
@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        myColor = new Color[8];
         myColorNum = new int[8];
     }
 
