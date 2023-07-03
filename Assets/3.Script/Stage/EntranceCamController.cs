@@ -6,9 +6,6 @@ using Photon.Pun;
 
 public class EntranceCamController : MonoBehaviourPun
 {
-    [Header("[My Player transform (set)]")]
-    public Transform player;
-
     [Header("[Vote Cam]")]
     [SerializeField] CinemachineVirtualCamera voteCam;
 
@@ -21,8 +18,6 @@ public class EntranceCamController : MonoBehaviourPun
     
     public void FollowPlayer()
     {
-        transform.position = new Vector3(45, 44, player.position.z);
-
         Invoke("MovetoVoteCam", 9);
     }
 

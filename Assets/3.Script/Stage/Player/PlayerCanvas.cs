@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerCanvas : MonoBehaviour
 {
@@ -9,14 +10,20 @@ public class PlayerCanvas : MonoBehaviour
     [Header("[Active PlayUI (set)]")]
     [SerializeField] GameObject playUI;
 
+    private PhotonView PV;
+
     private void Awake()
     {
         TryGetComponent(out canvasAni);
+        PV = transform.parent.gameObject.GetPhotonView();
         playUI = GameObject.Find("PlayUI");
     }
     private void Start()
     {
-        CanvasAnimation();
+        if (PV.IsMine)
+        {
+            CanvasAnimation();
+        }
     }
     private void Update()
     {

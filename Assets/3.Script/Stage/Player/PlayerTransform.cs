@@ -9,7 +9,6 @@ public class PlayerTransform : MonoBehaviourPun
     {
         if (!photonView.IsMine) return;
 
-        FindObjectOfType<EntranceCamController>().player = gameObject.transform;
         FindObjectOfType<EntranceCamController>().FollowPlayer();
     }
 }

@@ -58,7 +58,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         colorController.ColorRemove_pv();
-        
+
         PhotonNetwork.LeaveRoom();
     }
 
@@ -108,6 +108,7 @@ public class PunManager : MonoBehaviourPunCallbacks
 
         lobbyBtnController.RoomCreateOrEnter();
 
+        MyNumSet();
         PhotonNetwork.Instantiate(playerNameUIPreb.name, Vector3.zero, Quaternion.identity);
 
         Update_Player();
@@ -126,7 +127,18 @@ public class PunManager : MonoBehaviourPunCallbacks
         base.OnPlayerLeftRoom(otherPlayer);
         Debug.Log($"{otherPlayer.NickName} leave room..");
 
+        MyNumSet();
         Update_Player();
+    }
+    private void MyNumSet()
+    {
+        int myNum = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+
+        PhotonNetwork.LocalPlayer.CustomProperties = new ExitGames.Client.Photon.Hashtable()
+        {
+            {"myNum", myNum }
+        };
+
     }
     public void Update_Player()
     {

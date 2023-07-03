@@ -7,10 +7,12 @@ public class RoleUISetting : MonoBehaviour
 {
     [Header("[Role Img UI]")]
     [SerializeField] Image[] roleImg;
+    [SerializeField] RectTransform bgTransform;
 
     private void Start()
     {
         RoleSet();
+        BGSet();
     }
 
     private void RoleSet()
@@ -32,5 +34,10 @@ public class RoleUISetting : MonoBehaviour
         {
             roleImg[i].gameObject.SetActive(false);
         }
+    }
+    private void BGSet()
+    {
+        Debug.Log(560 - ((GameManager.instance.roles.Count - 1) * 80));
+        bgTransform.offsetMax = new Vector2(-(560 - ((GameManager.instance.roles.Count - 1) * 80)), bgTransform.sizeDelta.y);
     }
 }

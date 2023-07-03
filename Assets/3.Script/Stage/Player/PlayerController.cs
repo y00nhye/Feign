@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,22 +29,37 @@ public class PlayerController : MonoBehaviour
     [Header("[Player Role (set)]")]
     public Role myRole;
 
+    public int myNum;
+
+    private PhotonView PV;
+
     private void Awake()
     {
         TryGetComponent(out playerInput);
         TryGetComponent(out playerAni);
         TryGetComponent(out playerRigid);
-
-        myRole = GameManager.instance.shuffleRoles[GameManager.instance.myOrder];
+        TryGetComponent(out PV);
     }
     private void Start()
     {
-        //myColor.color = GameManager.instance.myColor;
-        myNickname.text = GameManager.instance.myName;
-        //slimeColor.material = materials[GameManager.instance.myColorNum]; 고쳐주세용
-        myRoleColor.color = myRole.roleColor;
-        myRoleImg.sprite = myRole.roleData.roleImg;
-        myRoleTxt.text = myRole.roleData.roleName;
+        myNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"];
+
+        if (PV.IsMine)
+        {
+            PV.RPC("Set", RpcTarget.AllBuffered, myNum);
+
+            myRole = GameManager.instance.shuffleRoles[myNum];
+            myRoleColor.color = myRole.roleColor;
+            myRoleImg.sprite = myRole.roleData.roleImg;
+            myRoleTxt.text = myRole.roleData.roleName;
+        }
+    }
+    [PunRPC]
+    private void Set(int num)
+    {
+        myColor.color = GameManager.instance.myColor[num];
+        myNickname.text = PV.Controller.NickName;
+        slimeColor.material = materials[num];
     }
     private void Update()
     {

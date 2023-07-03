@@ -26,13 +26,7 @@ public class PlayerNameUI : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-        {
-            if (PhotonNetwork.PlayerList[i].NickName == PV.Controller.NickName)
-            {
-                viewID = i;
-            }
-        }
+        viewID = (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"];
 
         if (PV.IsMine)
         {

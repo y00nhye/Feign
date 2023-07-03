@@ -38,7 +38,6 @@ public class LobbyBtnController : MonoBehaviour
     public void NicknameSet()
     {
         playerName = playerNameInput.text;
-        GameManager.instance.myName = playerName;
 
         nicknameSettingUI.SetActive(false);
         lobbyMenuUI.SetActive(true);
@@ -162,7 +161,8 @@ public class LobbyBtnController : MonoBehaviour
             GameManager.instance.myColor[i] = playerColor[i].color;
         }
 
-        SceneManager.LoadScene(1);
+        //SceneManager.LoadScene(1);
+        PhotonNetwork.LoadLevel("Stage");
     }
     public void RoomCreateExit()
     {
