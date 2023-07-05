@@ -73,11 +73,6 @@ public class PunManager : MonoBehaviourPunCallbacks
 
         //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
         PhotonNetwork.CreateRoom(createRoomName.text, new RoomOptions { MaxPlayers = 8 }, null);
-
-        PhotonNetwork.LocalPlayer.CustomProperties = new ExitGames.Client.Photon.Hashtable()
-        {
-            //{"myNum", myNum }
-        };
     }
     public void EnterRoom()
     {

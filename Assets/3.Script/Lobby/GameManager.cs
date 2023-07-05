@@ -1,24 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 [System.Serializable]
 public class Role
 {
     public RoleData roleData;
     public int roleCnt = 0;
+    public int roleSerialNum;
     public Color roleColor;
 
     public bool isImposter;
     public bool isNeutral;
 
-    public Role (RoleData roleData, int roleCnt, Color roleColor, bool isImposter, bool isNeutral)
+    public Role (RoleData roleData, int roleCnt, Color roleColor, bool isImposter, bool isNeutral, int roleSerialNum)
     {
         this.roleData = roleData;
         this.roleCnt = roleCnt;
         this.roleColor = roleColor;
         this.isImposter = isImposter;
         this.isNeutral = isNeutral;
+        this.roleSerialNum = roleSerialNum;
     }
 }
 public class GameManager : MonoBehaviour

@@ -1218,7 +1218,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 97448886}
   m_OnClick:
     m_PersistentCalls:
@@ -3462,8 +3462,6 @@ MonoBehaviour:
   rolePlayTime: 0
   myColor: []
   myColorNum: 
-  myName: 
-  myOrder: 0
   citizenNum: 0
   imposterNum: 0
   neutralNum: 0
@@ -8136,6 +8134,7 @@ GameObject:
   - component: {fileID: 773053380}
   - component: {fileID: 773053379}
   - component: {fileID: 773053383}
+  - component: {fileID: 773053385}
   - component: {fileID: 773053384}
   m_Layer: 0
   m_Name: LobbyManager
@@ -8282,6 +8281,18 @@ MonoBehaviour:
   sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &773053385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773053378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3cbb3b9686af904c93fff1e4dde1a16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!64 &799384134
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class LobbyBtnController : MonoBehaviour
 {
@@ -42,7 +42,7 @@ public class LobbyBtnController : MonoBehaviour
             playerNameInput.text = "이름을 입력해 주세요!!";
             return;
         }
-        
+
         playerName = playerNameInput.text;
 
         nicknameSettingUI.SetActive(false);
@@ -84,12 +84,12 @@ public class LobbyBtnController : MonoBehaviour
 
     public void GameStart_pv()
     {
-        if(PhotonNetwork.CurrentRoom.PlayerCount != FindObjectOfType<RoleController>().totalNum || FindObjectOfType<RoleController>().totalNum <= 0)
+        if (PhotonNetwork.CurrentRoom.PlayerCount != FindObjectOfType<RoleController>().totalNum || FindObjectOfType<RoleController>().totalNum <= 0)
         {
             StartCoroutine(Error_co());
             return;
         }
-          
+
         PV.RPC("GameStart", RpcTarget.AllBuffered);
     }
 
@@ -116,25 +116,25 @@ public class LobbyBtnController : MonoBehaviour
         //roleInfo 담기
         for (int i = 0; i < GameObject.FindGameObjectsWithTag("Role").Length; i++)
         {
-            Role role = new Role(GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleData, GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().num, 
-                GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleColor, GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().isImposter, GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().isNeutral);
+            Role role = new Role(GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleData, GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().num,
+                GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleColor, GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().isImposter, GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().isNeutral, GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleSerialNum);
 
-            if(role.isImposter)
+            if (role.isImposter)
             {
                 imposterRole.Add(role);
-                
+
                 imposterCnt += role.roleCnt;
             }
             else if (role.isNeutral)
             {
                 neutralRole.Add(role);
-                
+
                 neutralCnt += role.roleCnt;
             }
             else
             {
                 citizenRole.Add(role);
-                
+
                 citizenCnt += role.roleCnt;
             }
         }
@@ -150,23 +150,27 @@ public class LobbyBtnController : MonoBehaviour
             GameManager.instance.roles.Add(neutralRole[i]);
         }
 
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameManager.instance.RoleShuffle();
+            FindObjectOfType<RoleConverter>().RoleConvert();
+        }
+
         GameManager.instance.citizenNum = citizenCnt;
         GameManager.instance.imposterNum = imposterCnt;
         GameManager.instance.neutralNum = neutralCnt;
 
         GameManager.instance.totalRoleNum = citizenCnt + imposterCnt + neutralCnt;
-        
-        //GameManager.instance.RoleShuffle();
 
         //Time 담기
         GameManager.instance.voteTime = FindObjectOfType<TimeBtnController>().voteTimeCurrent;
         GameManager.instance.rolePlayTime = FindObjectOfType<TimeBtnController>().rolePlayTimeCurrent;
 
-        for(int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
             GameManager.instance.myColor[i] = playerColor[i].color;
         }
-        
+
         PhotonNetwork.LoadLevel("Stage");
     }
     public void RoomCreateExit()

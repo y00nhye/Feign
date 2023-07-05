@@ -18,6 +18,7 @@ public class RoleInfo : MonoBehaviour
     public RoleData roleData;
     public Color roleColor;
     public int num = 0;
+    public int roleSerialNum;
     public bool isImposter = false;
     public bool isNeutral = false;
 
@@ -48,54 +49,67 @@ public class RoleInfo : MonoBehaviour
         if(roleData.roleName == "의사")
         {
             num = roleController.doctorNum;
+            roleSerialNum = 1;
         }
         else if (roleData.roleName == "정신병자")
         {
             num = roleController.psychopathNum;
+            roleSerialNum = 2;
         }
         else if (roleData.roleName == "청소부")
         {
             num = roleController.cleanerNum;
+            roleSerialNum = 3;
         }
         else if (roleData.roleName == "페인터")
         {
             num = roleController.painterNum;
+            roleSerialNum = 4;
         }
         else if (roleData.roleName == "경찰" && !isImposter)
         {
             num = roleController.cPoliceOfficerNum;
+            roleSerialNum = 5;
         }
         else if (roleData.roleName == "경찰" && isImposter)
         {
             num = roleController.iPoliceOfficerNum;
+            roleSerialNum = 6;
         }
         else if (roleData.roleName == "조사관" && !isImposter)
         {
             num = roleController.cAgentNum;
+            roleSerialNum = 7;
         }
         else if (roleData.roleName == "조사관" && isImposter)
         {
             num = roleController.iAgentNum;
+            roleSerialNum = 8;
         }
         else if (roleData.roleName == "연쇄 살인마")
         {
             num = roleController.serialKillerNum;
+            roleSerialNum = 9;
         }
         else if (roleData.roleName == "도둑")
         {
             num = roleController.thiefNum;
+            roleSerialNum = 10;
         }
         else if (roleData.roleName == "무작위" && !isImposter && !isNeutral)
         {
             num = roleController.cRandomNum;
+            roleSerialNum = 11;
         }
         else if (roleData.roleName == "무작위" && isImposter && !isNeutral)
         {
             num = roleController.iRandomNum;
+            roleSerialNum = 12;
         }
         else if (roleData.roleName == "무작위" && !isImposter && isNeutral)
         {
             num = roleController.nRandomNum;
+            roleSerialNum = 13;
         }
     }
 
