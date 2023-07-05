@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class TimeBtnController : MonoBehaviour
+public class TimeBtnController : MonoBehaviourPun
 {
     [Header("[Time Text UI]")]
     [SerializeField] Text voteTimeTxt;
@@ -35,7 +35,7 @@ public class TimeBtnController : MonoBehaviour
     }
     public void VoteTimeUp_pv()
     {
-        PV.RPC("VoteTimeUp", RpcTarget.AllBuffered);
+        photonView.RPC("VoteTimeUp", RpcTarget.AllBuffered);
     }
     public void VoteTimeDown_pv()
     {

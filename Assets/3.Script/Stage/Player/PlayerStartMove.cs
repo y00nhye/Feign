@@ -80,7 +80,7 @@ public class PlayerStartMove : MonoBehaviour
 
             yield return null;
         }
-        while (Vector3.Distance(transform.position, conP) > 0.5)
+        while (Vector3.Distance(transform.position, conP) > 0.1 && transform.position.x > conP.x)
         {
             transform.position = Vector3.Lerp(transform.position, conP, moveSpeed);
 
@@ -93,12 +93,12 @@ public class PlayerStartMove : MonoBehaviour
 
         votR = votePos[Mathf.Abs(myNum - 4)].position - transform.position;
 
-        while (Vector3.Distance(transform.position, votePos[myNum].position) > 0.01 && pos2 != transform.rotation)
+        while (Vector3.Distance(transform.position, votePos[myNum].position) > 0.4 || pos2 != transform.rotation)
         {
             pos2 = transform.rotation;
 
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(votR), Time.deltaTime * rotateSpeed);
-            transform.position = Vector3.MoveTowards(transform.position, votePos[myNum].position, 0.01f);
+            transform.position = Vector3.MoveTowards(transform.position, votePos[myNum].position, 0.02f);
 
             yield return null;
         }

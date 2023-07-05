@@ -64,6 +64,16 @@ MonoBehaviour:
   - VoteTimeUp
   - ColorRemove
   - GameStart
+  - Skip
+  - Vote
+  - Num1
+  - Num2
+  - Num3
+  - Num4
+  - Num5
+  - Num6
+  - Num7
+  - Num8
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

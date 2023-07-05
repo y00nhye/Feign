@@ -16,6 +16,10 @@ public class TimeManager : MonoBehaviour
     [Header("[Time Status]")]
     [SerializeField] GameObject hourglass;
 
+    [Header("[Event UI]")]
+    [SerializeField] GameObject voteUI;
+    [SerializeField] GameObject rolePlayingUI;
+
     [Header("[Time Check (set)]")]
     public bool isDay = false;
     public bool isVote = false;
@@ -23,8 +27,15 @@ public class TimeManager : MonoBehaviour
     public bool isLoading = false;
     public bool isTimeChange = false; //시간 바뀔 때 true 변경
 
-    private int currentTime = 0;
+    [Header("[Current Time (set)]")]
+    public int currentTime = 0;
 
+    private EventUIBtn eventUI;
+
+    private void Awake()
+    {
+        eventUI = FindObjectOfType<EventUIBtn>();
+    }
     private void Update()
     {
         if (isTimeChange)
@@ -42,9 +53,14 @@ public class TimeManager : MonoBehaviour
             }
             else if (isVote)
             {
+                eventUI.VoteBtn();
+                
                 dayTimeUI.SetActive(false);
                 voteTimeUI.SetActive(true);
                 nightTimeUI.SetActive(false);
+
+                voteUI.SetActive(true);
+                rolePlayingUI.SetActive(false);
 
                 currentTime = GameManager.instance.voteTime;
                 time.text = "" + GameManager.instance.voteTime;
@@ -55,9 +71,14 @@ public class TimeManager : MonoBehaviour
             }
             else if (isNight)
             {
+                eventUI.NightBtn();
+
                 dayTimeUI.SetActive(false);
                 voteTimeUI.SetActive(false);
                 nightTimeUI.SetActive(true);
+
+                voteUI.SetActive(false);
+                rolePlayingUI.SetActive(true);
 
                 currentTime = GameManager.instance.rolePlayTime;
                 time.text = "" + GameManager.instance.rolePlayTime;
@@ -69,6 +90,8 @@ public class TimeManager : MonoBehaviour
 
             if (isLoading)
             {
+                eventUI.LoadingBtn();
+
                 time.gameObject.SetActive(false);
                 hourglass.SetActive(true);
 
@@ -81,12 +104,15 @@ public class TimeManager : MonoBehaviour
 
     IEnumerator Timer_co()
     {
-        while (currentTime != 0)
+        while (currentTime > 0)
         {
             yield return new WaitForSeconds(1f);
 
             currentTime -= 1;
             time.text = "" + currentTime;
         }
+
+        isTimeChange = true;
+        isLoading = true;
     }
 }

@@ -46,8 +46,6 @@ public class PunManager : MonoBehaviourPunCallbacks
 
         //Master Server 에 연결
         PhotonNetwork.ConnectToMaster(setting.AppSettings.Server, setting.AppSettings.Port, "");
-
-        Debug.Log("Connect to Master Server...");
     }
 
     public void Disconnect()
@@ -67,7 +65,6 @@ public class PunManager : MonoBehaviourPunCallbacks
     {
         if (createRoomName.Equals(string.Empty))
         {
-            Debug.Log("입력해 주십시오.");
             return;
         }
 
@@ -76,48 +73,53 @@ public class PunManager : MonoBehaviourPunCallbacks
 
         //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
         PhotonNetwork.CreateRoom(createRoomName.text, new RoomOptions { MaxPlayers = 8 }, null);
+
+        PhotonNetwork.LocalPlayer.CustomProperties = new ExitGames.Client.Photon.Hashtable()
+        {
+            //{"myNum", myNum }
+        };
     }
     public void EnterRoom()
     {
         if (enterRoomName.Equals(string.Empty))
         {
-            Debug.Log("입력해 주십시오.");
             return;
         }
 
         PhotonNetwork.LocalPlayer.NickName = lobbyBtnController.playerName;
         RoomName.text = enterRoomName.text;
 
-        if (!PhotonNetwork.LocalPlayer.IsMasterClient)
-        {
-            lobbyBtnController.NotMasterSet();
-        }
-
         PhotonNetwork.JoinRoom(enterRoomName.text);
     }
     public override void OnConnectedToMaster()
     {
         base.OnConnectedToMaster();
-
-        Debug.Log("Connect Complete!");
     }
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
-        Debug.Log("Connect to Room..");
 
         lobbyBtnController.RoomCreateOrEnter();
 
-        MyNumSet();
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            lobbyBtnController.MasterSet();
+        }
+
         PhotonNetwork.Instantiate(playerNameUIPreb.name, Vector3.zero, Quaternion.identity);
 
+        MyNumSet();
         Update_Player();
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         //어떤 newPlayer 가 들어왔을 때 콜백되는 콜백함수
         base.OnPlayerEnteredRoom(newPlayer);
-        Debug.Log($"{newPlayer.NickName} enter room..");
+
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            lobbyBtnController.MasterSet();
+        }
 
         Update_Player();
     }
@@ -125,7 +127,11 @@ public class PunManager : MonoBehaviourPunCallbacks
     {
         //어떤 otherPlayer 가 방에서 나갔을 때 콜백되는 콜백함수
         base.OnPlayerLeftRoom(otherPlayer);
-        Debug.Log($"{otherPlayer.NickName} leave room..");
+
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            lobbyBtnController.MasterSet();
+        }
 
         MyNumSet();
         Update_Player();

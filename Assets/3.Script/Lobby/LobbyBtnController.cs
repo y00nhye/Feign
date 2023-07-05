@@ -37,6 +37,12 @@ public class LobbyBtnController : MonoBehaviour
 
     public void NicknameSet()
     {
+        if (playerNameInput.text.Equals(string.Empty))
+        {
+            playerNameInput.text = "이름을 입력해 주세요!!";
+            return;
+        }
+        
         playerName = playerNameInput.text;
 
         nicknameSettingUI.SetActive(false);
@@ -71,9 +77,9 @@ public class LobbyBtnController : MonoBehaviour
         Application.Quit();
     }
 
-    public void NotMasterSet()
+    public void MasterSet()
     {
-        startBtn.interactable = false;
+        startBtn.interactable = true;
     }
 
     public void GameStart_pv()
@@ -149,8 +155,8 @@ public class LobbyBtnController : MonoBehaviour
         GameManager.instance.neutralNum = neutralCnt;
 
         GameManager.instance.totalRoleNum = citizenCnt + imposterCnt + neutralCnt;
-
-        GameManager.instance.RoleShuffle();
+        
+        //GameManager.instance.RoleShuffle();
 
         //Time 담기
         GameManager.instance.voteTime = FindObjectOfType<TimeBtnController>().voteTimeCurrent;
@@ -160,8 +166,7 @@ public class LobbyBtnController : MonoBehaviour
         {
             GameManager.instance.myColor[i] = playerColor[i].color;
         }
-
-        //SceneManager.LoadScene(1);
+        
         PhotonNetwork.LoadLevel("Stage");
     }
     public void RoomCreateExit()
