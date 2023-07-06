@@ -1,9 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using ExitGames.Client.Photon;
 
 public class PunManager : MonoBehaviourPunCallbacks
 {
@@ -71,8 +71,13 @@ public class PunManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.NickName = lobbyBtnController.playerName;
         RoomName.text = createRoomName.text;
 
+        RoomOptions room = new RoomOptions();
+
+        room.MaxPlayers = 8;
+        room.CustomRoomProperties = new Hashtable() { { "0", false }, { "1", false }, { "2", false }, { "3", false }, { "4", false }, { "5", false }, { "6", false }, { "7", false } };
+
         //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
-        PhotonNetwork.CreateRoom(createRoomName.text, new RoomOptions { MaxPlayers = 8 }, null);
+        PhotonNetwork.CreateRoom(createRoomName.text, room, null);
     }
     public void EnterRoom()
     {
@@ -135,7 +140,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     {
         int myNum = PhotonNetwork.LocalPlayer.ActorNumber - 1;
 
-        PhotonNetwork.LocalPlayer.CustomProperties = new ExitGames.Client.Photon.Hashtable()
+        PhotonNetwork.LocalPlayer.CustomProperties = new Hashtable()
         {
             {"myNum", myNum }
         };

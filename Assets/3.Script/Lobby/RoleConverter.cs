@@ -5,8 +5,7 @@ using Photon.Pun;
 
 public class RoleConverter : MonoBehaviour
 {
-    private string roleKey;
-    private string receiver;
+    public string roleKey = null;
 
     private PhotonView PV;
 
@@ -14,32 +13,78 @@ public class RoleConverter : MonoBehaviour
     {
         PV = GameObject.Find("LobbyManager").GetPhotonView();
     }
-    public void RoleConvert()
+    public void RoleConverttoString()
     {
+        GameManager.instance.RoleShuffle();
+
+        string key = null;
+        
         for (int i = 0; i < GameManager.instance.roles.Count; i++)
         {
-            if (roleKey == null)
+            if (i == 0)
             {
-                roleKey += GameManager.instance.shuffleRoles[i].roleSerialNum.ToString();
+                key += GameManager.instance.shuffleRoles[i].roleSerialNum.ToString();
             }
             else
             {
-                roleKey += "," + GameManager.instance.shuffleRoles[i].roleSerialNum.ToString();
+                key += "," + GameManager.instance.shuffleRoles[i].roleSerialNum.ToString();
             }
         }
 
-        ShareKey_pv();
+        PV.RPC("Send", RpcTarget.OthersBuffered, key);
     }
-
-    public void ShareKey_pv()
-    {
-        PV.RPC("ShareKey", RpcTarget.AllBuffered, roleKey);
-        Debug.Log(roleKey);
-    }
-
+    
     [PunRPC]
-    private void ShareKey(string key)
+    void Send(string key)
     {
-        receiver = key;
+        roleKey = key;
+        RoleConvertertoInt();
+    }
+
+    public void RoleConvertertoInt()
+    {
+        string[] serialNum_s = roleKey.Split(',');
+        int[] serialNum_i = new int[serialNum_s.Length];
+
+        for (int i = 0; i < serialNum_s.Length; i++)
+        {
+            serialNum_i[i] = int.Parse(serialNum_s[i]);
+        }
+
+        RoleConvertertoRole(serialNum_i);
+    }
+    public void RoleConvertertoRole(int[] serialNum)
+    {
+        GameManager.instance.shuffleRoles = new Role[serialNum.Length];
+        List<int> useNum = new List<int>();
+        bool isUse = false;
+
+        for (int i = 0; i < GameManager.instance.roles.Count; i++)
+        {
+            for (int j = 0; j < serialNum.Length; j++)
+            {
+                if (GameManager.instance.roles[i].roleSerialNum == serialNum[j])
+                {
+                    for (int k = 0; k < useNum.Count; k++)
+                    {
+                        if (useNum[k] == j)
+                        {
+                            isUse = true;
+                            break;
+                        }
+                        else
+                        {
+                            isUse = false;
+                        }
+                    }
+                    if (!isUse)
+                    {
+                        GameManager.instance.shuffleRoles[j] = GameManager.instance.roles[i];
+                        useNum.Add(j);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

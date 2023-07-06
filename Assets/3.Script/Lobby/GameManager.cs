@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     //역할 정보 담는 변수
     public List<Role> roles = new List<Role>();
-    public List<Role> shuffleRoles = new List<Role>();
+    public Role[] shuffleRoles;
 
     //투표, 역할 시간 담는 변수
     public int voteTime;
@@ -71,9 +71,11 @@ public class GameManager : MonoBehaviour
 
     public void RoleShuffle()
     {
+        shuffleRoles = new Role[roles.Count];
+        
         for(int i = 0; i < roles.Count; i++)
-        {   
-            shuffleRoles.Add(roles[i]);
+        {
+            shuffleRoles[i] = roles[i];
         }
 
         int ran1;

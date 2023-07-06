@@ -26,6 +26,8 @@ public class LobbyBtnController : MonoBehaviour
 
     private PhotonView PV;
 
+    private bool isLoadCheck = false;
+
     private void Awake()
     {
         PV = GameObject.Find("LobbyManager").GetPhotonView();
@@ -34,7 +36,13 @@ public class LobbyBtnController : MonoBehaviour
     {
         playerColor = new Image[8];
     }
-
+    private void Update()
+    {
+        if (isLoadCheck)
+        {
+            LoadCheck();
+        }
+    }
     public void NicknameSet()
     {
         if (playerNameInput.text.Equals(string.Empty))
@@ -105,6 +113,8 @@ public class LobbyBtnController : MonoBehaviour
     [PunRPC]
     private void GameStart()
     {
+        ExitGames.Client.Photon.Hashtable custom = PhotonNetwork.CurrentRoom.CustomProperties;
+        
         int citizenCnt = 0;
         int imposterCnt = 0;
         int neutralCnt = 0;
@@ -152,8 +162,7 @@ public class LobbyBtnController : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
-            GameManager.instance.RoleShuffle();
-            FindObjectOfType<RoleConverter>().RoleConvert();
+            FindObjectOfType<RoleConverter>().RoleConverttoString();
         }
 
         GameManager.instance.citizenNum = citizenCnt;
@@ -171,7 +180,11 @@ public class LobbyBtnController : MonoBehaviour
             GameManager.instance.myColor[i] = playerColor[i].color;
         }
 
-        PhotonNetwork.LoadLevel("Stage");
+        custom[PhotonNetwork.LocalPlayer.CustomProperties["myNum"].ToString()] = true;
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(custom);
+
+        isLoadCheck = true;
     }
     public void RoomCreateExit()
     {
@@ -179,5 +192,22 @@ public class LobbyBtnController : MonoBehaviour
         roomCreateUI.SetActive(false);
 
         FindObjectOfType<PunManager>().LeaveRoom();
+    }
+
+    private void LoadCheck()
+    {
+        isLoadCheck = false;
+        
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            if (!(bool)PhotonNetwork.CurrentRoom.CustomProperties[i.ToString()])
+            {
+                isLoadCheck = true;
+                Debug.Log("지나가용");
+                return;
+            }
+        }
+
+        PhotonNetwork.LoadLevel("Stage");
     }
 }

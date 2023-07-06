@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
         {
             PV.RPC("Set", RpcTarget.AllBuffered, myNum);
 
-            myRole = GameManager.instance.roles[myNum];
+            myRole = GameManager.instance.shuffleRoles[myNum];
             myRoleColor.color = myRole.roleColor;
             myRoleImg.sprite = myRole.roleData.roleImg;
             myRoleTxt.text = myRole.roleData.roleName;
