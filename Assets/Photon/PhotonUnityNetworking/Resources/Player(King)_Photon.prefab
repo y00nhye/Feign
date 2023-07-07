@@ -226,6 +226,8 @@ MonoBehaviour:
   myRoleColor: {fileID: 7769337024531146755}
   myRoleImg: {fileID: 7769337025098634836}
   myRoleTxt: {fileID: 7769337025228583988}
+  roomPos: []
+  votePos: []
   myRole:
     roleData: {fileID: 0}
     roleCnt: 0

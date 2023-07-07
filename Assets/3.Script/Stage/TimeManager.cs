@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class TimeManager : MonoBehaviour
 {
@@ -20,12 +21,18 @@ public class TimeManager : MonoBehaviour
     [SerializeField] GameObject voteUI;
     [SerializeField] GameObject rolePlayingUI;
 
+    [Header("[Chinemachine camera]")]
+    [SerializeField] CinemachineVirtualCamera voteCam; 
+    [SerializeField] CinemachineVirtualCamera nightCam;
+
     [Header("[Time Check (set)]")]
     public bool isDay = false;
     public bool isVote = false;
     public bool isNight = false;
     public bool isLoading = false;
     public bool isTimeChange = false; //시간 바뀔 때 true 변경
+    public bool nightMove = false;
+    public bool dayMove = false;
 
     [Header("[Current Time (set)]")]
     public int currentTime = 0;
@@ -66,11 +73,11 @@ public class TimeManager : MonoBehaviour
                 time.text = "" + GameManager.instance.voteTime;
 
                 StartCoroutine(Timer_co());
-
-                isVote = false;
             }
             else if (isNight)
             {
+                voteCam.enabled = false;
+
                 eventUI.NightBtn();
 
                 dayTimeUI.SetActive(false);
@@ -84,8 +91,6 @@ public class TimeManager : MonoBehaviour
                 time.text = "" + GameManager.instance.rolePlayTime;
 
                 StartCoroutine(Timer_co());
-
-                isNight = false;
             }
 
             if (isLoading)
@@ -112,7 +117,35 @@ public class TimeManager : MonoBehaviour
             time.text = "" + currentTime;
         }
 
+        if (isVote)
+        {
+            nightMove = true;
+
+            isVote = false;
+
+            Invoke("NightOn", 1f);
+        }
+        else if (isNight)
+        {
+            voteCam.enabled = true;
+
+            dayMove = true;
+            
+            isNight = false;
+
+            Invoke("DayOn", 1f);
+        }
+    }
+
+    private void NightOn()
+    {
         isTimeChange = true;
+        isNight = true;
+    }
+    private void DayOn()
+    {
+        isTimeChange = true;
+        isDay = true;
         isLoading = true;
     }
 }

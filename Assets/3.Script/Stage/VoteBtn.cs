@@ -8,6 +8,7 @@ public class VoteBtn : MonoBehaviour
 {
     [Header("[Vote Num (set)]")]
     public int[] voteNum = new int[8];
+    public int highNum;
 
     [Header("[Vote Txt]")]
     [SerializeField] Text[] texts;
@@ -56,7 +57,12 @@ public class VoteBtn : MonoBehaviour
     }
     public void Skip_pv()
     {
-        PV.RPC("Skip", RpcTarget.AllBuffered);
+        if (rightVote > 0)
+        {
+            PV.RPC("Skip", RpcTarget.AllBuffered);
+
+            rightVote--;
+        }
     }
     [PunRPC]
     private void Skip()
@@ -65,7 +71,12 @@ public class VoteBtn : MonoBehaviour
     }
     public void Num1_pv()
     {
-        PV.RPC("Num1", RpcTarget.AllBuffered);
+        if (rightVote > 0)
+        {
+            PV.RPC("Num1", RpcTarget.AllBuffered);
+
+            rightVote--;
+        }
     }
     [PunRPC]
     private void Num1()
@@ -74,7 +85,12 @@ public class VoteBtn : MonoBehaviour
     }
     public void Num2_pv()
     {
-        PV.RPC("Num2", RpcTarget.AllBuffered);
+        if (rightVote > 0)
+        {
+            PV.RPC("Num2", RpcTarget.AllBuffered);
+
+            rightVote--;
+        }
     }
     [PunRPC]
     private void Num2()
@@ -83,7 +99,12 @@ public class VoteBtn : MonoBehaviour
     }
     public void Num3_pv()
     {
-        PV.RPC("Num3", RpcTarget.AllBuffered);
+        if (rightVote > 0)
+        {
+            PV.RPC("Num3", RpcTarget.AllBuffered);
+
+            rightVote--;
+        }
     }
     [PunRPC]
     private void Num3()
@@ -92,7 +113,12 @@ public class VoteBtn : MonoBehaviour
     }
     public void Num4_pv()
     {
-        PV.RPC("Num4", RpcTarget.AllBuffered);
+        if (rightVote > 0)
+        {
+            PV.RPC("Num4", RpcTarget.AllBuffered);
+
+            rightVote--;
+        }
     }
     [PunRPC]
     private void Num4()
@@ -101,7 +127,12 @@ public class VoteBtn : MonoBehaviour
     }
     public void Num5_pv()
     {
-        PV.RPC("Num5", RpcTarget.AllBuffered);
+        if (rightVote > 0)
+        {
+            PV.RPC("Num5", RpcTarget.AllBuffered);
+
+            rightVote--;
+        }
     }
     [PunRPC]
     private void Num5()
@@ -110,7 +141,12 @@ public class VoteBtn : MonoBehaviour
     }
     public void Num6_pv()
     {
-        PV.RPC("Num6", RpcTarget.AllBuffered);
+        if (rightVote > 0)
+        {
+            PV.RPC("Num6", RpcTarget.AllBuffered);
+
+            rightVote--;
+        }
     }
     [PunRPC]
     private void Num6()
@@ -119,7 +155,12 @@ public class VoteBtn : MonoBehaviour
     }
     public void Num7_pv()
     {
-        PV.RPC("Num7", RpcTarget.AllBuffered);
+        if (rightVote > 0)
+        {
+            PV.RPC("Num7", RpcTarget.AllBuffered);
+
+            rightVote--;
+        }
     }
     [PunRPC]
     private void Num7()
@@ -128,7 +169,12 @@ public class VoteBtn : MonoBehaviour
     }
     public void Num8_pv()
     {
-        PV.RPC("Num8", RpcTarget.AllBuffered);
+        if (rightVote > 0)
+        {
+            PV.RPC("Num8", RpcTarget.AllBuffered);
+
+            rightVote--;
+        }
     }
     [PunRPC]
     private void Num8()
@@ -138,16 +184,12 @@ public class VoteBtn : MonoBehaviour
 
     private void Vote(Text txt, int num, GameObject choice)
     {
-        if (rightVote > 0)
-        {
-            choice.SetActive(false);
+        choice.SetActive(false);
 
-            voteNum[num]++;
-            txt.text = "" + voteNum[num];
+        voteNum[num]++;
+        txt.text = "" + voteNum[num];
 
-            rightVote--;
-            totalVote++;
-        }
+        totalVote++;
     }
     private void VoteCheck()
     {
@@ -159,11 +201,29 @@ public class VoteBtn : MonoBehaviour
     }
     private void VoteReset()
     {
-        for(int i = 0; i < voteNum.Length; i++)
+        highNum = VoteCount();
+        
+        for (int i = 0; i < voteNum.Length; i++)
         {
             voteNum[i] = 0;
         }
         totalVote = 0;
         rightVote = 1;
+    }
+    private int VoteCount()
+    {
+        List<int> numList = new List<int>();
+        int highNum;
+
+        for (int i = 0; i < voteNum.Length; i++)
+        {
+            numList.Add(voteNum[i]);
+        }
+
+        numList.Sort();
+
+        highNum = numList[voteNum.Length - 1];
+
+        return highNum;
     }
 }

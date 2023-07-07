@@ -28,7 +28,9 @@ public class PlayerStartMove : MonoBehaviour
 
         cornerPos = new Transform[4];
         votePos = new Transform[8];
-
+    }
+    private void Start()
+    {
         for (int i = 0; i < cornerPos.Length; i++)
         {
             cornerPos[i] = GameObject.Find("Corner").GetComponentsInChildren<Transform>()[i + 1];
@@ -37,9 +39,7 @@ public class PlayerStartMove : MonoBehaviour
         {
             votePos[i] = GameObject.Find("VotePos").GetComponentsInChildren<Transform>()[i + 1];
         }
-    }
-    private void Start()
-    {
+
         myNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"];
         waitTime = 7;
 
@@ -89,20 +89,27 @@ public class PlayerStartMove : MonoBehaviour
             yield return null;
         }
         transform.position = conP;
-        playerAni.SetFloat("Speed", 0);
 
-        votR = votePos[Mathf.Abs(myNum - 4)].position - transform.position;
+        votR = votePos[myNum].position - transform.position;
 
-        while (Vector3.Distance(transform.position, votePos[myNum].position) > 0.4 || pos2 != transform.rotation)
+        while (pos2 == null || pos2 != transform.rotation)
         {
             pos2 = transform.rotation;
 
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(votR), Time.deltaTime * rotateSpeed);
-            transform.position = Vector3.MoveTowards(transform.position, votePos[myNum].position, 0.02f);
+
+            yield return null;
+        }
+        while (Vector3.Distance(transform.position, votePos[myNum].position) > 0.1 && Mathf.Abs(transform.position.z) < Mathf.Abs(votePos[myNum].position.z))
+        {
+            transform.position = Vector3.MoveTowards(transform.position, votePos[myNum].position, 0.01f);
+
+            playerAni.SetFloat("Speed", 1);
 
             yield return null;
         }
 
+        playerAni.SetFloat("Speed", 0);
         transform.position = votePos[myNum].position;
         transform.rotation = votePos[myNum].transform.rotation;
     }

@@ -74,7 +74,7 @@ public class PunManager : MonoBehaviourPunCallbacks
         RoomOptions room = new RoomOptions();
 
         room.MaxPlayers = 8;
-        room.CustomRoomProperties = new Hashtable() { { "0", false }, { "1", false }, { "2", false }, { "3", false }, { "4", false }, { "5", false }, { "6", false }, { "7", false } };
+        room.CustomRoomProperties = new Hashtable() { { "Load", false }};
 
         //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
         PhotonNetwork.CreateRoom(createRoomName.text, room, null);

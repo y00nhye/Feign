@@ -27,6 +27,9 @@ public class LobbyBtnController : MonoBehaviour
     private PhotonView PV;
 
     private bool isLoadCheck = false;
+    private bool isStage = false;
+
+    private bool[] loadEnd = new bool[8];
 
     private void Awake()
     {
@@ -38,10 +41,20 @@ public class LobbyBtnController : MonoBehaviour
     }
     private void Update()
     {
-        if (isLoadCheck)
-        {
-            LoadCheck();
-        }
+        //if (isLoadCheck)
+        //{
+        //    LoadCheck();
+        //}
+
+        //if (PhotonNetwork.InRoom && !isStage)
+        //{
+        //    if ((bool)PhotonNetwork.CurrentRoom.CustomProperties["Load"])
+        //    {
+        //        isStage = true;
+        //        PhotonNetwork.LoadLevel("Stage");
+        //    }
+        //}
+
     }
     public void NicknameSet()
     {
@@ -113,8 +126,11 @@ public class LobbyBtnController : MonoBehaviour
     [PunRPC]
     private void GameStart()
     {
-        ExitGames.Client.Photon.Hashtable custom = PhotonNetwork.CurrentRoom.CustomProperties;
-        
+        SetInfo();
+    }
+
+    private void SetInfo()
+    {
         int citizenCnt = 0;
         int imposterCnt = 0;
         int neutralCnt = 0;
@@ -160,10 +176,10 @@ public class LobbyBtnController : MonoBehaviour
             GameManager.instance.roles.Add(neutralRole[i]);
         }
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            FindObjectOfType<RoleConverter>().RoleConverttoString();
-        }
+        //if (PhotonNetwork.IsMasterClient)
+        //{
+        //    FindObjectOfType<RoleConverter>().RoleConverttoString();
+        //}
 
         GameManager.instance.citizenNum = citizenCnt;
         GameManager.instance.imposterNum = imposterCnt;
@@ -180,12 +196,26 @@ public class LobbyBtnController : MonoBehaviour
             GameManager.instance.myColor[i] = playerColor[i].color;
         }
 
-        custom[PhotonNetwork.LocalPlayer.CustomProperties["myNum"].ToString()] = true;
+        PhotonNetwork.LoadLevel("Stage");
 
-        PhotonNetwork.CurrentRoom.SetCustomProperties(custom);
-
-        isLoadCheck = true;
+        //if (!PhotonNetwork.IsMasterClient)
+        //{
+        //    PV.RPC("LoadEnd", RpcTarget.MasterClient, (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"], true);
+        //}
+        //
+        //if (PhotonNetwork.IsMasterClient)
+        //{
+        //    LoadEnd((int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"], true);
+        //    isLoadCheck = true;
+        //}
     }
+
+    [PunRPC]
+    private void LoadEnd(int num, bool isEnd)
+    {
+        loadEnd[num] = isEnd;
+    }
+
     public void RoomCreateExit()
     {
         lobbyMenuUI.SetActive(true);
@@ -195,19 +225,22 @@ public class LobbyBtnController : MonoBehaviour
     }
 
     private void LoadCheck()
-    {
+    {   
         isLoadCheck = false;
-        
+
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
-            if (!(bool)PhotonNetwork.CurrentRoom.CustomProperties[i.ToString()])
+            if (!loadEnd[i])
             {
                 isLoadCheck = true;
-                Debug.Log("지나가용");
                 return;
             }
         }
 
-        PhotonNetwork.LoadLevel("Stage");
+        ExitGames.Client.Photon.Hashtable custom = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        custom["Load"] = true;
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(custom);
     }
 }

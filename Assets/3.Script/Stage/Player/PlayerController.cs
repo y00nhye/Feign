@@ -26,6 +26,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Image myRoleImg;
     [SerializeField] Text myRoleTxt;
 
+    [Header("[Day, Night Position]")]
+    [SerializeField] Transform[] roomPos;
+    [SerializeField] Transform[] votePos;
+
     [Header("[Player Role (set)]")]
     public Role myRole;
 
@@ -33,19 +37,35 @@ public class PlayerController : MonoBehaviour
 
     private PhotonView PV;
 
+    private TimeManager timeManager;
+
     private void Awake()
     {
         TryGetComponent(out playerInput);
         TryGetComponent(out playerAni);
         TryGetComponent(out playerRigid);
         TryGetComponent(out PV);
+
+        timeManager = FindObjectOfType<TimeManager>();
     }
     private void Start()
     {
-        myNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"];
+        roomPos = new Transform[8];
+        votePos = new Transform[8];
+
+        for (int i = 0; i < roomPos.Length; i++)
+        {
+            roomPos[i] = GameObject.Find("Room").GetComponentsInChildren<Transform>()[i + 1];
+        }
+        for (int i = 0; i < votePos.Length; i++)
+        {
+            votePos[i] = GameObject.Find("VotePos").GetComponentsInChildren<Transform>()[i + 1];
+        }
 
         if (PV.IsMine)
         {
+            myNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"];
+
             PV.RPC("Set", RpcTarget.AllBuffered, myNum);
 
             myRole = GameManager.instance.shuffleRoles[myNum];
@@ -63,13 +83,24 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        Rotate();
-        Move();
-
-        if (playerInput.move > 0)
+        if (PV.IsMine)
         {
-            playerAni.SetFloat("Speed", Mathf.Abs(playerInput.move));
+            if (timeManager.nightMove)
+            {
+                PV.RPC("NightMove", RpcTarget.AllBuffered, myNum);
+            }
+            if (timeManager.dayMove)
+            {
+                PV.RPC("DayMove", RpcTarget.AllBuffered, myNum);
+            }
         }
+        //Rotate();
+        //Move();
+        //
+        //if (playerInput.move > 0)
+        //{
+        //    playerAni.SetFloat("Speed", Mathf.Abs(playerInput.move));
+        //}
     }
 
     private void Move()
@@ -82,5 +113,48 @@ public class PlayerController : MonoBehaviour
     {
         float turn = playerInput.rotate * rotateSpeed * Time.deltaTime;
         transform.rotation *= Quaternion.Euler(0, turn, 0);
+    }
+    [PunRPC]
+    private void NightMove(int num)
+    {
+        timeManager.nightMove = false;
+        StartCoroutine(NightMove_co(num));
+    }
+
+    IEnumerator NightMove_co(int num)
+    {
+        Vector3 nightR = new Vector3();
+        Quaternion pos = new Quaternion();
+
+        nightR = roomPos[num].position - transform.position;
+
+        while (pos == null || pos != transform.rotation)
+        {
+            pos = transform.rotation;
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(nightR), Time.deltaTime * rotateSpeed);
+
+            yield return null;
+        }
+        while (Vector3.Distance(transform.position, roomPos[num].position) > 0.1 && Mathf.Abs(transform.position.z) < Mathf.Abs(roomPos[num].position.z))
+        {
+            transform.position = Vector3.MoveTowards(transform.position, roomPos[num].position, 0.005f);
+
+            playerAni.SetFloat("Speed", 1);
+
+            yield return null;
+        }
+
+        playerAni.SetFloat("Speed", 0);
+        transform.position = roomPos[num].position;
+        transform.rotation = roomPos[num].transform.rotation;
+    }
+    [PunRPC]
+    private void DayMove(int num)
+    {
+        timeManager.dayMove = false;
+
+        transform.position = votePos[num].position;
+        transform.rotation = votePos[num].transform.rotation;
     }
 }

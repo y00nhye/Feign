@@ -9,10 +9,21 @@ public class RoleConverter : MonoBehaviour
 
     private PhotonView PV;
 
+    public bool isFinish = false;
+
     private void Awake()
     {
-        PV = GameObject.Find("LobbyManager").GetPhotonView();
+        TryGetComponent(out PV);
     }
+
+    private void Start()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            RoleConverttoString();
+        }
+    }
+
     public void RoleConverttoString()
     {
         GameManager.instance.RoleShuffle();
@@ -31,7 +42,7 @@ public class RoleConverter : MonoBehaviour
             }
         }
 
-        PV.RPC("Send", RpcTarget.OthersBuffered, key);
+        PV.RPC("Send", RpcTarget.AllBuffered, key);
     }
     
     [PunRPC]
@@ -86,5 +97,7 @@ public class RoleConverter : MonoBehaviour
                 }
             }
         }
+
+        isFinish = true;
     }
 }
