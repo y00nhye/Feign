@@ -8,7 +8,7 @@ public class VoteBtn : MonoBehaviour
 {
     [Header("[Vote Num (set)]")]
     public int[] voteNum = new int[8];
-    public int highNum;
+    public int highNumIndex;
 
     [Header("[Vote Txt]")]
     [SerializeField] Text[] texts;
@@ -19,23 +19,43 @@ public class VoteBtn : MonoBehaviour
     [Header("[Choice Obj]")]
     [SerializeField] GameObject[] Choice;
 
-    private int rightVote;
+    [Header("[King obj]")]
+    [SerializeField] GameObject[] king;
+
+    private int rightVote; //≈ı«•±«
 
     private PhotonView PV;
 
-    private int totalVote;
+    private int totalVote = 0;
+
+    private bool isKingVote = false;
+    private bool isCheck = false;
+    private bool isKing = false;
+
+    private TimeManager timeManager;
 
     private void Awake()
     {
         TryGetComponent(out PV);
+        timeManager = FindObjectOfType<TimeManager>();
     }
     private void Start()
     {
-        VoteReset();
+        rightVote = 1;
+        totalVote = 0;
     }
     private void Update()
     {
-        VoteCheck();
+        if (totalVote > 0)
+        {
+            isCheck = false;
+        }
+
+        if ((totalVote == PhotonNetwork.CurrentRoom.PlayerCount || timeManager.currentTime == 0) && !isCheck)
+        {
+            isCheck = true;
+            VoteCheck();
+        }
     }
     public void ChoiceOn(GameObject choice)
     {
@@ -193,37 +213,71 @@ public class VoteBtn : MonoBehaviour
     }
     private void VoteCheck()
     {
-        if (totalVote == PhotonNetwork.CurrentRoom.PlayerCount)
+        if (timeManager.currentTime > 1)
         {
-            FindObjectOfType<TimeManager>().currentTime = 3;
-            VoteReset();
+            timeManager.currentTime = 3;
         }
+
+        VoteReset();
     }
     private void VoteReset()
     {
-        highNum = VoteCount();
-        
+        highNumIndex = VoteCount();
+
         for (int i = 0; i < voteNum.Length; i++)
         {
             voteNum[i] = 0;
         }
+
         totalVote = 0;
-        rightVote = 1;
+
+        if (isKing)
+        {
+            rightVote = 2;
+        }
+        else
+        {
+            rightVote = 1;
+        }
+
+        if (!isKingVote)
+        {
+            isKingVote = true;
+
+            if (highNumIndex == 0)
+            {
+                return;
+            }
+
+            king[highNumIndex - 1].SetActive(true);
+
+            if ((int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"] == (highNumIndex - 1))
+            {
+                isKing = true;
+            }
+        }
     }
     private int VoteCount()
     {
-        List<int> numList = new List<int>();
-        int highNum;
+        int highNum = 0;
+        int highNumIndex = 0;
 
         for (int i = 0; i < voteNum.Length; i++)
         {
-            numList.Add(voteNum[i]);
+            if (voteNum[i] > highNum)
+            {
+                highNum = voteNum[i];
+                highNumIndex = i;
+            }
+            else if (voteNum[i] == highNum)
+            {
+                int rand = Random.Range(0, 2);
+
+                highNum = (rand == 0) ? voteNum[i] : highNum;
+                highNumIndex = (rand == 0) ? i : highNumIndex;
+            }
         }
 
-        numList.Sort();
-
-        highNum = numList[voteNum.Length - 1];
-
-        return highNum;
+        return highNumIndex;
     }
 }
