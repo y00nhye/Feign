@@ -22,6 +22,14 @@ public class RolePlayingBtn : MonoBehaviour
     [SerializeField] Image role_11Img;
     [SerializeField] Image role_12Img;
 
+    public string[] actions;
+
+    private PhotonView PV;
+
+    private void Awake()
+    {
+        TryGetComponent(out PV);
+    }
     private void Start()
     {
         Set();
@@ -66,5 +74,41 @@ public class RolePlayingBtn : MonoBehaviour
         }
 
         che.SetActive(true);
+    }
+    public void RolePlaying(Button rolePlaying, int activeNum)
+    {
+        for (int i = 0; i < role_1Btn.Length; i++)
+        {
+            role_1Btn[i].gameObject.SetActive(false);
+            role_2Btn[i].gameObject.SetActive(false);
+        }
+
+        rolePlaying.gameObject.SetActive(true);
+        rolePlaying.interactable = false;
+
+        PV.RPC("Action", RpcTarget.AllBuffered, activeNum);
+    }
+    [PunRPC]
+    private void Action(int activeNum)
+    {
+        if (actions[activeNum] == null)
+        {
+            actions[activeNum] += GameManager.instance.shuffleRoles[activeNum].roleData.roleOrder;
+        }
+        else
+        {
+            actions[activeNum] += "," + GameManager.instance.shuffleRoles[activeNum].roleData.roleOrder;
+        }
+    }
+    private void UIReset()
+    {
+        for (int i = 0; i < role_1Btn.Length; i++)
+        {
+            role_1Btn[i].interactable = true;
+            role_2Btn[i].interactable = true;
+
+            role_1Btn[i].gameObject.SetActive(false);
+            role_2Btn[i].gameObject.SetActive(false);
+        }
     }
 }

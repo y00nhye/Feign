@@ -81,6 +81,8 @@ MonoBehaviour:
   - LoadEnd
   - DayMove
   - NightMove
+  - Active
+  - Action
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

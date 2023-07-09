@@ -7,9 +7,5 @@ public class RoleData : ScriptableObject
 {
     public string roleName;
     public Sprite roleImg;
-
-    public void RolePlaying()
-    {
-
-    }
+    public string roleOrder;
 }
