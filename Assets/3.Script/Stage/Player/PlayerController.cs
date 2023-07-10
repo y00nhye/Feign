@@ -15,6 +15,12 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed = 3f;
     private float rotateSpeed = 120f;
 
+    //Player PhotonView
+    private PhotonView PV;
+
+    //Manager
+    private TimeManager timeManager;
+
     [Header("[0Mint 1Blue 2Purple 3Yellow 4Gray 5Pink 6Orange 7Green]")]
     [SerializeField] Material[] materials;
 
@@ -26,6 +32,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Image myRoleImg;
     [SerializeField] Text myRoleTxt;
 
+    [Header("[Player Number]")]
+    public int myNum;
+
     [Header("[Day, Night Position]")]
     [SerializeField] Transform[] roomPos;
     [SerializeField] Transform[] votePos;
@@ -33,11 +42,8 @@ public class PlayerController : MonoBehaviour
     [Header("[Player Role (set)]")]
     public Role myRole;
 
-    public int myNum;
-
-    private PhotonView PV;
-
-    private TimeManager timeManager;
+    [Header("[Player Status (set)")]
+    public bool isDie = false;
 
     private void Awake()
     {
