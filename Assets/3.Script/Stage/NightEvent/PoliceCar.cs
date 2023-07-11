@@ -20,7 +20,7 @@ public class PoliceCar : MonoBehaviour
 
         while (Vector3.Distance(endPos, transform.position) > 0.01f)
         {
-            transform.position = Vector3.Lerp(endPos, transform.position, 0.995f);
+            transform.position = Vector3.Lerp(endPos, transform.position, 0.95f);
 
             yield return null;
         }

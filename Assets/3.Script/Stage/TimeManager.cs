@@ -33,6 +33,7 @@ public class TimeManager : MonoBehaviour
     public bool isTimeChange = false; //시간 바뀔 때 true 변경
     public bool nightMove = false;
     public bool dayMove = false;
+    public bool rolePlayingSet = false;
 
     [Header("[Current Time (set)]")]
     public int currentTime = 0;
@@ -52,6 +53,8 @@ public class TimeManager : MonoBehaviour
 
             if (isDay)
             {
+                voteCam.enabled = false;
+
                 dayTimeUI.SetActive(true);
                 voteTimeUI.SetActive(false);
                 nightTimeUI.SetActive(false);
@@ -127,13 +130,7 @@ public class TimeManager : MonoBehaviour
         }
         else if (isNight)
         {
-            voteCam.enabled = true;
-
-            dayMove = true;
-            
-            isNight = false;
-
-            Invoke("DayOn", 1f);
+            rolePlayingSet = true;
         }
     }
 
@@ -142,10 +139,9 @@ public class TimeManager : MonoBehaviour
         isTimeChange = true;
         isNight = true;
     }
-    private void DayOn()
+    public void DayOn()
     {
         isTimeChange = true;
         isDay = true;
-        isLoading = true;
     }
 }

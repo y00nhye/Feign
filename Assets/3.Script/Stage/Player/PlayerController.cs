@@ -39,10 +39,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform[] roomPos;
     [SerializeField] Transform[] votePos;
 
+    [Header("[Night Event Obj]")]
+    [SerializeField] GameObject sword;
+    [SerializeField] GameObject kit;
+    [SerializeField] GameObject car;
+    //찾아서 세팅할 목록
+    private GameObject towel;
+    private GameObject paint;
+
     [Header("[Player Role (set)]")]
     public Role myRole;
 
     [Header("[Player Status (set)")]
+    public bool isPaint = false;
+    public bool isClean = false;
     public bool isDie = false;
 
     private void Awake()
@@ -53,6 +63,9 @@ public class PlayerController : MonoBehaviour
         TryGetComponent(out PV);
 
         timeManager = FindObjectOfType<TimeManager>();
+
+        towel = GameObject.Find("Towel");
+        paint = GameObject.Find("PaintEffect");
     }
     private void Start()
     {
@@ -85,7 +98,7 @@ public class PlayerController : MonoBehaviour
     {
         myColor.color = GameManager.instance.myColor[num];
         myNickname.text = PV.Controller.NickName;
-        slimeColor.material = materials[num];
+        slimeColor.material = materials[GameManager.instance.myColorNum[num]];
     }
     private void Update()
     {
@@ -99,6 +112,15 @@ public class PlayerController : MonoBehaviour
             {
                 PV.RPC("DayMove", RpcTarget.AllBuffered, myNum);
             }
+
+            if (timeManager.isNight)
+            {
+                if (FindObjectOfType<RolePlayingBtn>().isRolePlaying)
+                {
+                    FindObjectOfType<RolePlayingBtn>().isRolePlaying = false;
+                    StartCoroutine(RolePlaying_co());
+                }
+            }
         }
         //Rotate();
         //Move();
@@ -108,7 +130,51 @@ public class PlayerController : MonoBehaviour
         //    playerAni.SetFloat("Speed", Mathf.Abs(playerInput.move));
         //}
     }
+    IEnumerator RolePlaying_co()
+    {
+        yield return new WaitForSeconds(1f);
 
+        int[] rolePlaying = FindObjectOfType<RolePlayingBtn>().ActionConvertertoInt(myNum);
+
+        if(rolePlaying != null)
+        {
+            for (int i = 0; i < rolePlaying.Length; i++)
+            {
+                switch (rolePlaying[i])
+                {
+                    case 0:
+                        sword.SetActive(true);
+                        break;
+                    case 1:
+                        car.SetActive(true);
+                        break;
+                    case 2:
+                        sword.SetActive(true);
+                        break;
+                    case 3:
+                        isPaint = true;
+                        break;
+                    case 4:
+                        isClean = true;
+                        break;
+                    case 5:
+                        sword.SetActive(true);
+                        break;
+                    case 6:
+                        kit.SetActive(true);
+                        break;
+                }
+                yield return new WaitForSeconds(3f);
+            }
+        }
+        FindObjectOfType<RolePlayingBtn>().RolePlayingReset();
+        PV.RPC("RolePlayingEnd", RpcTarget.AllBuffered);
+    }
+    [PunRPC]
+    private void RolePlayingEnd()
+    {
+        FindObjectOfType<RolePlayingBtn>().rolePlayingEnd++;
+    }
     private void Move()
     {
         Vector3 moveDistance = playerInput.move * transform.forward * moveSpeed * Time.deltaTime;
@@ -163,4 +229,5 @@ public class PlayerController : MonoBehaviour
         transform.position = votePos[num].position;
         transform.rotation = votePos[num].transform.rotation;
     }
+
 }

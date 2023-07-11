@@ -25,8 +25,6 @@ public class Medicine : MonoBehaviour
             {
                 other.GetComponent<PlayerController>().isDie = false;
                 other.transform.GetChild(3).gameObject.SetActive(true);
-
-                StartCoroutine(Heal(other));
             }
             else
             {
@@ -36,18 +34,30 @@ public class Medicine : MonoBehaviour
     }
     IEnumerator Drop()
     {
-        Vector3 endPos = transform.position - new Vector3(0, 1.7f, 0);
+        Vector3 endPos = transform.position - new Vector3(0, 0.7f, 0);
 
         while (Vector3.Distance(endPos, transform.position) > 0.01f)
         {
-            transform.position = Vector3.Lerp(endPos, transform.position, 0.995f);
+            transform.position = Vector3.Lerp(endPos, transform.position, 0.99f);
 
             yield return null;
         }
 
         transform.position = endPos;
+
+        if (transform.parent.GetComponent<PlayerController>().isDie)
+        {
+            transform.parent.GetComponent<PlayerController>().isDie = false;
+            transform.parent.GetChild(3).gameObject.SetActive(true);
+
+            StartCoroutine(Heal(transform.parent.gameObject));
+        }
+        else
+        {
+            Invoke("PosReset", 1.5f);
+        }
     }
-    IEnumerator Heal(Collider other)
+    IEnumerator Heal(GameObject other)
     {
         yield return new WaitForSeconds(1f);
 
@@ -55,7 +65,7 @@ public class Medicine : MonoBehaviour
         Material[] mat = new Material[2] { other.GetComponentInChildren<SkinnedMeshRenderer>().material, revivalFace };
         other.GetComponentInChildren<SkinnedMeshRenderer>().materials = mat;
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
 
         PosReset();
     }

@@ -4,20 +4,19 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
-    [Header("[Blood Animator]")]
-    [SerializeField] Animator bloodAni;
-
     [Header("[Die Face Material]")]
     [SerializeField] Material dieFace;
 
     Rigidbody rig;
 
+    private Animator bloodAni;
     private Vector3 startPos;
 
     private void Awake()
     {
         TryGetComponent(out rig);
         startPos = transform.position;
+        bloodAni = GameObject.Find("BloodEffect").GetComponent<Animator>();
     }
     private void OnTriggerEnter(Collider other)
     {

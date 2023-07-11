@@ -18,7 +18,7 @@ public class EntranceCamController : MonoBehaviourPun
     
     public void FollowPlayer()
     {
-        Invoke("MovetoVoteCam", 9);
+        Invoke("MovetoVoteCam", 10);
     }
 
     private void MovetoVoteCam()

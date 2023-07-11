@@ -26,10 +26,8 @@ public class LobbyBtnController : MonoBehaviour
 
     private PhotonView PV;
 
-    private bool isLoadCheck = false;
-    private bool isStage = false;
-
-    private bool[] loadEnd = new bool[8];
+    private int loadCheck;
+    private bool isStart;
 
     private void Awake()
     {
@@ -39,21 +37,28 @@ public class LobbyBtnController : MonoBehaviour
     {
         playerColor = new Image[8];
     }
+    private void OnEnable()
+    {
+        loadCheck = 0;
+        isStart = false;
+
+    }
     private void Update()
     {
-        //if (isLoadCheck)
-        //{
-        //    LoadCheck();
-        //}
+        if (isStart)
+        {
+            isStart = false;
+            SetInfo();
+        }
 
-        //if (PhotonNetwork.InRoom && !isStage)
-        //{
-        //    if ((bool)PhotonNetwork.CurrentRoom.CustomProperties["Load"])
-        //    {
-        //        isStage = true;
-        //        PhotonNetwork.LoadLevel("Stage");
-        //    }
-        //}
+        if (PhotonNetwork.InRoom)
+        {
+            if (loadCheck == PhotonNetwork.CurrentRoom.PlayerCount)
+            {
+                loadCheck = 0;
+                PhotonNetwork.LoadLevel("Stage");
+            }
+        }
 
     }
     public void NicknameSet()
@@ -111,7 +116,7 @@ public class LobbyBtnController : MonoBehaviour
             return;
         }
 
-        PV.RPC("GameStart", RpcTarget.AllBuffered);
+        PV.RPC("GameStart", RpcTarget.AllBuffered, true);
     }
 
     IEnumerator Error_co()
@@ -124,9 +129,14 @@ public class LobbyBtnController : MonoBehaviour
     }
 
     [PunRPC]
-    private void GameStart()
+    private void GameStart(bool start)
     {
-        SetInfo();
+        isStart = start;
+    }
+    [PunRPC]
+    private void LoadCheck()
+    {
+        loadCheck++;
     }
 
     private void SetInfo()
@@ -176,11 +186,6 @@ public class LobbyBtnController : MonoBehaviour
             GameManager.instance.roles.Add(neutralRole[i]);
         }
 
-        //if (PhotonNetwork.IsMasterClient)
-        //{
-        //    FindObjectOfType<RoleConverter>().RoleConverttoString();
-        //}
-
         GameManager.instance.citizenNum = citizenCnt;
         GameManager.instance.imposterNum = imposterCnt;
         GameManager.instance.neutralNum = neutralCnt;
@@ -196,24 +201,7 @@ public class LobbyBtnController : MonoBehaviour
             GameManager.instance.myColor[i] = playerColor[i].color;
         }
 
-        PhotonNetwork.LoadLevel("Stage");
-
-        //if (!PhotonNetwork.IsMasterClient)
-        //{
-        //    PV.RPC("LoadEnd", RpcTarget.MasterClient, (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"], true);
-        //}
-        //
-        //if (PhotonNetwork.IsMasterClient)
-        //{
-        //    LoadEnd((int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"], true);
-        //    isLoadCheck = true;
-        //}
-    }
-
-    [PunRPC]
-    private void LoadEnd(int num, bool isEnd)
-    {
-        loadEnd[num] = isEnd;
+        PV.RPC("LoadCheck", RpcTarget.AllBuffered);
     }
 
     public void RoomCreateExit()
@@ -222,25 +210,5 @@ public class LobbyBtnController : MonoBehaviour
         roomCreateUI.SetActive(false);
 
         FindObjectOfType<PunManager>().LeaveRoom();
-    }
-
-    private void LoadCheck()
-    {   
-        isLoadCheck = false;
-
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-        {
-            if (!loadEnd[i])
-            {
-                isLoadCheck = true;
-                return;
-            }
-        }
-
-        ExitGames.Client.Photon.Hashtable custom = PhotonNetwork.CurrentRoom.CustomProperties;
-
-        custom["Load"] = true;
-
-        PhotonNetwork.CurrentRoom.SetCustomProperties(custom);
     }
 }
