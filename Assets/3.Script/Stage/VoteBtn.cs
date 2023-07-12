@@ -14,7 +14,7 @@ public class VoteBtn : MonoBehaviour
     [SerializeField] Text[] texts;
 
     [Header("[Vote Btns]")]
-    [SerializeField] Button[] btns;
+    public Button[] btns;
 
     [Header("[Choice Obj]")]
     [SerializeField] GameObject[] Choice;
@@ -51,7 +51,7 @@ public class VoteBtn : MonoBehaviour
             isCheck = false;
         }
 
-        if ((totalVote == PhotonNetwork.CurrentRoom.PlayerCount || timeManager.currentTime == 0) && !isCheck)
+        if ((totalVote == GameManager.instance.currentPlayer || timeManager.currentTime == 0) && !isCheck)
         {
             isCheck = true;
             VoteCheck();
@@ -227,6 +227,8 @@ public class VoteBtn : MonoBehaviour
         for (int i = 0; i < voteNum.Length; i++)
         {
             voteNum[i] = 0;
+            texts[i].text = "0";
+            btns[i].interactable = true;
         }
 
         totalVote = 0;
@@ -256,6 +258,8 @@ public class VoteBtn : MonoBehaviour
                 isKing = true;
             }
         }
+
+        highNumIndex = 0;
     }
     private int VoteCount()
     {
@@ -280,4 +284,5 @@ public class VoteBtn : MonoBehaviour
 
         return highNumIndex;
     }
+
 }

@@ -10,7 +10,7 @@ public class PlayerStartMove : MonoBehaviour
 
     //이동 및 회전 속도
     private float rotateSpeed = 5f;
-    private float moveSpeed = 0.005f;
+    private float moveSpeed = 0.01f;
 
     private Animator playerAni;
 

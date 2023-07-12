@@ -1,22 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 
 public class PlayerCanvas : MonoBehaviour
 {
     private Animator canvasAni;
 
-    [Header("[Active PlayUI (set)]")]
-    [SerializeField] GameObject playUI;
-
     private PhotonView PV;
+
+    public PlayerController playerController;
+
+    [Header("[Player Info]")]
+    [SerializeField] Image myRoleColor;
+    [SerializeField] Image myRoleImg;
+    [SerializeField] Text myRoleTxt;
 
     private void Awake()
     {
         TryGetComponent(out canvasAni);
+        playerController = transform.parent.GetComponent<PlayerController>();
         PV = transform.parent.gameObject.GetPhotonView();
-        playUI = GameObject.Find("PlayUI");
     }
     private void Start()
     {
@@ -30,7 +35,7 @@ public class PlayerCanvas : MonoBehaviour
         transform.LookAt(Camera.main.transform);
     }
 
-    private void CanvasAnimation()
+    public void CanvasAnimation()
     {
         Invoke("AniOn", 1f);
 
@@ -38,7 +43,7 @@ public class PlayerCanvas : MonoBehaviour
 
         Invoke("AniOff", 5f);
 
-        Invoke("PlayUIOn", 6f);
+        Invoke("AniReset", 7f);
     }
 
     private void AniOn()
@@ -48,13 +53,22 @@ public class PlayerCanvas : MonoBehaviour
     private void AniShow()
     {
         canvasAni.SetBool("Show", true);
+
+        if (!playerController.isClean)
+        {
+            myRoleColor.color = playerController.myRole.roleColor;
+            myRoleImg.sprite = playerController.myRole.roleData.roleImg;
+            myRoleTxt.text = playerController.myRole.roleData.roleName;
+        }
     }
     private void AniOff()
     {
         canvasAni.SetBool("Off", true);
     }
-    private void PlayUIOn()
+    private void AniReset()
     {
-        playUI.SetActive(true);
+        canvasAni.SetBool("On", false);
+        canvasAni.SetBool("Show", false);
+        canvasAni.SetBool("Off", false);
     }
 }

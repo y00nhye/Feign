@@ -8,7 +8,7 @@ using System;
 public class RolePlayingBtn : MonoBehaviour
 {
     [Header("[Role Playing Button]")]
-    [SerializeField] Button[] playerBtn;
+    public Button[] playerBtn;
     [SerializeField] Button[] role_1Btn;
     [SerializeField] Button[] role_2Btn;
 
@@ -121,6 +121,11 @@ public class RolePlayingBtn : MonoBehaviour
         role_1Btn[activeNum].gameObject.SetActive(true);
         role_1Btn[activeNum].interactable = false;
 
+        for (int i = 0; i < role_1Btn.Length; i++)
+        {
+            playerBtn[i].interactable = false;
+        }
+
         ActiveNum = activeNum;
 
         if (int.Parse(GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleOrder) == 0 ||
@@ -139,6 +144,11 @@ public class RolePlayingBtn : MonoBehaviour
 
         role_2Btn[activeNum].gameObject.SetActive(true);
         role_2Btn[activeNum].interactable = false;
+
+        for (int i = 0; i < role_1Btn.Length; i++)
+        {
+            playerBtn[i].interactable = false;
+        }
 
         ActiveNum = activeNum;
 
@@ -205,6 +215,7 @@ public class RolePlayingBtn : MonoBehaviour
         {
             role_1Btn[i].interactable = true;
             role_2Btn[i].interactable = true;
+            playerBtn[i].interactable = true;
 
             role_1Btn[i].gameObject.SetActive(false);
             role_2Btn[i].gameObject.SetActive(false);

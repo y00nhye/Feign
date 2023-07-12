@@ -110,7 +110,7 @@ public class LobbyBtnController : MonoBehaviour
 
     public void GameStart_pv()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount != FindObjectOfType<RoleController>().totalNum || FindObjectOfType<RoleController>().totalNum <= 0)
+        if (PhotonNetwork.CurrentRoom.PlayerCount != FindObjectOfType<RoleController>().totalNum || FindObjectOfType<RoleController>().totalNum <= 2)
         {
             StartCoroutine(Error_co());
             return;
@@ -191,6 +191,8 @@ public class LobbyBtnController : MonoBehaviour
         GameManager.instance.neutralNum = neutralCnt;
 
         GameManager.instance.totalRoleNum = citizenCnt + imposterCnt + neutralCnt;
+
+        GameManager.instance.currentPlayer = PhotonNetwork.CurrentRoom.PlayerCount;
 
         //Time ´ã±â
         GameManager.instance.voteTime = FindObjectOfType<TimeBtnController>().voteTimeCurrent;

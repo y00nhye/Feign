@@ -3418,6 +3418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59f6b9d817d8a5e40a74e0e7b68a66d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPrefs: []
   roles: []
   shuffleRoles: []
   voteTime: 0
@@ -3428,6 +3429,8 @@ MonoBehaviour:
   imposterNum: 0
   neutralNum: 0
   totalRoleNum: 0
+  currentPlayer: 0
+  timeManager: {fileID: 0}
 --- !u!1 &330661185
 GameObject:
   m_ObjectHideFlags: 0

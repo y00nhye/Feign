@@ -25,6 +25,9 @@ public class TimeManager : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera voteCam; 
     [SerializeField] CinemachineVirtualCamera nightCam;
 
+    [Header("[PostProcessing]")]
+    [SerializeField] GameObject nightPostProcessing;
+
     [Header("[Time Check (set)]")]
     public bool isDay = false;
     public bool isVote = false;
@@ -44,6 +47,10 @@ public class TimeManager : MonoBehaviour
     {
         eventUI = FindObjectOfType<EventUIBtn>();
     }
+    private void Start()
+    {
+        GameManager.instance.timeManager = GetComponent<TimeManager>();
+    }
     private void Update()
     {
         if (isTimeChange)
@@ -53,13 +60,14 @@ public class TimeManager : MonoBehaviour
 
             if (isDay)
             {
-                voteCam.enabled = false;
+                voteCam.enabled = true;
+                nightPostProcessing.SetActive(false);
 
                 dayTimeUI.SetActive(true);
                 voteTimeUI.SetActive(false);
                 nightTimeUI.SetActive(false);
 
-                isDay = false;
+                isLoading = true;
             }
             else if (isVote)
             {
@@ -80,6 +88,7 @@ public class TimeManager : MonoBehaviour
             else if (isNight)
             {
                 voteCam.enabled = false;
+                nightPostProcessing.SetActive(true);
 
                 eventUI.NightBtn();
 

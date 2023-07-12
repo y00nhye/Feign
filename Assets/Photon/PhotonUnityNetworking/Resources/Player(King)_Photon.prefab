@@ -216,6 +216,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 342b0499a2839d448a8aa95319cbf675, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vote: {fileID: 0}
+  rolePlaying: {fileID: 0}
   materials:
   - {fileID: 2100000, guid: 6fa3f20ee791bee439afcc1b75c70ffe, type: 2}
   - {fileID: 2100000, guid: b96f93ebe557c3441a821de2b260d17f, type: 2}
@@ -225,6 +227,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 032637538652e0b4ca205dc5bf8c5d4b, type: 2}
   - {fileID: 2100000, guid: 831dfc9c344b1384788429391c08fe01, type: 2}
   - {fileID: 2100000, guid: ec93c936eda5d9d4c96d7fc546e794a0, type: 2}
+  dieFace: {fileID: 2100000, guid: f5c4e8744f97ef4468f92d8b6072bc15, type: 2}
   myColor: {fileID: 7769337025208959111}
   myNickname: {fileID: 7769337024469565658}
   slimeColor: {fileID: 3144488410292583404}
@@ -247,6 +250,7 @@ MonoBehaviour:
   isPaint: 0
   isClean: 0
   isDie: 0
+  isFinish: 0
 --- !u!114 &3953146126802785483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5703,7 +5707,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffdedd91467d21c499ebb1f7b0c521be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playUI: {fileID: 0}
+  playerController: {fileID: 0}
+  myRoleColor: {fileID: 7769337024531146755}
+  myRoleImg: {fileID: 7769337025098634836}
+  myRoleTxt: {fileID: 7769337025228583988}
 --- !u!1 &7769337025098634858
 GameObject:
   m_ObjectHideFlags: 0

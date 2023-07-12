@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     private Animator playerAni;
     private Rigidbody playerRigid;
 
+    [SerializeField] VoteBtn vote;
+    [SerializeField] RolePlayingBtn rolePlaying;
+
     //이동 및 회전 속도 수치값 변수
     private float moveSpeed = 3f;
     private float rotateSpeed = 120f;
@@ -23,6 +26,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("[0Mint 1Blue 2Purple 3Yellow 4Gray 5Pink 6Orange 7Green]")]
     [SerializeField] Material[] materials;
+    [SerializeField] Material dieFace;
 
     [Header("[Player Info]")]
     [SerializeField] Image myColor;
@@ -54,6 +58,9 @@ public class PlayerController : MonoBehaviour
     public bool isPaint = false;
     public bool isClean = false;
     public bool isDie = false;
+    public bool isFinish = false;
+
+    private GameObject dieUI;
 
     private void Awake()
     {
@@ -66,6 +73,7 @@ public class PlayerController : MonoBehaviour
 
         towel = GameObject.Find("Towel");
         paint = GameObject.Find("PaintEffect");
+        dieUI = GameObject.Find("Showing");
     }
     private void Start()
     {
@@ -83,15 +91,18 @@ public class PlayerController : MonoBehaviour
 
         if (PV.IsMine)
         {
-            myNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"];
+            PV.RPC("MyNumSet", RpcTarget.AllBuffered, (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]);
 
             PV.RPC("Set", RpcTarget.AllBuffered, myNum);
-
-            myRole = GameManager.instance.shuffleRoles[myNum];
-            myRoleColor.color = myRole.roleColor;
-            myRoleImg.sprite = myRole.roleData.roleImg;
-            myRoleTxt.text = myRole.roleData.roleName;
         }
+
+    }
+    [PunRPC]
+    void MyNumSet(int myNum)
+    {
+        this.myNum = myNum;
+        GameManager.instance.playerPrefs[myNum] = gameObject;
+        myRole = GameManager.instance.shuffleRoles[myNum];
     }
     [PunRPC]
     private void Set(int num)
@@ -110,7 +121,10 @@ public class PlayerController : MonoBehaviour
             }
             if (timeManager.dayMove)
             {
-                PV.RPC("DayMove", RpcTarget.AllBuffered, myNum);
+                if (!isDie)
+                {
+                    PV.RPC("DayMove", RpcTarget.AllBuffered, myNum);
+                }
             }
 
             if (timeManager.isNight)
@@ -122,6 +136,44 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
+        if (timeManager.isVote)
+        {
+            if (isDie && !dieUI.activeSelf)
+            {
+                vote.btns[myNum].interactable = false;
+                rolePlaying.playerBtn[myNum].interactable = false;
+
+                dieUI.SetActive(true);
+            }
+        }
+
+        if (isDie && !isFinish)
+        {
+            timeManager.dayMove = false;
+            isFinish = true;
+
+            if (myRole.isImposter)
+            {
+                GameManager.instance.imposterNum--;
+            }
+            else if (myRole.isNeutral)
+            {
+                GameManager.instance.neutralNum--;
+            }
+            else
+            {
+                GameManager.instance.citizenNum--;
+            }
+
+            FindObjectOfType<FocusCamController>().dieCheck.Add(myNum);
+
+            Material[] mat = new Material[2] { GetComponentInChildren<SkinnedMeshRenderer>().material, dieFace };
+            GetComponentInChildren<SkinnedMeshRenderer>().materials = mat;
+
+            transform.GetChild(2).gameObject.SetActive(true);
+        }
+
         //Rotate();
         //Move();
         //
@@ -130,13 +182,18 @@ public class PlayerController : MonoBehaviour
         //    playerAni.SetFloat("Speed", Mathf.Abs(playerInput.move));
         //}
     }
+    [PunRPC]
+    void DieCheck(bool die)
+    {
+        isDie = die;
+    }
     IEnumerator RolePlaying_co()
     {
         yield return new WaitForSeconds(1f);
 
         int[] rolePlaying = FindObjectOfType<RolePlayingBtn>().ActionConvertertoInt(myNum);
 
-        if(rolePlaying != null)
+        if (rolePlaying != null)
         {
             for (int i = 0; i < rolePlaying.Length; i++)
             {
@@ -164,9 +221,10 @@ public class PlayerController : MonoBehaviour
                         kit.SetActive(true);
                         break;
                 }
-                yield return new WaitForSeconds(3f);
+                yield return new WaitForSeconds(3.5f);
             }
         }
+        PV.RPC("DieCheck", RpcTarget.AllBuffered, isDie);
         FindObjectOfType<RolePlayingBtn>().RolePlayingReset();
         PV.RPC("RolePlayingEnd", RpcTarget.AllBuffered);
     }
@@ -229,5 +287,4 @@ public class PlayerController : MonoBehaviour
         transform.position = votePos[num].position;
         transform.rotation = votePos[num].transform.rotation;
     }
-
 }

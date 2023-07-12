@@ -14,7 +14,7 @@ public class Role
     public bool isImposter;
     public bool isNeutral;
 
-    public Role (RoleData roleData, int roleCnt, Color roleColor, bool isImposter, bool isNeutral, int roleSerialNum)
+    public Role(RoleData roleData, int roleCnt, Color roleColor, bool isImposter, bool isNeutral, int roleSerialNum)
     {
         this.roleData = roleData;
         this.roleCnt = roleCnt;
@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
         }
     }
     #endregion
+    public GameObject[] playerPrefs;
 
     //역할 정보 담는 변수
     public List<Role> roles = new List<Role>();
@@ -63,17 +64,60 @@ public class GameManager : MonoBehaviour
 
     public int totalRoleNum;
 
+    public int currentPlayer;
+
+    public TimeManager timeManager;
+
     private void Start()
     {
+        playerPrefs = new GameObject[8];
         myColor = new Color[8];
         myColorNum = new int[8];
     }
+    private void Update()
+    {
+        if (timeManager != null)
+        {
+            if (timeManager.isVote)
+            {
+                if (imposterNum == 0 && neutralNum == 0)
+                {
+                    timeManager.isVote = false;
 
+                    timeManager.isTimeChange = true;
+                    timeManager.isLoading = true;
+
+                    GameObject.Find("EndingUI").transform.GetChild(0).gameObject.SetActive(true);
+                    FindObjectOfType<EndingUISetting>().WinnerSet(1);
+                }
+                else if (citizenNum + neutralNum <= imposterNum)
+                {
+                    timeManager.isVote = false;
+
+                    timeManager.isTimeChange = true;
+                    timeManager.isLoading = true;
+
+                    GameObject.Find("EndingUI").transform.GetChild(0).gameObject.SetActive(true);
+                    FindObjectOfType<EndingUISetting>().WinnerSet(2);
+                }
+                else if (citizenNum + imposterNum == 0 && neutralNum > 0)
+                {
+                    timeManager.isVote = false;
+
+                    timeManager.isTimeChange = true;
+                    timeManager.isLoading = true;
+
+                    GameObject.Find("EndingUI").transform.GetChild(0).gameObject.SetActive(true);
+                    FindObjectOfType<EndingUISetting>().WinnerSet(3);
+                }
+            }
+        }
+    }
     public void RoleShuffle()
     {
         shuffleRoles = new Role[roles.Count];
-        
-        for(int i = 0; i < roles.Count; i++)
+
+        for (int i = 0; i < roles.Count; i++)
         {
             shuffleRoles[i] = roles[i];
         }
@@ -83,7 +127,7 @@ public class GameManager : MonoBehaviour
 
         Role temp;
 
-        for(int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             ran1 = Random.Range(0, roles.Count);
             ran2 = Random.Range(0, roles.Count);
