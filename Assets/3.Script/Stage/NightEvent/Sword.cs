@@ -15,7 +15,7 @@ public class Sword : MonoBehaviour
     private void Awake()
     {
         TryGetComponent(out rig);
-        startPos = transform.position;
+        startPos = transform.localPosition;
         bloodAni = GameObject.Find("BloodEffect").GetComponent<Animator>();
     }
     private void OnTriggerEnter(Collider other)
@@ -47,7 +47,7 @@ public class Sword : MonoBehaviour
     private void PosReset()
     {
         bloodAni.SetBool("Blood", false);
-        transform.position = startPos;
+        transform.localPosition = startPos;
         rig.useGravity = true;
         gameObject.SetActive(false);
     }

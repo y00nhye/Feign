@@ -6,14 +6,13 @@ public class Towel : MonoBehaviour
 {
     Animator towelAni;
     Vector3 startPos;
-
     private void Awake()
     {
         TryGetComponent(out towelAni);
     }
     private void Start()
     {
-        startPos = transform.position;
+        startPos = transform.localPosition;
     }
     private void OnEnable()
     {
@@ -23,7 +22,7 @@ public class Towel : MonoBehaviour
     }
     private void AniEnd()
     {
-        transform.position = startPos;
+        transform.localPosition = startPos;
         towelAni.SetBool("Towel", false);
         gameObject.SetActive(false);
     }

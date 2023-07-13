@@ -8,7 +8,7 @@ public class PoliceCar : MonoBehaviour
 
     private void Start()
     {
-        startPos = transform.position;
+        startPos = transform.localPosition;
     }
     private void OnEnable()
     {
@@ -43,7 +43,7 @@ public class PoliceCar : MonoBehaviour
             yield return null;
         }
 
-        transform.position = startPos;
+        transform.localPosition = startPos;
         gameObject.SetActive(false);
     }
 }

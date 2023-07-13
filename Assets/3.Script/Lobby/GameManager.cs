@@ -74,44 +74,49 @@ public class GameManager : MonoBehaviour
         myColor = new Color[8];
         myColorNum = new int[8];
     }
-    private void Update()
+    public bool GameOverCheck()
     {
-        if (timeManager != null)
+        if (imposterNum == 0 && neutralNum == 0)
         {
-            if (timeManager.isVote)
-            {
-                if (imposterNum == 0 && neutralNum == 0)
-                {
-                    timeManager.isVote = false;
+            timeManager.isVote = false;
+            timeManager.isNight = false;
 
-                    timeManager.isTimeChange = true;
-                    timeManager.isLoading = true;
+            timeManager.isTimeChange = true;
+            timeManager.isLoading = true;
 
-                    GameObject.Find("EndingUI").transform.GetChild(0).gameObject.SetActive(true);
-                    FindObjectOfType<EndingUISetting>().WinnerSet(1);
-                }
-                else if (citizenNum + neutralNum <= imposterNum)
-                {
-                    timeManager.isVote = false;
+            GameObject.Find("EndingUI").transform.GetChild(0).gameObject.SetActive(true);
+            FindObjectOfType<EndingUISetting>().WinnerSet(1);
 
-                    timeManager.isTimeChange = true;
-                    timeManager.isLoading = true;
-
-                    GameObject.Find("EndingUI").transform.GetChild(0).gameObject.SetActive(true);
-                    FindObjectOfType<EndingUISetting>().WinnerSet(2);
-                }
-                else if (citizenNum + imposterNum == 0 && neutralNum > 0)
-                {
-                    timeManager.isVote = false;
-
-                    timeManager.isTimeChange = true;
-                    timeManager.isLoading = true;
-
-                    GameObject.Find("EndingUI").transform.GetChild(0).gameObject.SetActive(true);
-                    FindObjectOfType<EndingUISetting>().WinnerSet(3);
-                }
-            }
+            return true;
         }
+        else if (citizenNum + neutralNum <= imposterNum)
+        {
+            timeManager.isVote = false;
+            timeManager.isNight = false;
+
+            timeManager.isTimeChange = true;
+            timeManager.isLoading = true;
+
+            GameObject.Find("EndingUI").transform.GetChild(0).gameObject.SetActive(true);
+            FindObjectOfType<EndingUISetting>().WinnerSet(2);
+
+            return true;
+        }
+        else if (citizenNum + imposterNum == 0 && neutralNum > 0)
+        {
+            timeManager.isVote = false;
+            timeManager.isNight = false;
+
+            timeManager.isTimeChange = true;
+            timeManager.isLoading = true;
+
+            GameObject.Find("EndingUI").transform.GetChild(0).gameObject.SetActive(true);
+            FindObjectOfType<EndingUISetting>().WinnerSet(3);
+
+            return true;
+        }
+
+        return false;
     }
     public void RoleShuffle()
     {

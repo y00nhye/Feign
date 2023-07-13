@@ -14,13 +14,15 @@ public class VoteBtn : MonoBehaviour
     [SerializeField] Text[] texts;
 
     [Header("[Vote Btns]")]
-    public Button[] btns;
+    [SerializeField] Button[] btns;
 
     [Header("[Choice Obj]")]
-    [SerializeField] GameObject[] Choice;
+    [SerializeField] GameObject[] choice;
 
-    [Header("[King obj]")]
+    [Header("[Status obj]")]
     [SerializeField] GameObject[] king;
+    [SerializeField] GameObject[] blood;
+    [SerializeField] GameObject[] check;
 
     private int rightVote; //ÅõÇ¥±Ç
 
@@ -31,6 +33,9 @@ public class VoteBtn : MonoBehaviour
     private bool isKingVote = false;
     private bool isCheck = false;
     private bool isKing = false;
+    private bool isDieUIOn = false;
+
+    [SerializeField] GameObject dieUI;
 
     private TimeManager timeManager;
 
@@ -56,6 +61,17 @@ public class VoteBtn : MonoBehaviour
             isCheck = true;
             VoteCheck();
         }
+        if (dieUI.activeSelf && !isDieUIOn)
+        {
+            isDieUIOn = true;
+
+            PV.RPC("DieOn", RpcTarget.AllBuffered, (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]);
+        }
+    }
+    [PunRPC]
+    private void DieOn(int playerNum)
+    {
+        blood[playerNum].SetActive(true);
     }
     public void ChoiceOn(GameObject choice)
     {
@@ -79,148 +95,164 @@ public class VoteBtn : MonoBehaviour
     {
         if (rightVote > 0)
         {
-            PV.RPC("Skip", RpcTarget.AllBuffered);
+            PV.RPC("Skip", RpcTarget.AllBuffered, rightVote);
+            choice[0].SetActive(false);
+            check[0].SetActive(true);
 
-            rightVote--;
+            rightVote = 0;
         }
     }
     [PunRPC]
-    private void Skip()
+    private void Skip(int voteRight)
     {
-        Vote(texts[0], 0, Choice[0]);
+        Vote(texts[0], 0, voteRight);
     }
     public void Num1_pv()
     {
         if (rightVote > 0)
         {
-            PV.RPC("Num1", RpcTarget.AllBuffered);
+            PV.RPC("Num1", RpcTarget.AllBuffered, rightVote);
+            choice[1].SetActive(false);
+            check[1].SetActive(true);
 
-            rightVote--;
+            rightVote = 0;
         }
     }
     [PunRPC]
-    private void Num1()
+    private void Num1(int voteRight)
     {
-        Vote(texts[1], 1, Choice[1]);
+        Vote(texts[1], 1, voteRight);
     }
     public void Num2_pv()
     {
         if (rightVote > 0)
         {
-            PV.RPC("Num2", RpcTarget.AllBuffered);
+            PV.RPC("Num2", RpcTarget.AllBuffered, rightVote);
+            choice[2].SetActive(false);
+            check[2].SetActive(true);
 
-            rightVote--;
+            rightVote = 0;
         }
     }
     [PunRPC]
-    private void Num2()
+    private void Num2(int voteRight)
     {
-        Vote(texts[2], 2, Choice[2]);
+        Vote(texts[2], 2, voteRight);
     }
     public void Num3_pv()
     {
         if (rightVote > 0)
         {
-            PV.RPC("Num3", RpcTarget.AllBuffered);
+            PV.RPC("Num3", RpcTarget.AllBuffered, rightVote);
+            choice[3].SetActive(false);
+            check[3].SetActive(true);
 
-            rightVote--;
+            rightVote = 0;
         }
     }
     [PunRPC]
-    private void Num3()
+    private void Num3(int voteRight)
     {
-        Vote(texts[3], 3, Choice[3]);
+        Vote(texts[3], 3, voteRight);
     }
     public void Num4_pv()
     {
         if (rightVote > 0)
         {
-            PV.RPC("Num4", RpcTarget.AllBuffered);
+            PV.RPC("Num4", RpcTarget.AllBuffered, rightVote);
+            choice[4].SetActive(false);
+            check[4].SetActive(true);
 
-            rightVote--;
+            rightVote = 0;
         }
     }
     [PunRPC]
-    private void Num4()
+    private void Num4(int voteRight)
     {
-        Vote(texts[4], 4, Choice[4]);
+        Vote(texts[4], 4, voteRight);
     }
     public void Num5_pv()
     {
         if (rightVote > 0)
         {
-            PV.RPC("Num5", RpcTarget.AllBuffered);
+            PV.RPC("Num5", RpcTarget.AllBuffered, rightVote);
+            choice[5].SetActive(false);
+            check[5].SetActive(true);
 
-            rightVote--;
+            rightVote = 0;
         }
     }
     [PunRPC]
-    private void Num5()
+    private void Num5(int voteRight)
     {
-        Vote(texts[5], 5, Choice[5]);
+        Vote(texts[5], 5, voteRight);
     }
     public void Num6_pv()
     {
         if (rightVote > 0)
         {
-            PV.RPC("Num6", RpcTarget.AllBuffered);
+            PV.RPC("Num6", RpcTarget.AllBuffered, rightVote);
+            choice[6].SetActive(false);
+            check[6].SetActive(true);
 
-            rightVote--;
+            rightVote = 0;
         }
     }
     [PunRPC]
-    private void Num6()
+    private void Num6(int voteRight)
     {
-        Vote(texts[6], 6, Choice[6]);
+        Vote(texts[6], 6, voteRight);
     }
     public void Num7_pv()
     {
         if (rightVote > 0)
         {
-            PV.RPC("Num7", RpcTarget.AllBuffered);
+            PV.RPC("Num7", RpcTarget.AllBuffered, rightVote);
 
-            rightVote--;
+            choice[7].SetActive(false);
+            check[7].SetActive(true);
+
+            rightVote = 0;
         }
     }
     [PunRPC]
-    private void Num7()
+    private void Num7(int voteRight)
     {
-        Vote(texts[7], 7, Choice[7]);
+        Vote(texts[7], 7, voteRight);
     }
     public void Num8_pv()
     {
         if (rightVote > 0)
         {
-            PV.RPC("Num8", RpcTarget.AllBuffered);
+            PV.RPC("Num8", RpcTarget.AllBuffered, rightVote);
 
-            rightVote--;
+            choice[8].SetActive(false);
+            check[8].SetActive(true);
+
+            rightVote = 0;
         }
     }
     [PunRPC]
-    private void Num8()
+    private void Num8(int voteRight)
     {
-        Vote(texts[8], 8, Choice[8]);
+        Vote(texts[8], 8, voteRight);
     }
 
-    private void Vote(Text txt, int num, GameObject choice)
+    private void Vote(Text txt, int num, int voteRight)
     {
-        choice.SetActive(false);
-
-        voteNum[num]++;
+        voteNum[num] += voteRight;
         txt.text = "" + voteNum[num];
 
         totalVote++;
     }
     private void VoteCheck()
     {
-        if (timeManager.currentTime > 1)
+        if (timeManager.currentTime > 3)
         {
             timeManager.currentTime = 3;
         }
-
-        VoteReset();
     }
-    private void VoteReset()
+    public void VoteReset()
     {
         highNumIndex = VoteCount();
 
@@ -229,9 +261,50 @@ public class VoteBtn : MonoBehaviour
             voteNum[i] = 0;
             texts[i].text = "0";
             btns[i].interactable = true;
+            check[i].SetActive(false);
         }
 
         totalVote = 0;
+
+        if (!isKingVote)
+        {
+            isKingVote = true;
+
+            if (highNumIndex != 0)
+            {
+                king[highNumIndex - 1].SetActive(true);
+
+                if ((int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"] == (highNumIndex - 1))
+                {
+                    isKing = true;
+                }
+            }
+        }
+        else
+        {
+            if (highNumIndex != 0)
+            {
+                GameManager.instance.playerPrefs[highNumIndex - 1].GetComponent<PlayerController>().isOut = true;
+                if (GameManager.instance.playerPrefs[highNumIndex - 1].GetComponent<PlayerController>().myRole.isImposter)
+                {
+                    GameManager.instance.imposterNum--;
+                }
+                else if (GameManager.instance.playerPrefs[highNumIndex - 1].GetComponent<PlayerController>().myRole.isNeutral)
+                {
+                    GameManager.instance.neutralNum--;
+                }
+                else
+                {
+                    GameManager.instance.citizenNum--;
+                }
+                FindObjectOfType<FocusCamController>().dieCheck.Add(highNumIndex - 1);
+
+                if ((int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"] == (highNumIndex - 1))
+                {
+                    timeManager.isFinish = true;
+                }
+            }
+        }
 
         if (isKing)
         {
@@ -240,23 +313,6 @@ public class VoteBtn : MonoBehaviour
         else
         {
             rightVote = 1;
-        }
-
-        if (!isKingVote)
-        {
-            isKingVote = true;
-
-            if (highNumIndex == 0)
-            {
-                return;
-            }
-
-            king[highNumIndex - 1].SetActive(true);
-
-            if ((int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"] == (highNumIndex - 1))
-            {
-                isKing = true;
-            }
         }
 
         highNumIndex = 0;

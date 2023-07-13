@@ -11,9 +11,6 @@ public class PlayerController : MonoBehaviour
     private Animator playerAni;
     private Rigidbody playerRigid;
 
-    [SerializeField] VoteBtn vote;
-    [SerializeField] RolePlayingBtn rolePlaying;
-
     //이동 및 회전 속도 수치값 변수
     private float moveSpeed = 3f;
     private float rotateSpeed = 120f;
@@ -58,7 +55,10 @@ public class PlayerController : MonoBehaviour
     public bool isPaint = false;
     public bool isClean = false;
     public bool isDie = false;
+    public bool isOut = false;
+    public bool isOutCheck = false;
     public bool isFinish = false;
+    public bool isFinishCheck = false;
 
     private GameObject dieUI;
 
@@ -117,11 +117,14 @@ public class PlayerController : MonoBehaviour
         {
             if (timeManager.nightMove)
             {
-                PV.RPC("NightMove", RpcTarget.AllBuffered, myNum);
+                if (!isOut && !isDie)
+                {
+                    PV.RPC("NightMove", RpcTarget.AllBuffered, myNum);
+                }
             }
             if (timeManager.dayMove)
             {
-                if (!isDie)
+                if (!isOut && !isDie)
                 {
                     PV.RPC("DayMove", RpcTarget.AllBuffered, myNum);
                 }
@@ -134,17 +137,29 @@ public class PlayerController : MonoBehaviour
                     FindObjectOfType<RolePlayingBtn>().isRolePlaying = false;
                     StartCoroutine(RolePlaying_co());
                 }
+                if (!isFinishCheck)
+                {
+                    if (isOut && !dieUI.transform.GetChild(0).gameObject.activeSelf)
+                    {
+                        dieUI.transform.GetChild(0).gameObject.SetActive(true);
+                        isFinishCheck = true;
+                    }
+                }
             }
-        }
 
-        if (timeManager.isVote)
-        {
-            if (isDie && !dieUI.activeSelf)
+            if (timeManager.isVote && !isFinishCheck)
             {
-                vote.btns[myNum].interactable = false;
-                rolePlaying.playerBtn[myNum].interactable = false;
+                if (isDie && !dieUI.transform.GetChild(0).gameObject.activeSelf)
+                {
+                    dieUI.transform.GetChild(0).gameObject.SetActive(true);
+                    isFinishCheck = true;
+                }
+            }
 
-                dieUI.SetActive(true);
+            if(isOut && timeManager.currentTime == 0 && !isOutCheck)
+            {
+                isOutCheck = true;
+                PV.RPC("NightMove", RpcTarget.AllBuffered, myNum);
             }
         }
 
@@ -221,8 +236,12 @@ public class PlayerController : MonoBehaviour
                         kit.SetActive(true);
                         break;
                 }
-                yield return new WaitForSeconds(3.5f);
+                yield return new WaitForSeconds(4f);
             }
+        }
+        if (isDie)
+        {
+            timeManager.isFinish = true;
         }
         PV.RPC("DieCheck", RpcTarget.AllBuffered, isDie);
         FindObjectOfType<RolePlayingBtn>().RolePlayingReset();

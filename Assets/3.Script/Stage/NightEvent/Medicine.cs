@@ -11,7 +11,7 @@ public class Medicine : MonoBehaviour
 
     private void Start()
     {
-        startPos = transform.position;
+        startPos = transform.localPosition;
     }
     private void OnEnable()
     {
@@ -38,7 +38,7 @@ public class Medicine : MonoBehaviour
 
         while (Vector3.Distance(endPos, transform.position) > 0.01f)
         {
-            transform.position = Vector3.Lerp(endPos, transform.position, 0.99f);
+            transform.position = Vector3.Lerp(endPos, transform.position, 0.9f);
 
             yield return null;
         }
@@ -59,8 +59,6 @@ public class Medicine : MonoBehaviour
     }
     IEnumerator Heal(GameObject other)
     {
-        yield return new WaitForSeconds(1f);
-
         other.transform.GetChild(2).gameObject.SetActive(false);
         Material[] mat = new Material[2] { other.GetComponentInChildren<SkinnedMeshRenderer>().material, revivalFace };
         other.GetComponentInChildren<SkinnedMeshRenderer>().materials = mat;
@@ -71,7 +69,7 @@ public class Medicine : MonoBehaviour
     }
     private void PosReset()
     {
-        transform.position = startPos;
+        transform.localPosition = startPos;
         gameObject.SetActive(false);
     }
 }

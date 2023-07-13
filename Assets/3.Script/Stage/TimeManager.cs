@@ -20,9 +20,10 @@ public class TimeManager : MonoBehaviour
     [Header("[Event UI]")]
     [SerializeField] GameObject voteUI;
     [SerializeField] GameObject rolePlayingUI;
+    [SerializeField] GameObject kingUI;
 
     [Header("[Chinemachine camera]")]
-    [SerializeField] CinemachineVirtualCamera voteCam; 
+    [SerializeField] CinemachineVirtualCamera voteCam;
     [SerializeField] CinemachineVirtualCamera nightCam;
 
     [Header("[PostProcessing]")]
@@ -37,9 +38,13 @@ public class TimeManager : MonoBehaviour
     public bool nightMove = false;
     public bool dayMove = false;
     public bool rolePlayingSet = false;
+    public bool voteSet = false;
+    public bool isFinish = false;
 
     [Header("[Current Time (set)]")]
     public int currentTime = 0;
+
+    [SerializeField] VoteBtn voteBtn;
 
     private EventUIBtn eventUI;
 
@@ -72,7 +77,7 @@ public class TimeManager : MonoBehaviour
             else if (isVote)
             {
                 eventUI.VoteBtn();
-                
+
                 dayTimeUI.SetActive(false);
                 voteTimeUI.SetActive(true);
                 nightTimeUI.SetActive(false);
@@ -86,8 +91,11 @@ public class TimeManager : MonoBehaviour
                 StartCoroutine(Timer_co());
             }
             else if (isNight)
-            {
-                voteCam.enabled = false;
+            {           
+                if (!isFinish)
+                {
+                    voteCam.enabled = false;
+                }
                 nightPostProcessing.SetActive(true);
 
                 eventUI.NightBtn();
@@ -131,11 +139,10 @@ public class TimeManager : MonoBehaviour
 
         if (isVote)
         {
-            nightMove = true;
+            voteBtn.VoteReset();
 
             isVote = false;
-
-            Invoke("NightOn", 1f);
+            voteSet = true;
         }
         else if (isNight)
         {
@@ -143,7 +150,7 @@ public class TimeManager : MonoBehaviour
         }
     }
 
-    private void NightOn()
+    public void NightOn()
     {
         isTimeChange = true;
         isNight = true;

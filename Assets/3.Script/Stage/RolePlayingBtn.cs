@@ -8,7 +8,7 @@ using System;
 public class RolePlayingBtn : MonoBehaviour
 {
     [Header("[Role Playing Button]")]
-    public Button[] playerBtn;
+    [SerializeField] Button[] playerBtn;
     [SerializeField] Button[] role_1Btn;
     [SerializeField] Button[] role_2Btn;
 
@@ -16,6 +16,7 @@ public class RolePlayingBtn : MonoBehaviour
     [SerializeField] GameObject[] check;
     [SerializeField] GameObject role1;
     [SerializeField] GameObject role2;
+    [SerializeField] GameObject[] blood;
 
     [Header("[Role Plaing Img]")]
     [SerializeField] Sprite DieImg;
@@ -32,8 +33,11 @@ public class RolePlayingBtn : MonoBehaviour
 
     private bool isKill = false;
     public bool isRolePlaying = false;
+    private bool isDieUIOn = false;
 
     public int rolePlayingEnd = 0;
+
+    [SerializeField] GameObject dieUI;
 
     private TimeManager timeManager;
 
@@ -69,6 +73,18 @@ public class RolePlayingBtn : MonoBehaviour
         {
             RolePlayingEnd();
         }
+
+        if (dieUI.activeSelf && !isDieUIOn)
+        {
+            isDieUIOn = true;
+
+            PV.RPC("DieOn", RpcTarget.AllBuffered, (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]);
+        }
+    }
+    [PunRPC]
+    private void DieOn(int playerNum)
+    {
+        blood[playerNum].SetActive(true);
     }
     private void Set()
     {
@@ -77,15 +93,12 @@ public class RolePlayingBtn : MonoBehaviour
             role_1Btn[i].image.sprite = GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleImg;
         }
 
+        ButtonSet();
+
         if (!GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].isImposter)
         {
             role1.SetActive(true);
             role_01Img.sprite = GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleImg;
-
-            for (int i = 0; i < role_2Btn.Length; i++)
-            {
-                role_2Btn[i].gameObject.SetActive(false);
-            }
         }
         else
         {
@@ -98,7 +111,21 @@ public class RolePlayingBtn : MonoBehaviour
                 role_2Btn[i].image.sprite = DieImg;
             }
         }
+    }
+    private void ButtonSet()
+    {
+        for (int i = 0; i < role_2Btn.Length; i++)
+        {
+            role_1Btn[i].gameObject.SetActive(true);
+        }
 
+        if (GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].isImposter)
+        {
+            for (int i = 0; i < role_2Btn.Length; i++)
+            {
+                role_2Btn[i].gameObject.SetActive(true);
+            }
+        }
     }
 
     public void CheckOn(GameObject che)
@@ -216,13 +243,14 @@ public class RolePlayingBtn : MonoBehaviour
             role_1Btn[i].interactable = true;
             role_2Btn[i].interactable = true;
             playerBtn[i].interactable = true;
-
-            role_1Btn[i].gameObject.SetActive(false);
-            role_2Btn[i].gameObject.SetActive(false);
+            check[i].SetActive(false);
 
             isBlock[i] = false;
             actions[i] = null;
         }
+
+        ButtonSet();
+
         isKill = false;
         ActiveNum = -1;
 
