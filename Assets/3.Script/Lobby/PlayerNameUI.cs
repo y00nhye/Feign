@@ -38,6 +38,7 @@ public class PlayerNameUI : MonoBehaviourPunCallbacks
     private void Set(int id)
     {
         transform.SetParent(GameObject.Find("Sort").transform);
+        transform.localScale = Vector3.one;
         GetComponentInChildren<Text>().text = PV.Controller.NickName;
 
         lobbyBtnController.playerColor[id] = playerColor;

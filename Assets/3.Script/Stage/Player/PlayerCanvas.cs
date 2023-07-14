@@ -13,9 +13,12 @@ public class PlayerCanvas : MonoBehaviour
     public PlayerController playerController;
 
     [Header("[Player Info]")]
-    [SerializeField] Image myRoleColor;
-    [SerializeField] Image myRoleImg;
-    [SerializeField] Text myRoleTxt;
+    public Image myRoleColor;
+    public Image myRoleImg;
+    public Text myRoleTxt;
+
+    [Header("[ETC]")]
+    [SerializeField] Color imposter;
 
     private void Awake()
     {
@@ -54,9 +57,21 @@ public class PlayerCanvas : MonoBehaviour
     {
         canvasAni.SetBool("Show", true);
 
-        if (!playerController.isClean)
+        if (playerController.myRole.roleData.roleName == "정신병자" && !playerController.isDie_ && !playerController.isOut)
+        {
+            myRoleColor.color = playerController.rolePsy.roleColor;
+            myRoleImg.sprite = playerController.rolePsy.roleData.roleImg;
+            myRoleTxt.text = playerController.rolePsy.roleData.roleName;
+        }
+        else if (!playerController.isClean && !playerController.isPaint)
         {
             myRoleColor.color = playerController.myRole.roleColor;
+            myRoleImg.sprite = playerController.myRole.roleData.roleImg;
+            myRoleTxt.text = playerController.myRole.roleData.roleName;
+        }
+        else if (playerController.isPaint)
+        {
+            myRoleColor.color = imposter;
             myRoleImg.sprite = playerController.myRole.roleData.roleImg;
             myRoleTxt.text = playerController.myRole.roleData.roleName;
         }

@@ -29,8 +29,8 @@ public class RoleController : MonoBehaviourPunCallbacks
     private List<GameObject> neutral = new List<GameObject>();
 
     //역할 수 세기 변수
-    private int citizenNum = 0;
-    private int imposterNum = 0;
+    public int citizenNum = 0;
+    public int imposterNum = 0;
     private int neutralNum = 0;
     public int totalNum = 0;
     public int doctorNum { get; private set; }

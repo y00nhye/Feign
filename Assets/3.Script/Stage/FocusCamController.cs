@@ -62,7 +62,7 @@ public class FocusCamController : MonoBehaviour
             focusCam[playerNum[i]].enabled = true;
 
             GameManager.instance.playerPrefs[playerNum[i]].GetComponentInChildren<PlayerCanvas>().CanvasAnimation();
-            yield return new WaitForSeconds(8f);
+            yield return new WaitForSeconds(7f);
 
             if (!isDay)
             {
@@ -84,6 +84,8 @@ public class FocusCamController : MonoBehaviour
             }
             else
             {
+                yield return new WaitForSeconds(1f);
+
                 timeManager.nightMove = true;
 
                 yield return new WaitForSeconds(1f);

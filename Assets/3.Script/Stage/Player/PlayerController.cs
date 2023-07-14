@@ -45,16 +45,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject kit;
     [SerializeField] GameObject car;
     //찾아서 세팅할 목록
-    private GameObject towel;
-    private GameObject paint;
+    [SerializeField] GameObject towel;
+    [SerializeField] GameObject paint;
 
     [Header("[Player Role (set)]")]
     public Role myRole;
+    public Role rolePsy;
 
     [Header("[Player Status (set)")]
     public bool isPaint = false;
     public bool isClean = false;
     public bool isDie = false;
+    public bool isDie_ = false;
     public bool isOut = false;
     public bool isOutCheck = false;
     public bool isFinish = false;
@@ -71,14 +73,16 @@ public class PlayerController : MonoBehaviour
 
         timeManager = FindObjectOfType<TimeManager>();
 
-        towel = GameObject.Find("Towel");
-        paint = GameObject.Find("PaintEffect");
+        towel = GameObject.Find("NightCam").transform.GetChild(1).gameObject;
+        paint = GameObject.Find("Canvas").transform.GetChild(2).gameObject;
         dieUI = GameObject.Find("Showing");
     }
     private void Start()
     {
         roomPos = new Transform[8];
         votePos = new Transform[8];
+
+        rolePsy = GameManager.instance.roles[Random.Range(0, GameManager.instance.citizenNum)];
 
         for (int i = 0; i < roomPos.Length; i++)
         {
@@ -95,7 +99,6 @@ public class PlayerController : MonoBehaviour
 
             PV.RPC("Set", RpcTarget.AllBuffered, myNum);
         }
-
     }
     [PunRPC]
     void MyNumSet(int myNum)
@@ -113,6 +116,31 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+        if (isDie_ && !isFinish)
+        {
+            isFinish = true;
+
+            if (myRole.isImposter)
+            {
+                GameManager.instance.imposterNum--;
+            }
+            else if (myRole.isNeutral)
+            {
+                GameManager.instance.neutralNum--;
+            }
+            else
+            {
+                GameManager.instance.citizenNum--;
+            }
+
+            FindObjectOfType<FocusCamController>().dieCheck.Add(myNum);
+
+            Material[] mat = new Material[2] { GetComponentInChildren<SkinnedMeshRenderer>().material, dieFace };
+            GetComponentInChildren<SkinnedMeshRenderer>().materials = mat;
+
+            transform.GetChild(2).gameObject.SetActive(true);
+        }
+
         if (PV.IsMine)
         {
             if (timeManager.nightMove)
@@ -156,39 +184,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if(isOut && timeManager.currentTime == 0 && !isOutCheck)
+            if (isOut && timeManager.currentTime == 0 && !isOutCheck)
             {
                 isOutCheck = true;
                 PV.RPC("NightMove", RpcTarget.AllBuffered, myNum);
             }
         }
-
-        if (isDie && !isFinish)
-        {
-            timeManager.dayMove = false;
-            isFinish = true;
-
-            if (myRole.isImposter)
-            {
-                GameManager.instance.imposterNum--;
-            }
-            else if (myRole.isNeutral)
-            {
-                GameManager.instance.neutralNum--;
-            }
-            else
-            {
-                GameManager.instance.citizenNum--;
-            }
-
-            FindObjectOfType<FocusCamController>().dieCheck.Add(myNum);
-
-            Material[] mat = new Material[2] { GetComponentInChildren<SkinnedMeshRenderer>().material, dieFace };
-            GetComponentInChildren<SkinnedMeshRenderer>().materials = mat;
-
-            transform.GetChild(2).gameObject.SetActive(true);
-        }
-
         //Rotate();
         //Move();
         //
@@ -198,9 +199,11 @@ public class PlayerController : MonoBehaviour
         //}
     }
     [PunRPC]
-    void DieCheck(bool die)
+    void StatusCheck(bool die, bool paint, bool clean)
     {
-        isDie = die;
+        isDie_ = die;
+        isPaint = paint;
+        isClean = clean;
     }
     IEnumerator RolePlaying_co()
     {
@@ -225,9 +228,11 @@ public class PlayerController : MonoBehaviour
                         break;
                     case 3:
                         isPaint = true;
+                        paint.SetActive(true);
                         break;
                     case 4:
                         isClean = true;
+                        towel.SetActive(true);
                         break;
                     case 5:
                         sword.SetActive(true);
@@ -243,7 +248,7 @@ public class PlayerController : MonoBehaviour
         {
             timeManager.isFinish = true;
         }
-        PV.RPC("DieCheck", RpcTarget.AllBuffered, isDie);
+        PV.RPC("StatusCheck", RpcTarget.AllBuffered, isDie, isPaint, isClean);
         FindObjectOfType<RolePlayingBtn>().RolePlayingReset();
         PV.RPC("RolePlayingEnd", RpcTarget.AllBuffered);
     }

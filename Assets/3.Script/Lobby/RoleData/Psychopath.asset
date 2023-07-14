@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roleName: "\uC815\uC2E0\uBCD1\uC790"
   roleImg: {fileID: 21300000, guid: 2dd1236e62650ae49ac4553b359f0eb2, type: 3}
+  roleOrder: 8
+  SerialNumC: 2
+  SerialNumI: 0
+  SerialNumN: 0

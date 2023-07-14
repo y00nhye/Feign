@@ -51,7 +51,7 @@ public class RolePlayingBtn : MonoBehaviour
         Set();
         actions = new string[8];
         isBlock = new bool[8];
-        for(int i = 0; i < isBlock.Length; i++)
+        for (int i = 0; i < isBlock.Length; i++)
         {
             isBlock[i] = false;
         }
@@ -63,13 +63,19 @@ public class RolePlayingBtn : MonoBehaviour
             if (!isBlock[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]])
             {
                 PV.RPC("Action", RpcTarget.AllBuffered, ActiveNum, (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"], isKill);
+
+                if (int.Parse(GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleOrder) == 7)
+                {
+                    GameManager.instance.playerPrefs[ActiveNum].GetComponentInChildren<PlayerCanvas>().myRoleImg.sprite = GameManager.instance.playerPrefs[ActiveNum].GetComponent<PlayerController>().myRole.roleData.roleImg;
+                    GameManager.instance.playerPrefs[ActiveNum].GetComponentInChildren<PlayerCanvas>().myRoleColor.color = GameManager.instance.playerPrefs[ActiveNum].GetComponent<PlayerController>().myRole.roleColor;
+                }
             }
 
             timeManager.rolePlayingSet = false;
             isRolePlaying = true;
         }
 
-        if(rolePlayingEnd == PhotonNetwork.CurrentRoom.PlayerCount)
+        if (rolePlayingEnd == PhotonNetwork.CurrentRoom.PlayerCount)
         {
             RolePlayingEnd();
         }
@@ -90,7 +96,15 @@ public class RolePlayingBtn : MonoBehaviour
     {
         for (int i = 0; i < role_1Btn.Length; i++)
         {
-            role_1Btn[i].image.sprite = GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleImg;
+            if (GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleName != "정신병자")
+            {
+                role_1Btn[i].image.sprite = GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleImg;
+            }
+            else
+            {
+                role_1Btn[i].image.sprite = GameManager.instance.playerPrefs[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].GetComponent<PlayerController>().rolePsy.roleData.roleImg;
+            }
+
         }
 
         ButtonSet();
@@ -98,7 +112,14 @@ public class RolePlayingBtn : MonoBehaviour
         if (!GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].isImposter)
         {
             role1.SetActive(true);
-            role_01Img.sprite = GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleImg;
+            if (GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleName != "정신병자")
+            {
+                role_01Img.sprite = GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleImg;
+            }
+            else
+            {
+                role_01Img.sprite = GameManager.instance.playerPrefs[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].GetComponent<PlayerController>().rolePsy.roleData.roleImg;
+            }
         }
         else
         {
@@ -158,7 +179,10 @@ public class RolePlayingBtn : MonoBehaviour
         if (int.Parse(GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleOrder) == 0 ||
             int.Parse(GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleOrder) == 1)
         {
-            PV.RPC("ActionBlockCheck", RpcTarget.AllBuffered, activeNum);
+            if ((int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"] != activeNum)
+            {
+                PV.RPC("ActionBlockCheck", RpcTarget.AllBuffered, activeNum);
+            }
         }
     }
     public void RolePlaying_2(int activeNum)
@@ -181,7 +205,10 @@ public class RolePlayingBtn : MonoBehaviour
 
         isKill = true;
 
-        PV.RPC("ActionBlockCheck", RpcTarget.AllBuffered, activeNum);
+        if ((int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"] != activeNum)
+        {
+            PV.RPC("ActionBlockCheck", RpcTarget.AllBuffered, activeNum);
+        }
     }
     [PunRPC]
     private void ActionBlockCheck(int num)
@@ -201,7 +228,10 @@ public class RolePlayingBtn : MonoBehaviour
                 }
                 else
                 {
-                    actions[activeNum] += GameManager.instance.shuffleRoles[myNum].roleData.roleOrder;
+                    if (int.Parse(GameManager.instance.shuffleRoles[myNum].roleData.roleOrder) != 7)
+                    {
+                        actions[activeNum] += GameManager.instance.shuffleRoles[myNum].roleData.roleOrder;
+                    }
                 }
             }
             else
@@ -212,14 +242,17 @@ public class RolePlayingBtn : MonoBehaviour
                 }
                 else
                 {
-                    actions[activeNum] += "," + GameManager.instance.shuffleRoles[myNum].roleData.roleOrder;
+                    if (int.Parse(GameManager.instance.shuffleRoles[myNum].roleData.roleOrder) != 7)
+                    {
+                        actions[activeNum] += "," + GameManager.instance.shuffleRoles[myNum].roleData.roleOrder;
+                    }
                 }
             }
         }
     }
     public int[] ActionConvertertoInt(int num)
     {
-        if(actions[num] == null)
+        if (actions[num] == null)
         {
             return null;
         }

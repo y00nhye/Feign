@@ -38,7 +38,7 @@ public class Medicine : MonoBehaviour
 
         while (Vector3.Distance(endPos, transform.position) > 0.01f)
         {
-            transform.position = Vector3.Lerp(endPos, transform.position, 0.9f);
+            transform.position = Vector3.Lerp(endPos, transform.position, 0.92f);
 
             yield return null;
         }

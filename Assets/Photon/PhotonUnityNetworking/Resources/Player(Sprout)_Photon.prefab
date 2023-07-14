@@ -239,6 +239,8 @@ MonoBehaviour:
   sword: {fileID: 7160768832659828166}
   kit: {fileID: 8091644979298347582}
   car: {fileID: 5962112381795485909}
+  towel: {fileID: 5551112240158679453, guid: 5980081c7bd3f5542a90c511fee04fa0, type: 3}
+  paint: {fileID: 3459925434788238587, guid: 7b07f4f822d53704ba962a64a5a46112, type: 3}
   myRole:
     roleData: {fileID: 0}
     roleCnt: 0
@@ -249,6 +251,7 @@ MonoBehaviour:
   isPaint: 0
   isClean: 0
   isDie: 0
+  isDie_: 0
   isOut: 0
   isOutCheck: 0
   isFinish: 0
@@ -827,6 +830,7 @@ MonoBehaviour:
   myRoleColor: {fileID: 7769337024531146755}
   myRoleImg: {fileID: 7769337025098634836}
   myRoleTxt: {fileID: 7769337025228583988}
+  imposter: {r: 0.83921576, g: 0.37254903, b: 0.30588236, a: 0}
 --- !u!1 &7769337025098634858
 GameObject:
   m_ObjectHideFlags: 0

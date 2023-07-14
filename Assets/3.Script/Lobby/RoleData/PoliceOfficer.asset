@@ -15,3 +15,6 @@ MonoBehaviour:
   roleName: "\uACBD\uCC30"
   roleImg: {fileID: 21300000, guid: f3a3a10fb881f3c4bb6c4810c81dfe72, type: 3}
   roleOrder: 1
+  SerialNumC: 5
+  SerialNumI: 6
+  SerialNumN: 0

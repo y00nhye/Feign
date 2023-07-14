@@ -14,8 +14,21 @@ public class LobbyBtnController : MonoBehaviour
     [SerializeField] GameObject nicknameSettingUI;
     [SerializeField] GameObject createRoomNameUI;
     [SerializeField] GameObject enterRoomNameUI;
-    [SerializeField] GameObject errorPopup;
+    [SerializeField] GameObject optionUI;
+    [SerializeField] GameObject numErrorPopup;
+    [SerializeField] GameObject imErrorPopup;
     [SerializeField] Button startBtn;
+
+    [Header("[RoleData]")]
+    [SerializeField] RoleData[] citizen;
+    [SerializeField] RoleData[] imposter;
+    [SerializeField] RoleData[] neutral;
+
+    private int randNumC;
+    private int randNumI;
+    private int randNumN;
+
+    private GameObject errorPopup;
 
     [Header("[Player Name]")]
     [SerializeField] Text playerNameInput;
@@ -28,6 +41,8 @@ public class LobbyBtnController : MonoBehaviour
 
     private int loadCheck;
     private bool isStart;
+
+    private List<RoleInfo> roles = new List<RoleInfo>();
 
     private void Awake()
     {
@@ -48,7 +63,17 @@ public class LobbyBtnController : MonoBehaviour
         if (isStart)
         {
             isStart = false;
-            SetInfo();
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                randNumC = Random.Range(0, citizen.Length);
+                randNumI = Random.Range(0, imposter.Length);
+                randNumN = Random.Range(0, neutral.Length);
+
+                PV.RPC("RandNumSet", RpcTarget.AllBuffered, randNumC, randNumI, randNumN);
+            }
+
+            SetRole();
         }
 
         if (PhotonNetwork.InRoom)
@@ -59,7 +84,13 @@ public class LobbyBtnController : MonoBehaviour
                 PhotonNetwork.LoadLevel("Stage");
             }
         }
-
+    }
+    [PunRPC]
+    private void RandNumSet(int rnd1, int rnd2, int rnd3)
+    {
+        randNumC = rnd1;
+        randNumI = rnd2;
+        randNumN = rnd3;
     }
     public void NicknameSet()
     {
@@ -91,6 +122,14 @@ public class LobbyBtnController : MonoBehaviour
         lobbyMenuUI.SetActive(false);
         enterRoomNameUI.SetActive(true);
     }
+    public void OptionEnter()
+    {
+        optionUI.SetActive(true);
+    }
+    public void OptionExit()
+    {
+        optionUI.SetActive(false);
+    }
     public void Back()
     {
         createRoomNameUI.SetActive(false);
@@ -110,8 +149,17 @@ public class LobbyBtnController : MonoBehaviour
 
     public void GameStart_pv()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount != FindObjectOfType<RoleController>().totalNum || FindObjectOfType<RoleController>().totalNum <= 2)
+        if (PhotonNetwork.CurrentRoom.PlayerCount != FindObjectOfType<RoleController>().totalNum && FindObjectOfType<RoleController>().totalNum <= 2)
         {
+            errorPopup = numErrorPopup;
+            
+            StartCoroutine(Error_co());
+            return;
+        }
+        else if (FindObjectOfType<RoleController>().citizenNum <= FindObjectOfType<RoleController>().imposterNum)
+        {
+            errorPopup = imErrorPopup;
+            
             StartCoroutine(Error_co());
             return;
         }
@@ -138,7 +186,34 @@ public class LobbyBtnController : MonoBehaviour
     {
         loadCheck++;
     }
+    private void SetRole()
+    {
+        for (int i = 0; i < GameObject.FindGameObjectsWithTag("Role").Length; i++)
+        {
+            if (GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleData.roleName == "무작위")
+            {
+                if (GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().isImposter)
+                {
+                    GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleData = imposter[randNumI];
+                    GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleSerialNum = GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleData.SerialNumI;
+                }
+                else if (GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().isNeutral)
+                {
+                    GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleData = neutral[randNumN];
+                    GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleSerialNum = GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleData.SerialNumN;
+                }
+                else
+                {
+                    GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleData = citizen[randNumC];
+                    GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleSerialNum = GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleData.SerialNumC;
+                }
+            }
 
+            roles.Add(GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>());
+        }
+
+        SetInfo();
+    }
     private void SetInfo()
     {
         int citizenCnt = 0;
@@ -150,10 +225,9 @@ public class LobbyBtnController : MonoBehaviour
         List<Role> neutralRole = new List<Role>();
 
         //roleInfo 담기
-        for (int i = 0; i < GameObject.FindGameObjectsWithTag("Role").Length; i++)
+        for (int i = 0; i < roles.Count; i++)
         {
-            Role role = new Role(GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleData, GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().num,
-                GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleColor, GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().isImposter, GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().isNeutral, GameObject.FindGameObjectsWithTag("Role")[i].GetComponent<RoleInfo>().roleSerialNum);
+            Role role = new Role(roles[i].roleData, roles[i].num, roles[i].roleColor, roles[i].isImposter, roles[i].isNeutral, roles[i].roleSerialNum);
 
             if (role.isImposter)
             {
