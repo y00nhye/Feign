@@ -10,6 +10,7 @@ public class ScreenSizeSet : MonoBehaviour
     public Toggle fullscreenBtn;
     public Dropdown resolutionDropdown;
     int resolutionNum;
+    int beforeResolutionNum = -1;
 
     private void Start()
     {
@@ -18,9 +19,9 @@ public class ScreenSizeSet : MonoBehaviour
 
     void InitUI()
     {
-        for(int i = 0; i < Screen.resolutions.Length; i++)
+        for (int i = 0; i < Screen.resolutions.Length; i++)
         {
-            if(Screen.resolutions[i].refreshRate == 60)
+            if (Screen.resolutions[i].refreshRate == 60)
             {
                 resolutions.Add(Screen.resolutions[i]);
             }
@@ -28,19 +29,18 @@ public class ScreenSizeSet : MonoBehaviour
 
         resolutionDropdown.options.Clear();
 
-        int optionNum = 0;
-        foreach (Resolution item in resolutions)
+        for (int i = 0; i < resolutions.Count; i++)
         {
             Dropdown.OptionData option = new Dropdown.OptionData();
-            option.text = item.width + " x " + item.height;
+            option.text = resolutions[i].width + " x " + resolutions[i].height;
             resolutionDropdown.options.Add(option);
 
-            if(item.width == Screen.width && item.height == Screen.height)
+            if (resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
             {
-                resolutionDropdown.value = optionNum;
-                optionNum++;
+                resolutionDropdown.value = i;
             }
         }
+
         resolutionDropdown.RefreshShownValue();
 
         fullscreenBtn.isOn = Screen.fullScreenMode.Equals(FullScreenMode.FullScreenWindow) ? true : false;
@@ -48,6 +48,11 @@ public class ScreenSizeSet : MonoBehaviour
 
     public void DropboxOptionChange(int x)
     {
+        if (beforeResolutionNum == -1)
+        {
+            beforeResolutionNum = resolutionDropdown.value;
+        }
+
         resolutionNum = x;
     }
 
@@ -59,5 +64,10 @@ public class ScreenSizeSet : MonoBehaviour
     public void OKBtnClick()
     {
         Screen.SetResolution(resolutions[resolutionNum].width, resolutions[resolutionNum].height, screenMode);
+    }
+
+    public void CancleBtnClick()
+    {
+        resolutionDropdown.value = beforeResolutionNum;
     }
 }
