@@ -29,6 +29,10 @@ public class RoleInfo : MonoBehaviour
         roleController = FindObjectOfType<RoleController>();
         PV = GameObject.Find("LobbyManager").GetPhotonView();
     }
+    private void Start()
+    {
+        transform.localScale = Vector3.one;
+    }
     private void Update()
     {
         RoleNumCheck();

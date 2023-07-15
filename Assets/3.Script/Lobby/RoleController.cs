@@ -81,8 +81,8 @@ public class RoleController : MonoBehaviourPunCallbacks
 
     private GameObject CitizenRoleSet() //시민 세팅
     {
-        imposterUI.transform.position -= PlusUIPos;
-        neutralUI.transform.position -= PlusUIPos;
+        imposterUI.transform.localPosition -= PlusUIPos;
+        neutralUI.transform.localPosition -= PlusUIPos;
 
         GameObject role = Instantiate(roleListPrebs);
         role.transform.SetParent(GameObject.Find("Citizen").transform);
@@ -96,7 +96,7 @@ public class RoleController : MonoBehaviourPunCallbacks
     }
     private GameObject ImposterRoleSet() //임포스터 세팅
     {
-        neutralUI.transform.position -= PlusUIPos;
+        neutralUI.transform.localPosition -= PlusUIPos;
 
         GameObject role = Instantiate(roleListPrebs);
         role.transform.SetParent(GameObject.Find("Imposter").transform);
@@ -404,8 +404,8 @@ public class RoleController : MonoBehaviourPunCallbacks
                     }
                 }
 
-                imposterUI.transform.position += PlusUIPos;
-                neutralUI.transform.position += PlusUIPos;
+                imposterUI.transform.localPosition += PlusUIPos;
+                neutralUI.transform.localPosition += PlusUIPos;
 
                 if (citizen.Count > 0)
                 {
@@ -467,7 +467,7 @@ public class RoleController : MonoBehaviourPunCallbacks
                     }
                 }
 
-                neutralUI.transform.position += PlusUIPos;
+                neutralUI.transform.localPosition += PlusUIPos;
 
                 if (imposter.Count > 0)
                 {
