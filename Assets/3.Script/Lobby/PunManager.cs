@@ -22,8 +22,14 @@ public class PunManager : MonoBehaviourPunCallbacks
     [Header("[Player Name UI]")]
     [SerializeField] GameObject playerNameUIPreb;
 
+    [Header("[Chat Txt]")]
+    [SerializeField] Text[] chatTxt;
+    [SerializeField] InputField chatInput;
+
     private LobbyBtnController lobbyBtnController;
     private ColorController colorController;
+
+    [SerializeField] PhotonView PV;
 
     private void Awake()
     {
@@ -33,6 +39,15 @@ public class PunManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         Connect();
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Send();
+
+            chatInput.ActivateInputField();
+        }
     }
     private void OnApplicationQuit()
     {
@@ -115,6 +130,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     {
         //어떤 newPlayer 가 들어왔을 때 콜백되는 콜백함수
         base.OnPlayerEnteredRoom(newPlayer);
+        PV.RPC("Chatting", RpcTarget.All, "<color=yellow>" + newPlayer.NickName + "님이 참가하셨습니다.</color>");
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
         {
@@ -127,6 +143,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     {
         //어떤 otherPlayer 가 방에서 나갔을 때 콜백되는 콜백함수
         base.OnPlayerLeftRoom(otherPlayer);
+        PV.RPC("Chatting", RpcTarget.All, "<color=yellow>" + otherPlayer.NickName + "님이 퇴장하셨습니다.</color>");
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
         {
@@ -150,6 +167,34 @@ public class PunManager : MonoBehaviourPunCallbacks
     {
         UserCountText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount}";
     }
+    public void Send()
+    {
+        string chat = PhotonNetwork.NickName + " : " + chatInput.text;
+        PV.RPC("Chatting", RpcTarget.All, PhotonNetwork.NickName + " : " + chatInput.text);
+        chatInput.text = "";
+    }
 
+    [PunRPC]
+    void Chatting(string chat)
+    {
+        bool isInput = false;
+        for(int i = 0; i < chatTxt.Length; i++)
+        {
+            if (chatTxt[i].text == "")
+            {
+                isInput = true;
+                chatTxt[i].text = chat;
+                break;
+            }
+        }
+        if (!isInput)
+        {
+            for(int i = 1; i < chatTxt.Length; i++)
+            {
+                chatTxt[i - 1].text = chatTxt[i].text;
+                chatTxt[chatTxt.Length - 1].text = chat;
+            }
+        }
+    }
     #endregion
 }
