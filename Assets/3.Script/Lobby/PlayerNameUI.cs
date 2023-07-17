@@ -5,17 +5,14 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 
-public class PlayerNameUI : MonoBehaviourPunCallbacks
+public class PlayerNameUI : MonoBehaviourPun
 {
-    [Header("[PhotonView]")]
-    public PhotonView PV;
+    public int viewID;
 
     private Image playerColor;
 
     private LobbyBtnController lobbyBtnController;
     private ColorController colorController;
-
-    public int viewID;
 
     private void Awake()
     {
@@ -24,26 +21,28 @@ public class PlayerNameUI : MonoBehaviourPunCallbacks
         TryGetComponent(out playerColor);
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        viewID = (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"];
-
-        if (PV.IsMine)
+        if (viewID == (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"])
         {
-            PV.RPC("Set", RpcTarget.AllBuffered, viewID);
+            GetComponentInChildren<Text>().text = PhotonNetwork.LocalPlayer.NickName;
         }
+
     }
 
-    [PunRPC]
     private void Set(int id)
     {
-        transform.SetParent(GameObject.Find("Sort").transform);
-        transform.localScale = Vector3.one;
-        GetComponentInChildren<Text>().text = PV.Controller.NickName;
+        //GetComponentInChildren<Text>().text = PV.Controller.NickName;
 
         lobbyBtnController.playerColor[id] = playerColor;
         colorController.playerColor[id] = playerColor;
 
-        colorController.DefaultColor(id);
+        // PV.RPC("ColorSet", RpcTarget.AllBuffered, id);
+    }
+
+    [PunRPC]
+    private void ColorSet(int myNum)
+    {
+        colorController.DefaultColor(myNum);
     }
 }

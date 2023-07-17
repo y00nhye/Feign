@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
-using Photon.Realtime;
 
 public class LobbyBtnController : MonoBehaviour
 {
@@ -149,7 +148,7 @@ public class LobbyBtnController : MonoBehaviour
 
     public void GameStart_pv()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount != FindObjectOfType<RoleController>().totalNum && FindObjectOfType<RoleController>().totalNum <= 2)
+        if (PhotonNetwork.CurrentRoom.PlayerCount != FindObjectOfType<RoleController>().totalNum || FindObjectOfType<RoleController>().totalNum <= 2)
         {
             errorPopup = numErrorPopup;
             

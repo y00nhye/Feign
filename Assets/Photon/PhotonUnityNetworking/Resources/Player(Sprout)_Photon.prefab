@@ -248,6 +248,13 @@ MonoBehaviour:
     roleColor: {r: 0, g: 0, b: 0, a: 0}
     isImposter: 0
     isNeutral: 0
+  rolePsy:
+    roleData: {fileID: 0}
+    roleCnt: 0
+    roleSerialNum: 0
+    roleColor: {r: 0, g: 0, b: 0, a: 0}
+    isImposter: 0
+    isNeutral: 0
   isPaint: 0
   isClean: 0
   isDie: 0

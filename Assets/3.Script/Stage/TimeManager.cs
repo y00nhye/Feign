@@ -35,22 +35,31 @@ public class TimeManager : MonoBehaviour
     public bool isNight = false;
     public bool isLoading = false;
     public bool isTimeChange = false; //시간 바뀔 때 true 변경
+
     public bool nightMove = false;
     public bool dayMove = false;
     public bool rolePlayingSet = false;
     public bool voteSet = false;
     public bool isFinish = false;
 
+    private bool isKingVote = true;
+
     [Header("[Current Time (set)]")]
     public int currentTime = 0;
+
+    [Header("[TimeChat UI]")]
+    public GameObject dayChatUI;
+    public GameObject nightChatUI;
 
     [SerializeField] VoteBtn voteBtn;
 
     private EventUIBtn eventUI;
+    private Chatting chatting;
 
     private void Awake()
     {
         eventUI = FindObjectOfType<EventUIBtn>();
+        chatting = FindObjectOfType<Chatting>();
     }
     private void Start()
     {
@@ -76,6 +85,18 @@ public class TimeManager : MonoBehaviour
             }
             else if (isVote)
             {
+                chatting.TimeLog(dayChatUI);
+                
+                if (isKingVote)
+                {
+                    chatting.SystemSend("시장 투표를 시작합니다. 시장은 다음 투표에서 표를 두배로 가집니다.");
+                    isKingVote = false;
+                }
+                else
+                {
+                    chatting.SystemSend("추방 투표를 시작합니다. 임포스터로 의심되는 사람을 투표하세요.");
+                }
+
                 eventUI.VoteBtn();
 
                 dayTimeUI.SetActive(false);
@@ -91,7 +112,11 @@ public class TimeManager : MonoBehaviour
                 StartCoroutine(Timer_co());
             }
             else if (isNight)
-            {           
+            {
+                chatting.TimeLog(nightChatUI);
+
+                chatting.SystemSend("밤이 되었습니다. 각자의 능력을 사용하세요.");
+
                 if (!isFinish)
                 {
                     voteCam.enabled = false;

@@ -91,6 +91,11 @@ MonoBehaviour:
   - StatusCheck
   - RandNumSet
   - Chatting
+  - Chat
+  - MyNum
+  - UseColor
+  - setColor
+  - SetColor
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

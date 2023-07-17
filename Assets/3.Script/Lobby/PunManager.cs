@@ -20,7 +20,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     public Text UserCountText;
 
     [Header("[Player Name UI]")]
-    [SerializeField] GameObject playerNameUIPreb;
+    [SerializeField] Image[] playerNameUIPreb;
 
     [Header("[Chat Txt]")]
     [SerializeField] Text[] chatTxt;
@@ -30,6 +30,8 @@ public class PunManager : MonoBehaviourPunCallbacks
     private ColorController colorController;
 
     [SerializeField] PhotonView PV;
+
+    [SerializeField] Text[] playerNameTxt;
 
     private void Awake()
     {
@@ -44,6 +46,12 @@ public class PunManager : MonoBehaviourPunCallbacks
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            if (chatInput.text == "")
+            {
+                chatInput.ActivateInputField();
+                return;
+            }
+
             Send();
 
             chatInput.ActivateInputField();
@@ -89,7 +97,7 @@ public class PunManager : MonoBehaviourPunCallbacks
         RoomOptions room = new RoomOptions();
 
         room.MaxPlayers = 8;
-        room.CustomRoomProperties = new Hashtable() { { "Load", false }};
+        //room.CustomRoomProperties = new Hashtable() { { "0", -1 }, { "1", -1 }, { "2", -1 }, { "3", -1 }, { "4", -1 }, { "5", -1 }, { "6", -1 }, { "7", -1 } };
 
         //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
         PhotonNetwork.CreateRoom(createRoomName.text, room, null);
@@ -121,16 +129,18 @@ public class PunManager : MonoBehaviourPunCallbacks
             lobbyBtnController.MasterSet();
         }
 
-        PhotonNetwork.Instantiate(playerNameUIPreb.name, Vector3.zero, Quaternion.identity);
+        //PhotonNetwork.Instantiate(playerNameUIPreb.name, Vector3.zero, Quaternion.identity);
 
         MyNumSet();
         Update_Player();
+
+        NameSet();
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         //어떤 newPlayer 가 들어왔을 때 콜백되는 콜백함수
         base.OnPlayerEnteredRoom(newPlayer);
-        PV.RPC("Chatting", RpcTarget.All, "<color=yellow>" + newPlayer.NickName + "님이 참가하셨습니다.</color>");
+        Chatting("<color=orange>" + newPlayer.NickName + "님이 참가하셨습니다.</color>");
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
         {
@@ -138,12 +148,14 @@ public class PunManager : MonoBehaviourPunCallbacks
         }
 
         Update_Player();
+
+        NameSet();
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         //어떤 otherPlayer 가 방에서 나갔을 때 콜백되는 콜백함수
         base.OnPlayerLeftRoom(otherPlayer);
-        PV.RPC("Chatting", RpcTarget.All, "<color=yellow>" + otherPlayer.NickName + "님이 퇴장하셨습니다.</color>");
+        Chatting("<color=orange>" + otherPlayer.NickName + "님이 퇴장하셨습니다.</color>");
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
         {
@@ -152,16 +164,39 @@ public class PunManager : MonoBehaviourPunCallbacks
 
         MyNumSet();
         Update_Player();
+
+        NameSet();
     }
     private void MyNumSet()
     {
-        int myNum = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+        int myNum = PhotonNetwork.CurrentRoom.PlayerCount - 1;
+        Debug.Log(myNum);
 
         PhotonNetwork.LocalPlayer.CustomProperties = new Hashtable()
         {
             {"myNum", myNum }
         };
+    }
+    public void NameSet()
+    {
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            playerNameUIPreb[i].gameObject.SetActive(true);
+            playerNameTxt[i].text = PhotonNetwork.PlayerList[i].NickName;
 
+            lobbyBtnController.playerColor[i] = playerNameUIPreb[i];
+            colorController.playerColor[i] = playerNameUIPreb[i];
+        }
+
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount - 1; i++)
+            {
+                colorController.SetColor_pv(colorController.useColor[i]);
+            }
+        }
+
+        colorController.DefaultColor(PhotonNetwork.CurrentRoom.PlayerCount - 1);
     }
     public void Update_Player()
     {
@@ -170,7 +205,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     public void Send()
     {
         string chat = PhotonNetwork.NickName + " : " + chatInput.text;
-        PV.RPC("Chatting", RpcTarget.All, PhotonNetwork.NickName + " : " + chatInput.text);
+        PV.RPC("Chatting", RpcTarget.All, chat);
         chatInput.text = "";
     }
 
@@ -178,22 +213,28 @@ public class PunManager : MonoBehaviourPunCallbacks
     void Chatting(string chat)
     {
         bool isInput = false;
-        for(int i = 0; i < chatTxt.Length; i++)
+        for (int i = 0; i < chatTxt.Length; i++)
         {
             if (chatTxt[i].text == "")
             {
                 isInput = true;
-                chatTxt[i].text = chat;
+
+                for (int j = i; j > 0; j--)
+                {
+                    chatTxt[j].text = chatTxt[j - 1].text;
+                }
+
+                chatTxt[0].text = chat;
                 break;
             }
         }
         if (!isInput)
         {
-            for(int i = 1; i < chatTxt.Length; i++)
+            for (int i = chatTxt.Length - 1; i > 0; i--)
             {
-                chatTxt[i - 1].text = chatTxt[i].text;
-                chatTxt[chatTxt.Length - 1].text = chat;
+                chatTxt[i].text = chatTxt[i - 1].text;
             }
+            chatTxt[0].text = chat;
         }
     }
     #endregion

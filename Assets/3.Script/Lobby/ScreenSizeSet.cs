@@ -63,6 +63,7 @@ public class ScreenSizeSet : MonoBehaviour
 
     public void OKBtnClick()
     {
+        beforeResolutionNum = resolutionDropdown.value;
         Screen.SetResolution(resolutions[resolutionNum].width, resolutions[resolutionNum].height, screenMode);
     }
 

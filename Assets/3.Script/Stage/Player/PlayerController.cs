@@ -82,7 +82,24 @@ public class PlayerController : MonoBehaviour
         roomPos = new Transform[8];
         votePos = new Transform[8];
 
-        rolePsy = GameManager.instance.roles[Random.Range(0, GameManager.instance.citizenNum)];
+        List<Role> psyRole = new List<Role>();
+
+        for (int i = 0; i < GameManager.instance.citizenNum; i++)
+        {
+            if (GameManager.instance.roles[i].roleData.roleName != "정신병자")
+            {
+                psyRole.Add(GameManager.instance.roles[i]);
+            }
+        }
+
+        if (psyRole.Count != 0)
+        {
+            rolePsy = psyRole[Random.Range(0, psyRole.Count)];
+        }
+        else
+        {
+            rolePsy = GameManager.instance.roles[0];
+        }
 
         for (int i = 0; i < roomPos.Length; i++)
         {

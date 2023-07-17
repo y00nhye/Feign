@@ -247,6 +247,13 @@ MonoBehaviour:
     roleColor: {r: 0, g: 0, b: 0, a: 0}
     isImposter: 0
     isNeutral: 0
+  rolePsy:
+    roleData: {fileID: 0}
+    roleCnt: 0
+    roleSerialNum: 0
+    roleColor: {r: 0, g: 0, b: 0, a: 0}
+    isImposter: 0
+    isNeutral: 0
   isPaint: 0
   isClean: 0
   isDie: 0
@@ -1131,7 +1138,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 74a5091d8707f334b9a5c31ef71a64ba, type: 3}
+    m_Font: {fileID: 12800000, guid: 2d17d10d505d02f4e94da1eadc02c44a, type: 3}
     m_FontSize: 100
     m_FontStyle: 1
     m_BestFit: 0
