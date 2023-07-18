@@ -177,7 +177,7 @@ public class PlayerController : MonoBehaviour
 
             if (timeManager.isNight)
             {
-                if (FindObjectOfType<RolePlayingBtn>().isRolePlaying)
+                if (FindObjectOfType<RolePlayingBtn>() != null && FindObjectOfType<RolePlayingBtn>().isRolePlaying)
                 {
                     FindObjectOfType<RolePlayingBtn>().isRolePlaying = false;
                     StartCoroutine(RolePlaying_co());
@@ -188,6 +188,7 @@ public class PlayerController : MonoBehaviour
                     {
                         dieUI.transform.GetChild(0).gameObject.SetActive(true);
                         isFinishCheck = true;
+                        FindObjectOfType<EventUIBtn>().Die();
                     }
                 }
             }
@@ -198,6 +199,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dieUI.transform.GetChild(0).gameObject.SetActive(true);
                     isFinishCheck = true;
+                    FindObjectOfType<EventUIBtn>().Die();
                 }
             }
 

@@ -17,6 +17,9 @@ public class LobbyBtnController : MonoBehaviour
     [SerializeField] GameObject numErrorPopup;
     [SerializeField] GameObject imErrorPopup;
     [SerializeField] Button startBtn;
+    [SerializeField] InputField createRoomName;
+    [SerializeField] InputField enterRoomName;
+    [SerializeField] Color textColor;
 
     [Header("[RoleData]")]
     [SerializeField] RoleData[] citizen;
@@ -33,7 +36,7 @@ public class LobbyBtnController : MonoBehaviour
     [SerializeField] Text playerNameInput;
     public string playerName { get; private set; }
 
-    [Header("[Player Color (set)]")]
+    [Header("[Player Color]")]
     public Image[] playerColor;
 
     private PhotonView PV;
@@ -46,10 +49,6 @@ public class LobbyBtnController : MonoBehaviour
     private void Awake()
     {
         PV = GameObject.Find("LobbyManager").GetPhotonView();
-    }
-    private void Start()
-    {
-        playerColor = new Image[8];
     }
     private void OnEnable()
     {
@@ -134,6 +133,14 @@ public class LobbyBtnController : MonoBehaviour
         createRoomNameUI.SetActive(false);
         enterRoomNameUI.SetActive(false);
         lobbyMenuUI.SetActive(true);
+
+        createRoomName.GetComponentInChildren<Text>().text = "Enter Roomname...";
+        createRoomName.GetComponentInChildren<Text>().color = textColor;
+        createRoomName.text = "";
+
+        enterRoomName.GetComponentInChildren<Text>().text = "Enter Roomname...";
+        enterRoomName.GetComponentInChildren<Text>().color = textColor;
+        enterRoomName.text = "";
 
     }
     public void GameExit()
@@ -266,6 +273,8 @@ public class LobbyBtnController : MonoBehaviour
         GameManager.instance.totalRoleNum = citizenCnt + imposterCnt + neutralCnt;
 
         GameManager.instance.currentPlayer = PhotonNetwork.CurrentRoom.PlayerCount;
+
+        GameManager.instance.myColorNum = FindObjectOfType<ColorController>().useColor;
 
         //Time ´ã±â
         GameManager.instance.voteTime = FindObjectOfType<TimeBtnController>().voteTimeCurrent;

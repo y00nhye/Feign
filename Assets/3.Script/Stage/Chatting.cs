@@ -38,7 +38,7 @@ public class Chatting : MonoBehaviourPun
     }
     public void Send()
     {
-        string chat = "(" + PhotonNetwork.NickName + ")" + chatInput.text;
+        string chat = "( " + PhotonNetwork.NickName + " ) " + chatInput.text;
         PV.RPC("Chat", RpcTarget.All, chat);
         chatInput.text = "";
     }

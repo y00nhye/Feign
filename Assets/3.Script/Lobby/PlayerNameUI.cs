@@ -43,6 +43,6 @@ public class PlayerNameUI : MonoBehaviourPun
     [PunRPC]
     private void ColorSet(int myNum)
     {
-        colorController.DefaultColor(myNum);
+        //colorController.DefaultColor();
     }
 }

@@ -171,6 +171,8 @@ public class TimeManager : MonoBehaviour
         }
         else if (isNight)
         {
+            FindObjectOfType<EventUIBtn>().RolePlayingBtn();
+
             rolePlayingSet = true;
         }
     }

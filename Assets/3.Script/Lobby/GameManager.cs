@@ -120,11 +120,19 @@ public class GameManager : MonoBehaviour
     }
     public void RoleShuffle()
     {
-        shuffleRoles = new Role[roles.Count];
+        shuffleRoles = new Role[totalRoleNum];
 
+        int j = 0;
         for (int i = 0; i < roles.Count; i++)
         {
-            shuffleRoles[i] = roles[i];
+            Debug.Log(roles[i].roleCnt);
+
+            for(int k = 0; k < roles[i].roleCnt; k++)
+            {
+                shuffleRoles[j] = roles[i];
+
+                j++;
+            }
         }
 
         int ran1;

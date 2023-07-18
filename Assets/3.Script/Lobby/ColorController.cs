@@ -7,7 +7,7 @@ using Photon.Realtime;
 
 public class ColorController : MonoBehaviour
 {
-    [Header("[Player Color (set)]")]
+    [Header("[Player Color]")]
     public Image[] playerColor;
 
     [Header("[0Mint 1Blue 2Purple 3Yellow 4Gray 5Pink 6Orange 7Green]")]
@@ -19,38 +19,40 @@ public class ColorController : MonoBehaviour
     //사용한 컬러 담는 변수
     public int[] useColor;
 
+    public int leftNum;
+
     private PhotonView PV;
 
     private void Awake()
     {
         PV = GameObject.Find("LobbyManager").GetPhotonView();
     }
-    private void Start()
+    public void SetColor_pv(int num, int index)
     {
-        playerColor = new Image[8];
+        PV.RPC("SetColor", RpcTarget.OthersBuffered, num, index);
     }
-    public void SetColor_pv(int num)
+    public void DefaultColor_pv()
     {
-        PV.RPC("SetColor", RpcTarget.OthersBuffered, num);
+        PV.RPC("DefaultColor", RpcTarget.AllBuffered);
     }
     [PunRPC]
-    private void SetColor(int num)
+    private void SetColor(int num, int index)
     {
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount - 1; i++)
-        {
-            playerColor[i].color = colors[num];
-        }
+        playerColor[index].color = colors[num];
+        useColor[index] = num;
+        useSprite[num].SetActive(true);
     }
-    public void DefaultColor(int playerNum)
+    [PunRPC]
+    private void DefaultColor()
     {
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
             if (!useSprite[i].activeSelf)
             {
-                playerColor[playerNum].color = colors[i];
-                GameManager.instance.myColorNum[playerNum] = i;
+                playerColor[PhotonNetwork.CurrentRoom.PlayerCount - 1].color = colors[i];
+                //GameManager.instance.myColorNum[PhotonNetwork.CurrentRoom.PlayerCount - 1] = i;
 
-                useColor[playerNum] = i;
+                useColor[PhotonNetwork.CurrentRoom.PlayerCount - 1] = i;
                 useSprite[i].SetActive(true);
 
                 break;
@@ -78,12 +80,12 @@ public class ColorController : MonoBehaviour
             }
         }
 
-        useSprite[GameManager.instance.myColorNum[playerNum]].SetActive(false);
+        useSprite[useColor[playerNum]].SetActive(false);
         useColor[playerNum] = -1;
 
         playerColor[playerNum].color = colors[colorNum];
 
-        GameManager.instance.myColorNum[playerNum] = colorNum;
+        //GameManager.instance.myColorNum[playerNum] = colorNum;
 
         useColor[playerNum] = colorNum;
         useSprite[colorNum].SetActive(true);
@@ -92,10 +94,34 @@ public class ColorController : MonoBehaviour
     [PunRPC]
     private void ColorRemove(int playerNum)
     {
-        PhotonNetwork.CurrentRoom.CustomProperties[playerNum.ToString()] = -1;
-        PhotonNetwork.CurrentRoom.SetCustomProperties(PhotonNetwork.CurrentRoom.CustomProperties);
+        playerColor[PhotonNetwork.CurrentRoom.PlayerCount - 1].gameObject.SetActive(false);
 
-        useSprite[GameManager.instance.myColorNum[playerNum]].SetActive(false);
+        useSprite[useColor[playerNum]].SetActive(false);
         useColor[playerNum] = -1;
+
+        for (int i = playerNum; i < useColor.Length - 1; i++)
+        {
+            useColor[i] = useColor[i + 1];
+        }
+
+        if ((int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"] > playerNum)
+        {
+            FindObjectOfType<PunManager>().MyNumSet((int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"] - 1);
+        }
+    }
+    public void ColorReset()
+    {
+        for (int i = 0; i < useColor.Length; i++)
+        {
+            useColor[i] = -1;
+            useSprite[i].SetActive(false);
+        }
+    }
+    public void SetColor()
+    {
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            playerColor[i].color = colors[useColor[i]];
+        }
     }
 }

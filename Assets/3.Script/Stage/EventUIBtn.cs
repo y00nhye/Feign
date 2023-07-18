@@ -57,4 +57,13 @@ public class EventUIBtn : MonoBehaviour
         OnBtn();
         onoffBtn.interactable = true;
     }
+    public void RolePlayingBtn()
+    {
+        OnBtn();
+        onoffBtn.interactable = false;
+    }
+    public void Die()
+    {
+        onoffBtn.interactable = false;
+    }
 }

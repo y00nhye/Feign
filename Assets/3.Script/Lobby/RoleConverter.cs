@@ -30,7 +30,7 @@ public class RoleConverter : MonoBehaviour
 
         string key = null;
         
-        for (int i = 0; i < GameManager.instance.roles.Count; i++)
+        for (int i = 0; i < GameManager.instance.shuffleRoles.Length; i++)
         {
             if (i == 0)
             {

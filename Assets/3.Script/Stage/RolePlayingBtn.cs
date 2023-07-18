@@ -24,6 +24,9 @@ public class RolePlayingBtn : MonoBehaviour
     [SerializeField] Image role_11Img;
     [SerializeField] Image role_12Img;
 
+    public Button eventUIBtn;
+    public GameObject eventUI;
+
     public string[] actions;
     public bool[] isBlock;
 
@@ -64,13 +67,15 @@ public class RolePlayingBtn : MonoBehaviour
             {
                 PV.RPC("Action", RpcTarget.AllBuffered, ActiveNum, (int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"], isKill);
 
-                if (int.Parse(GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleOrder) == 7)
+                if (ActiveNum >= 0)
                 {
-                    GameManager.instance.playerPrefs[ActiveNum].GetComponentInChildren<PlayerCanvas>().myRoleImg.sprite = GameManager.instance.playerPrefs[ActiveNum].GetComponent<PlayerController>().myRole.roleData.roleImg;
-                    GameManager.instance.playerPrefs[ActiveNum].GetComponentInChildren<PlayerCanvas>().myRoleColor.color = GameManager.instance.playerPrefs[ActiveNum].GetComponent<PlayerController>().myRole.roleColor;
+                    if (int.Parse(GameManager.instance.shuffleRoles[(int)PhotonNetwork.LocalPlayer.CustomProperties["myNum"]].roleData.roleOrder) == 7)
+                    {
+                        GameManager.instance.playerPrefs[ActiveNum].GetComponentInChildren<PlayerCanvas>().myRoleImg.sprite = GameManager.instance.playerPrefs[ActiveNum].GetComponent<PlayerController>().myRole.roleData.roleImg;
+                        GameManager.instance.playerPrefs[ActiveNum].GetComponentInChildren<PlayerCanvas>().myRoleColor.color = GameManager.instance.playerPrefs[ActiveNum].GetComponent<PlayerController>().myRole.roleColor;
+                    }
                 }
             }
-
             timeManager.rolePlayingSet = false;
             isRolePlaying = true;
         }

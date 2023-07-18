@@ -18,6 +18,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     public InputField enterRoomName;
     public Text RoomName;
     public Text UserCountText;
+    [SerializeField] Color textColor;
 
     [Header("[Player Name UI]")]
     [SerializeField] Image[] playerNameUIPreb;
@@ -79,6 +80,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         colorController.ColorRemove_pv();
+        colorController.ColorReset();
 
         PhotonNetwork.LeaveRoom();
     }
@@ -98,9 +100,25 @@ public class PunManager : MonoBehaviourPunCallbacks
 
         room.MaxPlayers = 8;
         //room.CustomRoomProperties = new Hashtable() { { "0", -1 }, { "1", -1 }, { "2", -1 }, { "3", -1 }, { "4", -1 }, { "5", -1 }, { "6", -1 }, { "7", -1 } };
+        
 
-        //방 참가를 시도하고 실패하면 생성해서 방에 참가해야함
         PhotonNetwork.CreateRoom(createRoomName.text, room, null);
+    }
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        base.OnCreateRoomFailed(returnCode, message);
+
+        createRoomName.text = "";
+        createRoomName.GetComponentInChildren<Text>().text = "Already exists!";
+        createRoomName.GetComponentInChildren<Text>().color = textColor;
+    }
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        base.OnJoinRoomFailed(returnCode, message);
+
+        enterRoomName.text = "";
+        enterRoomName.GetComponentInChildren<Text>().text = "Does not exist!";
+        enterRoomName.GetComponentInChildren<Text>().color = textColor;
     }
     public void EnterRoom()
     {
@@ -131,10 +149,11 @@ public class PunManager : MonoBehaviourPunCallbacks
 
         //PhotonNetwork.Instantiate(playerNameUIPreb.name, Vector3.zero, Quaternion.identity);
 
-        MyNumSet();
+        MyNumSet(PhotonNetwork.CurrentRoom.PlayerCount - 1);
         Update_Player();
 
         NameSet();
+        SendInfo();
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
@@ -150,6 +169,8 @@ public class PunManager : MonoBehaviourPunCallbacks
         Update_Player();
 
         NameSet();
+
+        SendInfo();
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -162,14 +183,16 @@ public class PunManager : MonoBehaviourPunCallbacks
             lobbyBtnController.MasterSet();
         }
 
-        MyNumSet();
+
+
         Update_Player();
 
         NameSet();
+
+        colorController.SetColor();
     }
-    private void MyNumSet()
+    public void MyNumSet(int myNum)
     {
-        int myNum = PhotonNetwork.CurrentRoom.PlayerCount - 1;
         Debug.Log(myNum);
 
         PhotonNetwork.LocalPlayer.CustomProperties = new Hashtable()
@@ -185,18 +208,19 @@ public class PunManager : MonoBehaviourPunCallbacks
             playerNameTxt[i].text = PhotonNetwork.PlayerList[i].NickName;
 
             lobbyBtnController.playerColor[i] = playerNameUIPreb[i];
-            colorController.playerColor[i] = playerNameUIPreb[i];
         }
-
+    }
+    public void SendInfo()
+    {
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
         {
             for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount - 1; i++)
             {
-                colorController.SetColor_pv(colorController.useColor[i]);
+                colorController.SetColor_pv(colorController.useColor[i], i);
             }
-        }
 
-        colorController.DefaultColor(PhotonNetwork.CurrentRoom.PlayerCount - 1);
+            colorController.DefaultColor_pv();
+        }
     }
     public void Update_Player()
     {
