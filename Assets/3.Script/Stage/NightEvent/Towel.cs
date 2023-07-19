@@ -19,6 +19,8 @@ public class Towel : MonoBehaviour
         towelAni.SetBool("Towel", true);
 
         Invoke("AniEnd", 3f);
+
+        AudioManager.instance.CleanSound();
     }
     private void AniEnd()
     {

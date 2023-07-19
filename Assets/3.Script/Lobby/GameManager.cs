@@ -68,6 +68,8 @@ public class GameManager : MonoBehaviour
 
     public TimeManager timeManager;
 
+    public string nickName;
+
     private void Start()
     {
         playerPrefs = new GameObject[8];

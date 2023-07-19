@@ -52,9 +52,11 @@ public class PlayerCanvas : MonoBehaviour
     private void AniOn()
     {
         canvasAni.SetBool("On", true);
+
     }
     private void AniShow()
     {
+        AudioManager.instance.OpenSound();
         canvasAni.SetBool("Show", true);
 
         if (playerController.myRole.roleData.roleName == "정신병자" && !playerController.isDie_ && !playerController.isOut)
@@ -79,6 +81,8 @@ public class PlayerCanvas : MonoBehaviour
     private void AniOff()
     {
         canvasAni.SetBool("Off", true);
+
+        AudioManager.instance.OpenSound();
     }
     private void AniReset()
     {

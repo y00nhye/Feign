@@ -18,6 +18,10 @@ public class Sword : MonoBehaviour
         startPos = transform.localPosition;
         bloodAni = GameObject.Find("BloodEffect").GetComponent<Animator>();
     }
+    private void OnEnable()
+    {
+        AudioManager.instance.KillSound();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

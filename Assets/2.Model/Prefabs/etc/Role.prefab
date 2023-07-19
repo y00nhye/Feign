@@ -171,6 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b25aee9472b29459201ff2b7c6bafb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  btn: {fileID: 3007342362568336571}
   roleBackground: {fileID: 3007342360753233214}
   roleImg: {fileID: 3007342362332542078}
   roleName: {fileID: 3007342360746157839}
@@ -178,6 +179,7 @@ MonoBehaviour:
   roleData: {fileID: 0}
   roleColor: {r: 0, g: 0, b: 0, a: 0}
   num: 0
+  roleSerialNum: 0
   isImposter: 0
   isNeutral: 0
 --- !u!1 &3007342361491004139

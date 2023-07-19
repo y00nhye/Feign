@@ -5723,7 +5723,7 @@ MonoBehaviour:
   myRoleColor: {fileID: 7769337024531146755}
   myRoleImg: {fileID: 7769337025098634836}
   myRoleTxt: {fileID: 7769337025228583988}
-  imposter: {r: 0.83921576, g: 0.37254903, b: 0.30588236, a: 0}
+  imposter: {r: 0.83921576, g: 0.37254903, b: 0.30588236, a: 1}
 --- !u!1 &7769337025098634858
 GameObject:
   m_ObjectHideFlags: 0

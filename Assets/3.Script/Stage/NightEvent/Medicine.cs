@@ -51,6 +51,7 @@ public class Medicine : MonoBehaviour
             transform.parent.GetChild(3).gameObject.SetActive(true);
 
             StartCoroutine(Heal(transform.parent.gameObject));
+            AudioManager.instance.MedicineSound();
         }
         else
         {

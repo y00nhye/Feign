@@ -14,6 +14,8 @@ public class Paint : MonoBehaviour
     {
         paintAni.SetBool("Paint", true);
         StartCoroutine(SetFalse());
+
+        AudioManager.instance.PaintSound();
     }
     IEnumerator SetFalse()
     {

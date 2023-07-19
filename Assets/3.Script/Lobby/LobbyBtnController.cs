@@ -34,6 +34,7 @@ public class LobbyBtnController : MonoBehaviour
 
     [Header("[Player Name]")]
     [SerializeField] Text playerNameInput;
+    [SerializeField] InputField playerNameInputField;
     public string playerName { get; private set; }
 
     [Header("[Player Color]")]
@@ -55,6 +56,12 @@ public class LobbyBtnController : MonoBehaviour
         loadCheck = 0;
         isStart = false;
 
+        if(GameManager.instance.nickName != "")
+        {
+            nicknameSettingUI.SetActive(false);
+        }
+
+        AudioManager.instance.LobbyBackgroundSound();
     }
     private void Update()
     {
@@ -94,11 +101,15 @@ public class LobbyBtnController : MonoBehaviour
     {
         if (playerNameInput.text.Equals(string.Empty))
         {
-            playerNameInput.text = "이름을 입력해 주세요!!";
+            playerNameInputField.GetComponentInChildren<Text>().text = "Please Enter Nickmame..";
+            playerNameInputField.GetComponentInChildren<Text>().color = Color.red;
+            playerNameInputField.text = "";
+
             return;
         }
 
         playerName = playerNameInput.text;
+        GameManager.instance.nickName = playerName;
 
         nicknameSettingUI.SetActive(false);
         lobbyMenuUI.SetActive(true);

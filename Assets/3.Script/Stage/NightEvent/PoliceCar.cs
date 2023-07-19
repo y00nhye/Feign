@@ -13,6 +13,8 @@ public class PoliceCar : MonoBehaviour
     private void OnEnable()
     {
         StartCoroutine(Depart_co());
+
+        AudioManager.instance.PoliceSound();
     }
     IEnumerator Depart_co()
     {

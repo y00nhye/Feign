@@ -8,6 +8,8 @@ public class RoleInfo : MonoBehaviour
 {
     private RoleController roleController;
 
+    [SerializeField] Button btn;
+
     [Header("[Role UI]")]
     [SerializeField] Image roleBackground;
     [SerializeField] Image roleImg;
@@ -32,6 +34,8 @@ public class RoleInfo : MonoBehaviour
     private void Start()
     {
         transform.localScale = Vector3.one;
+
+        btn.onClick.AddListener(AudioManager.instance.BtnSound);
     }
     private void Update()
     {

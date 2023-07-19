@@ -64,6 +64,8 @@ public class TimeManager : MonoBehaviour
     private void Start()
     {
         GameManager.instance.timeManager = GetComponent<TimeManager>();
+
+        AudioManager.instance.MainBackgroundSound();
     }
     private void Update()
     {
