@@ -59,6 +59,7 @@ public class LobbyBtnController : MonoBehaviour
         if(GameManager.instance.nickName != "")
         {
             nicknameSettingUI.SetActive(false);
+            lobbyMenuUI.SetActive(true);
         }
 
         AudioManager.instance.LobbyBackgroundSound();

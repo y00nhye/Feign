@@ -93,7 +93,7 @@ public class PunManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        PhotonNetwork.LocalPlayer.NickName = lobbyBtnController.playerName;
+        PhotonNetwork.LocalPlayer.NickName = GameManager.instance.nickName;
         RoomName.text = createRoomName.text;
 
         RoomOptions room = new RoomOptions();
@@ -127,7 +127,7 @@ public class PunManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        PhotonNetwork.LocalPlayer.NickName = lobbyBtnController.playerName;
+        PhotonNetwork.LocalPlayer.NickName = GameManager.instance.nickName;
         RoomName.text = enterRoomName.text;
 
         PhotonNetwork.JoinRoom(enterRoomName.text);
